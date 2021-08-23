@@ -3,17 +3,20 @@
     <head>
         <meta name = "viewport" content = "width=device-width">
         <title>Nugget Bridge</title>
-        <link href = "main.css" rel="stylesheet" type= "text/css">
+        <!-- <link href = "main.css" rel="stylesheet" type= "text/css"> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        
     </head>
     <body>
         <h1>Nugget Bridge</h1>
-        <canvas>
-
-        </canvas>
-        <div id=team-container>
+        <!-- <img id="short-bridge" src="./assets/bridge-overworld.png" style="display:none;"> -->
+        <canvas id="game-overlay" style="border:1px solid #000000;"></canvas>
+        </canvas><br>
+        <canvas id=team-container style="border:1px solid #000000;"></canvas>
             <p>i'm in team container!~</p>
-        </div>
+        </canvas>
         <h3>Use the directional keys to move and use Enter to select menu options</h3>
-        <script> src="index.js"</script>
+        <script src="./src/index.js"></script>
     </body>
 </html>
