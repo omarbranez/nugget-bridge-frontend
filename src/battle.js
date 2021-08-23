@@ -8,6 +8,7 @@
 // display message : trainer ${ name } wants to fight!
 
 // beginning state of battle //
+// let ongoingBattle = true
 // let turnNumber = 0
 // let goesFirst
 // let goesSecond
@@ -21,7 +22,8 @@
 //          prompt to select new pokemon from party
 //      else
 //          winner = currentOpponent
-//          render RESULTS
+//          ongoingBattle = false
+//          render RESULTS <<<< separate method
 //  else
 //      newTurn
 
@@ -110,6 +112,7 @@
 //          defender = playerThatJustWent
 //      else 
 //          turnsDone.push(lolYouDied)
+//          render pokemon fainting
 //          delete defender from playerTeam
 //          attacker = ''
 //          defender = ''
@@ -117,3 +120,26 @@
 //          newTurn
 //      else
 //          changeTurn    
+
+
+
+
+
+
+
+// AFTER BATTLE //
+//
+//  let regenerateTeam
+//      generate newpokemon and add to team until there are 6
+// 
+//  render results
+//      if pokemonTeam.length === 0
+//          render game over with number of battles won
+//          set screen state to main menu
+//      else
+//          if 1 < pokemonTeam.length < 6
+//              regenerate team
+//          set screen state to overworld
+//              
+//
+// 
