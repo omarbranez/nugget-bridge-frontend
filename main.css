@@ -21,3 +21,22 @@ body {
     justify-content: center;
 
 }
+
+#top-window {
+    width: 888px;
+    height: 512px;
+    position: relative;
+    border: 2px solid black;
+}
+
+canvas { 
+    position: absolute; 
+}
+
+#game-background {
+    z-index: 1;
+}
+
+#menu-buttons {
+    z-index: 2;
+}

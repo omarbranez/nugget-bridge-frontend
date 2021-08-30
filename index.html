@@ -3,19 +3,30 @@
     <head>
         <meta name = "viewport" content = "width=device-width">
         <title>Nugget Bridge</title>
-        <!-- <link href = "main.css" rel="stylesheet" type= "text/css"> -->
+        <link href = "main.css" rel="stylesheet" type= "text/css"> 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">  -->
         
     </head>
     <body>
         <h1>Nugget Bridge</h1>
-        <!-- <img id="short-bridge" src="./assets/bridge-overworld.png" style="display:none;"> -->
-        <canvas id="game-overlay" style="border:1px solid #000000;">
-        </canvas><br>
-        <canvas id="team-container" style="border:1px solid #000000;">
-        </canvas>
+        <div id="top-window">
+            <canvas id="game-background" width="888" height="512"></canvas>
+            <canvas id="menu-buttons" width="888" height="512"></canvas>
+            <canvas id="user-pokemon" style="z-index: 3;"></canvas>
+            <canvas id="cpu-pokemon" style="z-index: 4;"></canvas>
+            <canvas id="battle-buttons" style="z-index: 5;"></canvas>
+            <canvas id="battle-text" style="z-index: 6;"></canvas>
+        <br>
+        </div>
+        <div id="bottom-window" style="border:1px solid #000000;">
+            <canvas id="team-background" style="z-index:8;"></canvas>
+            <canvas id="team-pokemon-pictures" style="z-index:9;"></canvas>
+            <canvas id="team-pokemon-text" style="z-index:10"></canvas>
+        </div>
         <h3>Use the directional keys to move and use Enter to select menu options</h3>
         <script src="./src/index.js"></script>
+        <script src="./src/team.js"></script>
+        <script src="./src/menu.js"></script>
     </body>
 </html>

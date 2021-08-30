@@ -1,23 +1,57 @@
-// const BASE_URL = 'http://localhost:3000'
-const gameCanvas = document.getElementById("game-overlay")
-const gameContext = gameCanvas.getContext("2d")
-const teamCanvas = document.getElementById("team-container")
-const teamContext = teamCanvas.getContext("2d")
+const gameBackgroundCanvas = document.getElementById("game-background")
+const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
+const teamBackgroundCanvas = document.getElementById("team-background")
+const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
+// const BackgroundImage = Image;
+// class ProxyBackground {
+//     constructor(w, h) {
+//         const gameBackground = new BackgroundImage(w, h)
+//         const handler = {
+//             set: function(obj, prop, value) {
+//               if (prop === 'src') {
+//                 console.log('gotcha ' + value);
+//               }
+//               return gameBackground[prop] = value;
+//             },
+//             get: function(target, prop) {
+//               return target[prop];
+//             }
+//           };
+//         return new Proxy(gameBackground, handler)
+//     }
+// }
+// Image = ProxyBackground
 
-let currentScreen = "title" 
+let currentScreen = "initial" 
+let ongoingBattle = false   
+
+function renderGameWindowOverlay(){
+
+}
 
 function renderGameWindow() {
-    gameCanvas.height = 512
-    gameCanvas.width = 888//" //GBA is 1200x800, mine was 1721x800 for SCROLLING //old 400x860
+    gameBackgroundCanvas.height = 512
+    gameBackgroundCanvas.width = 888
     // const screens = ["title", "creation", "login", "options", "overworld", "battle", "result"]
-    const gameBackground = new Image()
+    // let gameBackground = new Image()
+    // const BackgroundImage = Image;
+    // let gameBackground = new BackgroundImage()
+    let gameBackground = new Image()
+    
     switch (currentScreen) {
         case "title":
+            clearScreen()
             gameBackground.src = "./assets/title-spritesheet.png"
+            // gameBackground = "./assets/title-spritesheet.png"
             spritesheetAnimate(5, 41, 2220, 10250, gameBackground)
             break
         case "initial":
-            gameBackground.src = "./assets/menu-gameBackground.png"
+            clearScreen()
+            gameBackground.src = "./assets/menu-background.png"
+            // debugger
+            staticDisplay(gameBackground)
+            renderInitialMenu()
+            console.log("calling menu.js")
             break
         case "creation":
             gameBackground.src = "./assets/nugget-bridge-creation.png"
@@ -44,40 +78,53 @@ function renderGameWindow() {
 }
 
 function renderTeamWindow() {
-    teamCanvas.height = 512
-    teamCanvas.width = 888
+    teamBackgroundCanvas.height = 512
+    teamBackgroundCanvas.width = 888
     const bottomBackground = new Image()
     bottomBackground.src = "./assets/team-canvas-background.png"
     bottomBackground.onload = function() { 
-        teamContext.drawImage(bottomBackground, 0, 0)
+        teamBackgroundContext.drawImage(bottomBackground, 0, 0)
     }
     console.log("started from the bottom")
 }
 
 // controls are keyboard. maybe mouse too?
-gameCanvas.addEventListener("keydown", function(e) {
+gameBackgroundCanvas.addEventListener("keydown", function(e) {
     if ([13, 37, 38, 39, 40].indexOf(e.key) > -1){
         e.preventDefault(); // arrow keys and enter
     }
 }, false);
 
 function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {
-    // const gameContext = gameCanvas.getContext("2d")
+    // const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
+    // clearScreen()
     let frameWidth = sheetWidth / numColumns //2220
     let frameHeight = sheetHeight / numRows // 10250
     let currentFrame = 0;
     setInterval( function() { // animate spritesheet
-    currentFrame++ // pick new frame
-    let maxFrame = numColumns * numRows - 1
-    if (currentFrame > maxFrame){ // loop frames
-        currentFrame = 0
-    }
-    let column = currentFrame % numColumns // update rows and columns
-    let row = Math.floor(currentFrame / numColumns) // Clear and draw
+        currentFrame++ // pick new frame
+        let maxFrame = numColumns * numRows - 1
+        if (currentFrame > maxFrame){ // loop frames
+            currentFrame = 0
+        }
+        let column = currentFrame % numColumns // update rows and columns
+        let row = Math.floor(currentFrame / numColumns) // Clear and draw
+        gameBackgroundContext.drawImage(bgImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, 0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
+    }, 100)    //wait for next step in the loop
+}
+
+function staticDisplay(bgImage) {
+    // clearScreen()
     // debugger
-    gameContext.drawImage(bgImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, 0, 0, gameCanvas.width, gameCanvas.height);
-    //Wait for next step in the loop
-}, 100);
+    bgImage.onload = function() {
+        gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 512)
+        console.log("i'm displaying the static background!")
+    }
+}
+
+function clearScreen() {
+    gameBackgroundContext.clearRect(0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
+    console.log("clearing the screen!")
 }
 
 //check that nothing is hideously broken    
@@ -85,5 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("anything")
     renderGameWindow()
     renderTeamWindow()
+    // console.log(gameBackground.src)
+
     
 })
