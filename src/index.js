@@ -2,7 +2,7 @@ const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
 const teamBackgroundCanvas = document.getElementById("team-background")
 const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
-
+var canvas = document.getElementsByTagName("canvas")
 
 let currentScreen = "initial" 
 let ongoingBattle = false   
@@ -71,11 +71,12 @@ function renderTeamWindow() {
 }
 
 // controls are keyboard. maybe mouse too?
-gameBackgroundCanvas.addEventListener("keydown", function(e) {
-    if ([13, 37, 38, 39, 40].indexOf(e.key) > -1){
-        e.preventDefault(); // arrow keys and enter
-    }
-}, false);
+// gameBackgroundCanvas.addEventListener("keydown", function(e) {
+//     if ([13, 37, 38, 39, 40].indexOf(e.key) > -1){
+//         e.preventDefault(); // arrow keys and enter
+//     }
+// }, false);
+
 
 function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {
     // const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
@@ -112,5 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("anything")
     renderGameWindow()
     renderTeamWindow()
+    gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
     
 })
