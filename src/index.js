@@ -56,6 +56,7 @@ function renderGameWindow() {
             renderBattleButtons()
             renderPlayerPokemon()
             renderCPUPokemon()
+            renderPlayerTeam()
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
@@ -130,7 +131,7 @@ function clearScreen() {
 
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("anything")
+    console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()

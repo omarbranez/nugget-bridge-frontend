@@ -4,7 +4,7 @@
 // 
 let battlePokemonCanvas = document.getElementById("battle-pokemon")
 let battlePokemonContext = battlePokemonCanvas.getContext("2d")
-let playerTeam = ["Venusaur"]
+let playerTeam = ["Charizard", "Venusaur", "Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
 let cpuTeam = ["Venusaur"]
 
 function renderPlayerPokemon(){
@@ -14,7 +14,7 @@ function renderPlayerPokemon(){
     currentPokemonRear.src = `./assets/pokemon-battle/${currentPokemon.toLowerCase()}-rear.png`
     console.log(`Draw ${currentPokemonRear.src}`)
     drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
-    console.log("Look at my Venusaur!")
+    console.log(`Look at my ${currentPokemon}!`)
     
 
 }
@@ -26,7 +26,7 @@ function renderCPUPokemon(){
     currentPokemonFront.src = `./assets/pokemon-battle/${currentPokemon.toLowerCase()}-front.png`
     console.log(`Draw ${currentPokemonFront.src}`)
     drawBattlePokemon(currentPokemonFront, 550, 20, 200, 200)
-    console.log("Look at their Venusaur!")
+    console.log(`Look at their ${currentPokemon}!`)
 }
 
 function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
