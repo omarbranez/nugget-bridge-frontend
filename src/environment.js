@@ -2,9 +2,11 @@
 //      render bridge, player character, and trainers
 //
 // 
-let battlePokemonCanvas = document.getElementById("battle-pokemon")
-let battlePokemonContext = battlePokemonCanvas.getContext("2d")
+const battlePokemonCanvas = document.getElementById("battle-pokemon")
+const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 let playerTeam = ["Charizard", "Venusaur", "Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+
+battlePokemonContext.font = "2.2em sans-serif";
 let cpuTeam = ["Venusaur"]
 
 function renderPlayerPokemon(){
@@ -15,7 +17,7 @@ function renderPlayerPokemon(){
     console.log(`Draw ${currentPokemonRear.src}`)
     drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
     console.log(`Look at my ${currentPokemon}!`)
-    
+    battlePokemonContext.fillText(currentPokemon, 500, 250)
 
 }
 
@@ -27,6 +29,7 @@ function renderCPUPokemon(){
     console.log(`Draw ${currentPokemonFront.src}`)
     drawBattlePokemon(currentPokemonFront, 550, 20, 200, 200)
     console.log(`Look at their ${currentPokemon}!`)
+    battlePokemonContext.fillText(currentPokemon, 175, 50)
 }
 
 function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
@@ -34,3 +37,7 @@ function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
         battlePokemonContext.drawImage(pokemon, xLocation, yLocation, width, height)
     }
 } // this can probably just be a draw all objects thing
+
+function drawHPBar(){
+
+}

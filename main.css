@@ -48,12 +48,12 @@ canvas {
     z-index: 100;
 }
 
-#myProgress {
+#progress {
     width: 100%;
     background-color: #ddd;
   }
   
-#myBar {
+#bar {
     width: 1%;
     height: 30px;
     background-color: #04AA6D;
