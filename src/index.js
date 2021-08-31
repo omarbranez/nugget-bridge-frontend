@@ -4,7 +4,7 @@ const teamBackgroundCanvas = document.getElementById("team-background")
 const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
 var canvas = document.getElementsByTagName("canvas")
 
-let currentScreen = "initial" 
+let currentScreen = "battle" 
 let ongoingBattle = false   
 
 function renderGameWindowOverlay(){
@@ -48,7 +48,11 @@ function renderGameWindow() {
             console.log("rendering overworld")
             break
         case "battle":
-            gameBackground.src = "./assets/nugget-bridge-battle.png"
+            clearScreen()
+            gameBackground.src = "./assets/battle-background-sheet.png"
+            staticDisplay(gameBackground)
+            ongoingBattle = true
+            renderBattleButtons()
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"

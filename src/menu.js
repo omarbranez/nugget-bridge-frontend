@@ -29,20 +29,20 @@
 
 // const { clear } = require("console");
 
-let menuState = "main"
+let menuState = "battle"
 
 const gameButtonCanvas = document.getElementById("menu-buttons")
 const gameButtonCanvasContext = gameButtonCanvas.getContext("2d")
-guessX = 0
-guessY = 0
-let buttons = []
+// guessX = 0
+// guessY = 0
+// let buttons = []
 
 function renderInitialMenu(){
     const newGameButton = new Image()
     newGameButton.src = "./assets/menu-button-new-game.png"
     const continueButton = new Image()
     continueButton.src = "./assets/menu-button-continue.png"
-    buttons.push(newGameButton, continueButton)
+    // buttons.push(newGameButton, continueButton)
     // buttons.forEach(function(button){
     //     renderButton(button)
     // })
@@ -67,9 +67,20 @@ function menuButtonListener(e){
         }
     } else {
         if (menuState === "battle") {
-
+            if (mouseX >= 155 && mouseX <= 345 && mouseY >= 320 && mouseY <= 380) {
+                alert("clicked fightButton")
+            } else {
+                if (mouseX >= 155 && mouseX <= 345 && mouseY >= 420 && mouseY <= 480) {
+                    alert("clicked switchButton")
+            } else {
+                if (mouseX >= 555 && mouseX <= 745 && mouseY >= 420 && mouseY <= 480) {
+                    alert("clicked quitButton")
+                    }
+                }   
+            }   
         }
     }
+
 
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
@@ -78,11 +89,10 @@ function menuButtonListener(e){
      // new button is 380, 170, 190, 60)
      // X > 400, X < 550
      // Y > 170, Y < 230
+     //fight 155, 320, 190, 60
 }
 
 function renderButton(gameButton, xLocation, yLocation, width, height){
-    gameButton.offsetLeft = xLocation
-    gameButton.offsetTop = yLocation
     gameButton.onload = function() {
         gameButtonCanvasContext.drawImage(gameButton, xLocation, yLocation, width, height)
     }
@@ -90,17 +100,18 @@ function renderButton(gameButton, xLocation, yLocation, width, height){
 
 function drawSelection(){ //draws rectangle if chosen
     gameButtonCanvasContext.beginPath()
-    gameButtonCanvasContext.lineWidth = "6"
+    gameButtonCanvasContext.lineWidth = "5"
     gameButtonCanvasContext.strokeStyle = "red"
     // gameButtonCanvasContext.rect(375, 150, 200, 100);
-    gameButtonCanvasContext.rect(380, 170, 190, 60)
+    // gameButtonCanvasContext.rect(380, 170, 190, 60)
+    gameButtonCanvasContext.rect(155, 320, 190, 60) // fight button
     gameButtonCanvasContext.stroke()
     console.log("drew red rectangle over selection")
 }
 
 function testSelection(){ // see how big the clickable area is, for eventlisteners
     gameButtonCanvasContext.beginPath()
-    gameButtonCanvasContext.lineWidth = "6"
+    gameButtonCanvasContext.lineWidth = "5"
     gameButtonCanvasContext.strokeStyle = "blue"
     gameButtonCanvasContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
     //continuebutton is 400, 270, 150, 60 AKA add 100 to Y location
@@ -108,4 +119,16 @@ function testSelection(){ // see how big the clickable area is, for eventlistene
     console.log("drew blue rectangle over clickable area")
 }
 
-function renderBattleButtons(){}
+function renderBattleButtons(){
+    const fightButton = new Image()
+    fightButton.src = "./assets/battle-fight-button.png"
+    renderButton(fightButton, 150, 300, 200, 100)
+    const switchButton = new Image()
+    switchButton.src = "./assets/battle-switch-button.png"
+    renderButton(switchButton, 150, 400, 200, 100)
+    const quitButton = new Image()
+    quitButton.src = "./assets/battle-save-quit-button.png"
+    renderButton(quitButton, 550, 400, 200, 100)
+    drawSelection()
+    console.log("displaying battle buttons")
+}
