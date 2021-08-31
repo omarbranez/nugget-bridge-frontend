@@ -2,6 +2,12 @@ const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
 const teamBackgroundCanvas = document.getElementById("team-background")
 const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
+const teamPokemonPicturesCanvas = document.getElementById("team-pokemon-pictures")
+const teamPokemonPicturesContext = teamPokemonPicturesCanvas.getContext("2d")
+const teamPokemonTextCanvas = document.getElementById("team-pokemon-text")
+const teamPokemonTextContext = teamPokemonTextCanvas.getContext("2d")
+
+
 var canvas = document.getElementsByTagName("canvas")
 
 let currentScreen = "battle" 
@@ -57,6 +63,7 @@ function renderGameWindow() {
             renderPlayerPokemon()
             renderCPUPokemon()
             renderPlayerTeam()
+            // renderTeamWindowText()
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
