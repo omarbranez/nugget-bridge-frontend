@@ -49,10 +49,13 @@ function renderGameWindow() {
             break
         case "battle":
             clearScreen()
-            gameBackground.src = "./assets/battle-background-sheet.png"
-            staticDisplay(gameBackground)
+            gameBackground.src = "./assets/battle-background-1.png"
+            battleBackgroundDisplay(gameBackground)
+            // spritesheetStatic(3, 4, 737, 466, gameBackground)
             ongoingBattle = true
             renderBattleButtons()
+            renderPlayerPokemon()
+            renderCPUPokemon()
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
@@ -104,6 +107,19 @@ function staticDisplay(bgImage) {
     bgImage.onload = function() {
         gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 512)
         console.log("i'm displaying the static background!")
+    }
+}
+
+// function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
+//     let frameWidth = sheetWidth / numColumns
+//     let frameHeight = sheetHeight / numRows
+//     let 
+// }
+
+function battleBackgroundDisplay(bgImage) {
+    bgImage.onload = function() {
+        gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 310)
+        console.log("i'm displaying the battle background!")
     }
 }
 
