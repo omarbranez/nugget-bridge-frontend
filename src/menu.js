@@ -46,8 +46,8 @@ function renderInitialMenu(){
     // buttons.forEach(function(button){
     //     renderButton(button)
     // })
-    renderButton(newGameButton, 400, 150, 150, 100)
-    renderButton(continueButton, 400, 250, 150, 100)
+    renderButton(newGameButton, 375, 150, 200, 100) // fixed aspect ratio
+    renderButton(continueButton, 375, 250, 200, 100)
     drawSelection()
     testSelection()
     console.log("new game menu rendering")
@@ -58,19 +58,24 @@ function menuButtonListener(e){
     // console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
     // alert ( mouseX + "," + mouseY)
     if (menuState === "main") {
-        if (mouseX > 400 && mouseX < 550 && mouseY > 270 && mouseY < 330) {
+        if (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330) {
             alert("clicked continueButton")
         } else {
-            if (mouseX > 400 && mouseX < 550 && mouseY > 170 && mouseY < 230) {
+            if (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230) {
             alert("clicked newGameButton")
             }
         }
+    } else {
+        if (menuState === "battle") {
+
+        }
     }
+
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
      // X > 400, X < 550
      // Y > 270, Y < 330
-     // new button is 400, 170, 150, 60
+     // new button is 380, 170, 190, 60)
      // X > 400, X < 550
      // Y > 170, Y < 230
 }
@@ -84,21 +89,23 @@ function renderButton(gameButton, xLocation, yLocation, width, height){
 }
 
 function drawSelection(){ //draws rectangle if chosen
-    gameButtonCanvasContext.beginPath();
-    gameButtonCanvasContext.lineWidth = "6";
-    gameButtonCanvasContext.strokeStyle = "red";
-    gameButtonCanvasContext.rect(375, 150, 200, 100);
-    gameButtonCanvasContext.stroke();
+    gameButtonCanvasContext.beginPath()
+    gameButtonCanvasContext.lineWidth = "6"
+    gameButtonCanvasContext.strokeStyle = "red"
+    // gameButtonCanvasContext.rect(375, 150, 200, 100);
+    gameButtonCanvasContext.rect(380, 170, 190, 60)
+    gameButtonCanvasContext.stroke()
     console.log("drew red rectangle over selection")
 }
 
 function testSelection(){ // see how big the clickable area is, for eventlisteners
-    gameButtonCanvasContext.beginPath();
-    gameButtonCanvasContext.lineWidth = "6";
-    gameButtonCanvasContext.strokeStyle = "blue";
-    gameButtonCanvasContext.rect(400, 270, 150, 60); //clickable area for newgamebutton is 400, 170, 150, 60
+    gameButtonCanvasContext.beginPath()
+    gameButtonCanvasContext.lineWidth = "6"
+    gameButtonCanvasContext.strokeStyle = "blue"
+    gameButtonCanvasContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
     //continuebutton is 400, 270, 150, 60 AKA add 100 to Y location
-    gameButtonCanvasContext.stroke();
+    gameButtonCanvasContext.stroke()
     console.log("drew blue rectangle over clickable area")
 }
 
+function renderBattleButtons(){}
