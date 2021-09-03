@@ -63,6 +63,7 @@ function renderGameWindow() {
             renderPlayerPokemon()
             renderCPUPokemon()
             renderPlayerTeam()
+            drawHpBar()
             // renderTeamWindowText()
             break
         case "result":
@@ -126,7 +127,7 @@ function staticDisplay(bgImage) {
 
 function battleBackgroundDisplay(bgImage) {
     bgImage.onload = function() {
-        gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 310)
+        gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 320)
         console.log("i'm displaying the battle background!")
     }
 }
@@ -142,5 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGameWindow()
     renderTeamWindow()
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
-    
+    gameButtonCanvas.addEventListener('click', (e)=>{
+        console.log(e.clientX - 8, e.clientY - 39)})
 })
