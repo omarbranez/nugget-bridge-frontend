@@ -67,13 +67,13 @@ function menuButtonListener(e){
         }
     } else {
         if (menuState === "battle") {
-            if (mouseX >= 155 && mouseX <= 345 && mouseY >= 320 && mouseY <= 380) {
+            if (mouseX > 155 && mouseX < 345 && mouseY >= 420 && mouseY <= 480) {
                 alert("clicked fightButton")
             } else {
-                if (mouseX >= 155 && mouseX <= 345 && mouseY >= 420 && mouseY <= 480) {
+                if (mouseX > 355 && mouseX < 555 && mouseY >= 420 && mouseY <= 480) {
                     alert("clicked switchButton")
             } else {
-                if (mouseX >= 555 && mouseX <= 745 && mouseY >= 420 && mouseY <= 480) {
+                if (mouseX > 555 && mouseX < 745 && mouseY >= 420 && mouseY <= 480) {
                     alert("clicked quitButton")
                     }
                 }   
@@ -104,7 +104,7 @@ function drawSelection(){ //draws rectangle if chosen
     gameButtonCanvasContext.strokeStyle = "red"
     // gameButtonCanvasContext.rect(375, 150, 200, 100);
     // gameButtonCanvasContext.rect(380, 170, 190, 60)
-    gameButtonCanvasContext.rect(155, 320, 190, 60) // fight button
+    gameButtonCanvasContext.rect(155, 420, 190, 60) // fight button
     gameButtonCanvasContext.stroke()
     console.log("drew red rectangle over selection")
 }
@@ -122,10 +122,12 @@ function testSelection(){ // see how big the clickable area is, for eventlistene
 function renderBattleButtons(){
     const fightButton = new Image()
     fightButton.src = "./assets/battle-fight-button.png"
-    renderButton(fightButton, 150, 300, 200, 100)
+    // renderButton(fightButton, 150, 300, 200, 100) // moving this down to fit dialog box
+    renderButton(fightButton, 150, 400, 200, 100)
     const switchButton = new Image()
     switchButton.src = "./assets/battle-switch-button.png"
-    renderButton(switchButton, 150, 400, 200, 100)
+    // renderButton(switchButton, 150, 400, 200, 100)
+    renderButton(switchButton, 350, 400, 200, 100)
     const quitButton = new Image()
     quitButton.src = "./assets/battle-save-quit-button.png"
     renderButton(quitButton, 550, 400, 200, 100)
