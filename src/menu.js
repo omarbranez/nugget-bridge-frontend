@@ -32,10 +32,11 @@
 let menuState = "battle"
 
 const gameButtonCanvas = document.getElementById("menu-buttons")
-const gameButtonCanvasContext = gameButtonCanvas.getContext("2d")
+const gameButtonContext = gameButtonCanvas.getContext("2d")
 // guessX = 0
 // guessY = 0
 // let buttons = []
+
 
 function renderInitialMenu(){
     const newGameButton = new Image()
@@ -94,28 +95,28 @@ function menuButtonListener(e){
 
 function renderButton(gameButton, xLocation, yLocation, width, height){
     gameButton.onload = function() {
-        gameButtonCanvasContext.drawImage(gameButton, xLocation, yLocation, width, height)
+        gameButtonContext.drawImage(gameButton, xLocation, yLocation, width, height)
     }
 }
 
 function drawSelection(){ //draws rectangle if chosen
-    gameButtonCanvasContext.beginPath()
-    gameButtonCanvasContext.lineWidth = "5"
-    gameButtonCanvasContext.strokeStyle = "red"
-    // gameButtonCanvasContext.rect(375, 150, 200, 100);
-    // gameButtonCanvasContext.rect(380, 170, 190, 60)
-    gameButtonCanvasContext.rect(155, 445, 190, 60) // fight button
-    gameButtonCanvasContext.stroke()
+    gameButtonContext.beginPath()
+    gameButtonContext.lineWidth = "5"
+    gameButtonContext.strokeStyle = "red"
+    // gameButtonContext.rect(375, 150, 200, 100);
+    // gameButtonContext.rect(380, 170, 190, 60)
+    gameButtonContext.rect(155, 445, 190, 60) // fight button
+    gameButtonContext.stroke()
     console.log("drew red rectangle over selection")
 }
 
 function testSelection(){ // see how big the clickable area is, for eventlisteners
-    gameButtonCanvasContext.beginPath()
-    gameButtonCanvasContext.lineWidth = "5"
-    gameButtonCanvasContext.strokeStyle = "blue"
-    gameButtonCanvasContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
+    gameButtonContext.beginPath()
+    gameButtonContext.lineWidth = "5"
+    gameButtonContext.strokeStyle = "blue"
+    gameButtonContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
     //continuebutton is 400, 270, 150, 60 AKA add 100 to Y location
-    gameButtonCanvasContext.stroke()
+    gameButtonContext.stroke()
     console.log("drew blue rectangle over clickable area")
 }
 

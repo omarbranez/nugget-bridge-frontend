@@ -6,9 +6,11 @@ const battlePokemonCanvas = document.getElementById("battle-pokemon")
 const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 
 let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+let cpuTeam = ["Venusaur"]
+
+// let displayDialog = "Blastoise used Surf!"
 
 battlePokemonContext.font = "2em sans-serif";
-let cpuTeam = ["Venusaur"]
 
 function renderPlayerPokemon(){
     const currentPokemon = playerTeam[0]
@@ -19,6 +21,7 @@ function renderPlayerPokemon(){
     drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
     console.log(`Look at my ${currentPokemon}!`)
     battlePokemonContext.fillText(currentPokemon, 500, 250)
+
     // drawHPBar("Player")
 }
 

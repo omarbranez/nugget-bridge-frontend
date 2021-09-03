@@ -55,7 +55,7 @@ function renderGameWindow() {
             break
         case "battle":
             clearScreen()
-            gameBackground.src = "./assets/battle-background-1.png"
+            gameBackground.src = "./assets/battle-background-2.png"
             battleBackgroundDisplay(gameBackground)
             // spritesheetStatic(3, 4, 737, 466, gameBackground)
             ongoingBattle = true
@@ -146,4 +146,5 @@ document.addEventListener('DOMContentLoaded', () => {
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
     gameButtonCanvas.addEventListener('click', (e)=>{
         console.log(e.clientX - 8, e.clientY - 39)})
+    // animateText(displayDialog)
 })

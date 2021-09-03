@@ -7,7 +7,7 @@ const playerPokemonMaxHP = 300
 const cpuPokemonCurrentHP = 100
 const cpuPokemonMaxHP = 290
 
-
+let displayDialog = "Blastoise used Surf!"
 
 function drawHpBar(){
     hpBarContext.font = '1em sans-serif'; 
@@ -46,5 +46,29 @@ function drawHpBar(){
         }
         console.log(`${cpuTeam[0]} has ${cpuPokemonCurrentHP} out of ${cpuPokemonMaxHP} HP remaining!`)
     }
+    animateText(displayDialog.toUpperCase())
+}
 
+function animateText(text){
+    const textLength = text.length
+    gameButtonContext.font = '2em serif'; 
+    gameButtonContext.fillStyle = "white";
+    let i = 0
+    let letterX = 150
+    const writer = setInterval( function() {
+        // if (el === text[-1]) {
+        if ( i === textLength) {
+            clearInterval(writer)
+        } else {
+            renderText(text[i], letterX)
+            letterX = letterX + 20
+            i++
+            console.log(`${letterX}, ${text[i]}`)
+        }
+    }, 30)
+}
+
+function renderText(letter, newX) {
+    gameButtonContext.textAlign = "center"
+    gameButtonContext.fillText(letter, newX, 360)
 }
