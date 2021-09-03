@@ -15,7 +15,7 @@ let teamWindowSlots = []
 
 function renderPlayerTeam(){
     for (const pokemon of playerTeam) {
-        console.log(`I'm going to render ${pokemon}`)
+        console.log(`I'm going to render ${pokemon} in the bottom window!`)
     }
     let pokemonOnePic = new Image()
     pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
