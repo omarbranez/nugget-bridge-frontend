@@ -3,11 +3,14 @@ const hpBarContext = hpBarCanvas.getContext("2d")
 
 // temp stuff
 const playerPokemonCurrentHP = 127
-const playerPokemonMaxHP = 300
+const playerPokemonMaxHP = 362
 const cpuPokemonCurrentHP = 100
-const cpuPokemonMaxHP = 290
+const cpuPokemonMaxHP = 364
 
-let displayDialog = "Blastoise used Surf!"
+let displayDialog = "Blastoise used Hydro Pump!"
+
+const longChars = ["r", "R", "w", "W"]
+const shortChars = ["", " ", "i", "I", "l", "!"]
 
 function drawHpBar(){
     hpBarContext.font = '1em sans-serif'; 
@@ -51,17 +54,25 @@ function drawHpBar(){
 
 function animateText(text){
     const textLength = text.length
-    gameButtonContext.font = '2em serif'; 
+    gameButtonContext.font = '2em sans-serif'; 
     gameButtonContext.fillStyle = "white";
     let i = 0
     let letterX = 150
     const writer = setInterval( function() {
-        // if (el === text[-1]) {
         if ( i === textLength) {
             clearInterval(writer)
         } else {
             renderText(text[i], letterX)
-            letterX = letterX + 20
+            if (shortChars.includes(text[i]) || shortChars.includes(text[i+1])){
+                letterX = letterX + 15
+                console.log(gameButtonContext.measureText(text[i]))
+            } else {
+                if (longChars.includes(text[i]) ){
+                    letterX = letterX + 25
+                }
+            else {
+                letterX = letterX + 20
+            }}
             i++
             console.log(`${letterX}, ${text[i]}`)
         }
