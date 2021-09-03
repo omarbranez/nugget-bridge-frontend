@@ -21,7 +21,7 @@ function renderGameWindow() {
     gameBackgroundCanvas.height = 512
     gameBackgroundCanvas.width = 888
     // const screens = ["title", "creation", "login", "options", "overworld", "battle", "result"]
-
+    gameBackgroundContext.fillStyle = "#285068"
     let gameBackground = new Image()
     
     switch (currentScreen) {
@@ -63,6 +63,7 @@ function renderGameWindow() {
             renderPlayerPokemon()
             renderCPUPokemon()
             renderPlayerTeam()
+            gameBackgroundContext.fillRect(0, 320, 888, 190)
             drawHpBar()
             // renderTeamWindowText()
             break
@@ -72,7 +73,7 @@ function renderGameWindow() {
         default:
             gameBackground.src = "./assets/title-screen-logo.gif"
     }
-    console.log("im all the way up!")
+    console.log("top window loaded")
 }
 
 function renderTeamWindow() {
