@@ -2,15 +2,15 @@ const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 
 // temp stuff
-const playerPokemonCurrentHP = 127
+const playerPokemonCurrentHP = 266
 const playerPokemonMaxHP = 362
-const cpuPokemonCurrentHP = 100
-const cpuPokemonMaxHP = 364
+const cpuPokemonCurrentHP = 114
+const cpuPokemonMaxHP = 416
 
-let displayDialog = "Blastoise used Hydro Pump!"
+let displayDialog = "The Enemy Mewtwo is Paralyzed! It may not attack!"
 
-const longChars = ["r", "R", "w", "W"]
-const shortChars = ["", " ", "i", "I", "l", "!"]
+const wideChars = ["R", "w", "W"]
+const narrowChars = ["", " ", "I", "!"]
 
 function drawHpBar(){
     hpBarContext.font = '1em sans-serif'; 
@@ -32,7 +32,6 @@ function drawHpBar(){
             hpBarContext.fillStyle = "black"
             hpBarContext.fillText(`HP: ${playerPokemonCurrentHP}/${playerPokemonMaxHP}`, 600, 288)
         }
-        // hpBarContext.strokeText(`HP: ${playerPokemonCurrentHP}/${playerPokemonMaxHP}`, 600, 288)
         console.log(`${playerTeam[0]} has ${playerPokemonCurrentHP} out of ${playerPokemonMaxHP} HP remaining!`)
     }
     cpuHPBar.onload = function() {
@@ -57,17 +56,17 @@ function animateText(text){
     gameButtonContext.font = '2em sans-serif'; 
     gameButtonContext.fillStyle = "white";
     let i = 0
-    let letterX = 150
+    let letterX = 100
     const writer = setInterval( function() {
         if ( i === textLength) {
             clearInterval(writer)
         } else {
             renderText(text[i], letterX)
-            if (shortChars.includes(text[i]) || shortChars.includes(text[i+1])){
+            if (narrowChars.includes(text[i]) || narrowChars.includes(text[i+1])){
                 letterX = letterX + 15
                 console.log(gameButtonContext.measureText(text[i]))
             } else {
-                if (longChars.includes(text[i]) ){
+                if (wideChars.includes(text[i])){
                     letterX = letterX + 25
                 }
             else {
@@ -81,5 +80,9 @@ function animateText(text){
 
 function renderText(letter, newX) {
     gameButtonContext.textAlign = "center"
-    gameButtonContext.fillText(letter, newX, 360)
+    if (newX <= 788) {
+        gameButtonContext.fillText(letter, newX, 360)
+    } else {
+        gameButtonContext.fillText(letter, newX - 688, 410)
+    }
 }
