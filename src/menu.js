@@ -33,20 +33,14 @@ let menuState = "battle"
 
 const gameButtonCanvas = document.getElementById("menu-buttons")
 const gameButtonContext = gameButtonCanvas.getContext("2d")
-// guessX = 0
-// guessY = 0
-// let buttons = []
-
+// const highlightCanvas = document.getElementById("highlight")
+// const highlightContext = highlightCanvas.getContext("2d")
 
 function renderInitialMenu(){
     const newGameButton = new Image()
     newGameButton.src = "./assets/menu-button-new-game.png"
     const continueButton = new Image()
     continueButton.src = "./assets/menu-button-continue.png"
-    // buttons.push(newGameButton, continueButton)
-    // buttons.forEach(function(button){
-    //     renderButton(button)
-    // })
     renderButton(newGameButton, 375, 150, 200, 100) // fixed aspect ratio
     renderButton(continueButton, 375, 250, 200, 100)
     drawSelection()
@@ -99,26 +93,56 @@ function renderButton(gameButton, xLocation, yLocation, width, height){
     }
 }
 
-function drawSelection(){ //draws rectangle if chosen
-    gameButtonContext.beginPath()
-    gameButtonContext.lineWidth = "5"
-    gameButtonContext.strokeStyle = "red"
-    // gameButtonContext.rect(375, 150, 200, 100);
-    // gameButtonContext.rect(380, 170, 190, 60)
-    gameButtonContext.rect(155, 445, 190, 60) // fight button
-    gameButtonContext.stroke()
-    console.log("drew red rectangle over selection")
-}
+// function drawSelection(x, y, dx, dy){ //draws rectangle if chosen
+//     highlightContext.beginPath()
+//     highlightContext.lineWidth = "5"
+//     highlightContext.strokeStyle = "red"
+//     // gameButtonContext.rect(375, 150, 200, 100);
+//     // gameButtonContext.rect(380, 170, 190, 60)
+//     //gameButtonContext.rect(155, 445, 190, 60) // fight button
+//     highlightContext.rect(x, y, dx, dy)
+//     highlightContext.stroke()
+//     // console.log("drew red rectangle over selection")
+// }
 
-function testSelection(){ // see how big the clickable area is, for eventlisteners
-    gameButtonContext.beginPath()
-    gameButtonContext.lineWidth = "5"
-    gameButtonContext.strokeStyle = "blue"
-    gameButtonContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
-    //continuebutton is 400, 270, 150, 60 AKA add 100 to Y location
-    gameButtonContext.stroke()
-    console.log("drew blue rectangle over clickable area")
-}
+// function clearSelection(x, y, dx, dy){
+//     highlightContext.clearRect(x, y, dx, dy)
+// }
+
+// function highlightButton(e) {
+//     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
+//     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
+//     debugger
+//     if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505){
+//         clearSelection(355, 445, 190, 60)
+//         clearSelection(555, 445, 190, 60)
+//         drawSelection(155, 445, 190, 60)
+//         alert("highlighting fight button!")
+//     } else {
+//         if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
+//             drawSelection(355, 445, 190, 60)
+//             alert("highlighting switch button")
+//         } else {
+//             if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505) {
+//                 drawSelection(555, 445, 190, 60)
+//                 alert("highlighting quit button")
+//             }
+//         }
+//     }
+// }    
+   
+
+
+
+// function testSelection(){ // see how big the clickable area is, for eventlisteners
+//     gameButtonContext.beginPath()
+//     gameButtonContext.lineWidth = "5"
+//     gameButtonContext.strokeStyle = "blue"
+//     gameButtonContext.rect(380, 270, 190, 60) //old clickable area for newgamebutton is 400, 170, 150, 60
+//     //continuebutton is 400, 270, 150, 60 AKA add 100 to Y location
+//     gameButtonContext.stroke()
+//     console.log("drew blue rectangle over clickable area")
+// }
 
 function renderBattleButtons(){
     const fightButton = new Image()

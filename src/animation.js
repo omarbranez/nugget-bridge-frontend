@@ -7,9 +7,9 @@ const playerPokemonMaxHP = 362
 const cpuPokemonCurrentHP = 114
 const cpuPokemonMaxHP = 416
 
-let displayDialog = "The Enemy Mewtwo is Paralyzed! It may not attack!"
+let displayDialog = "The enemy Mewtwo is Paralyzed! It may not attack!"
 
-const wideChars = ["R", "w", "W"]
+const wideChars = ["R", "w", "W", "E"]
 const narrowChars = ["", " ", "I", "!"]
 
 function drawHpBar(){
@@ -64,7 +64,7 @@ function animateText(text){
             renderText(text[i], letterX)
             if (narrowChars.includes(text[i]) || narrowChars.includes(text[i+1])){
                 letterX = letterX + 15
-                console.log(gameButtonContext.measureText(text[i]))
+                // console.log(gameButtonContext.measureText(text[i]))
             } else {
                 if (wideChars.includes(text[i])){
                     letterX = letterX + 25
@@ -73,7 +73,7 @@ function animateText(text){
                 letterX = letterX + 20
             }}
             i++
-            console.log(`${letterX}, ${text[i]}`)
+            // console.log(`${letterX}, ${text[i]}`)
         }
     }, 30)
 }

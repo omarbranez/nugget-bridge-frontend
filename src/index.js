@@ -6,7 +6,8 @@ const teamPokemonPicturesCanvas = document.getElementById("team-pokemon-pictures
 const teamPokemonPicturesContext = teamPokemonPicturesCanvas.getContext("2d")
 const teamPokemonTextCanvas = document.getElementById("team-pokemon-text")
 const teamPokemonTextContext = teamPokemonTextCanvas.getContext("2d")
-
+const highlightCanvas = document.getElementById("highlight-button")
+const highlightContext = highlightCanvas.getContext("2d")
 
 var canvas = document.getElementsByTagName("canvas")
 
@@ -138,13 +139,59 @@ function clearScreen() {
     console.log("clearing the screen!")
 }
 
+function drawSelection(x, y, dx, dy){ //draws rectangle if chosen
+    console.log("loaded")
+    highlightContext.beginPath()
+    highlightContext.lineWidth = "5"
+    highlightContext.strokeStyle = "red"
+    // gameButtonContext.rect(375, 150, 200, 100);
+    // gameButtonContext.rect(380, 170, 190, 60)
+    //gameButtonContext.rect(155, 445, 190, 60) // fight button
+    highlightContext.rect(x, y, dx, dy)
+    highlightContext.stroke()
+    // console.log("drew red rectangle over selection")
+}
+
+function clearSelection(x, y, dx, dy){
+    highlightContext.clearRect(x, y, dx, dy)
+}
+
+function highlightButton(e) {
+    // console.log("loaded")
+    let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
+    let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
+    if (mouseX > 155 - 10 && mouseX < 345 - 10 && mouseY >= 445 - 20  && mouseY <= 505 - 20){
+        highlightContext.clearRect(0, 0, 888, 512)
+        drawSelection(155, 445, 190, 60)
+        // alert("highlighting fight button!")
+    } else {
+        if (mouseX > 355 - 10 && mouseX < 555 - 10 && mouseY >= 445 - 20 && mouseY <= 505 - 20) {
+            highlightContext.clearRect(0, 0, 888, 512)
+            drawSelection(355, 445, 190, 60)
+            // alert("highlighting switch button")
+        } else {
+            if (mouseX > 555 - 10 && mouseX < 745 - 10 && mouseY >= 445 - 20 && mouseY <= 505 - 20) {
+                highlightContext.clearRect(0, 0, 888, 512)
+                drawSelection(555, 445, 190, 60)
+                // alert("highlighting quit button")
+            } else {
+                highlightContext.clearRect(0, 0, 888, 512)
+            }
+        }
+    }
+}
+
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
-    gameButtonCanvas.addEventListener('click', (e)=>{
-        console.log(e.clientX - 8, e.clientY - 39)})
-    // animateText(displayDialog)
+    window.addEventListener('mousemove', highlightButton, false)
+    // gameButtonCanvas.addEventListener('click', (e)=>{
+    //     console.log(e.clientX - 8, e.clientY - 39)})   
+    // window.onmousemove = function(e){console.log("mouse location:", e.clientX - 102, e.clientY - 31)}
+    // gameButtonCanvas.addEventListener("mouseout", (e))
+    // drawSelection(155, 445, 190, 60)
 })
+
