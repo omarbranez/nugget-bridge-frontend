@@ -1,19 +1,46 @@
-// const teamWindow = document.getElementById("team-container")
-//extends environment/gfx
-// teamBackgroundContext.fillText("Hello from the team library!", 10, 10)
 console.log(`i'm in the team window`)
 teamPokemonTextContext.font = "1.2em sans-serif";
-// const teamPokemonPicturesCanvas = document.getElementById("team-pokemon-pictures")
-// const teamPokemonPicturesContext = teamPokemonPicturesCanvas.getContext("2d")
-// const teamPokemonTextCanvas = document.getElementById("team-pokemon-text")
-// const teamPokemonTextContext = teamPokemonTextCanvas.getContext("2d")
 
 // let playerTeam = ["Charizard", "Venusaur"] //already declared in environment for now
 let teamWindowSlots = []
-// teamWindowSlots.push(playerTeam)
+let x = 0
+let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
 
+let funcArray = [ drawNormal, drawHigher ]
+let funcIndex = 0
+
+let hopOn = false
+
+window.setInterval(function(){
+    if (hopOn) {
+        funcArray[funcIndex++ % funcArray.length]()
+        // console.log("hello")
+    }}, 96)
+
+// function hopper() {
+//     funcArray[funcIndex++ % funcArray.length]()
+//     if (hopOn) {
+//         requestAnimationFrame(hopper)
+//     }
+// }
+// requestAnimationFrame(hopper)
+function drawNormal(){
+    teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
+    let pokemonOnePic = new Image()
+    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
+    renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
+    console.log("Jumping Up!")
+}
+function drawHigher(){
+    teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
+    let pokemonOnePic = new Image()
+    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
+    renderFirstTeam(pokemonOnePic, 50, 45, 133, 100)
+    console.log("Jumping Down!")
+}
 
 function renderPlayerTeam(){
+    teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
     for (const pokemon of playerTeam) {
         console.log(`I'm going to render ${pokemon} in the bottom window!`)
     }

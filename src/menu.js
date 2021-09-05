@@ -50,7 +50,7 @@ function renderInitialMenu(){
 function menuButtonListener(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
-    // console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
+    console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
     // alert ( mouseX + "," + mouseY)
     if (menuState === "main") {
         if (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330) {

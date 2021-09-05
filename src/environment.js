@@ -5,7 +5,7 @@
 const battlePokemonCanvas = document.getElementById("battle-pokemon")
 const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 
-let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+// let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
 let cpuTeam = ["Mewtwo", "Venusaur"]
 
 battlePokemonContext.font = "2em sans-serif";

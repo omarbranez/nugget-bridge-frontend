@@ -1,19 +1,21 @@
 const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
+const highlightCanvas = document.getElementById("highlight-button-top")
+const highlightContext = highlightCanvas.getContext("2d")
+
 const teamBackgroundCanvas = document.getElementById("team-background")
 const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
 const teamPokemonPicturesCanvas = document.getElementById("team-pokemon-pictures")
 const teamPokemonPicturesContext = teamPokemonPicturesCanvas.getContext("2d")
 const teamPokemonTextCanvas = document.getElementById("team-pokemon-text")
 const teamPokemonTextContext = teamPokemonTextCanvas.getContext("2d")
-const highlightCanvas = document.getElementById("highlight-button")
-const highlightContext = highlightCanvas.getContext("2d")
-
+const teamHighlightCanvas = document.getElementById("team-highlight")
+const teamHighlightContext = teamHighlightCanvas.getContext("2d")
 var canvas = document.getElementsByTagName("canvas")
 
 let currentScreen = "battle" 
 let ongoingBattle = false   
-
+// let hop
 function renderGameWindowOverlay(){
 
 }
@@ -139,8 +141,8 @@ function clearScreen() {
     console.log("clearing the screen!")
 }
 
-function drawSelection(x, y, dx, dy){ //draws rectangle if chosen
-    console.log("loaded")
+function drawSelection(x, y, dx, dy) { //draws rectangle if chosen
+    // console.log("loaded")
     highlightContext.beginPath()
     highlightContext.lineWidth = "5"
     highlightContext.strokeStyle = "red"
@@ -152,25 +154,33 @@ function drawSelection(x, y, dx, dy){ //draws rectangle if chosen
     // console.log("drew red rectangle over selection")
 }
 
-function clearSelection(x, y, dx, dy){
-    highlightContext.clearRect(x, y, dx, dy)
+function teamDrawSelection(x, y, dx, dy) {
+    teamHighlightContext.beginPath()
+    teamHighlightContext.lineWidth = "5"
+    teamHighlightContext.strokeStyle = "red"
+    teamHighlightContext.rect(x, y, dx, dy)
+    teamHighlightContext.stroke()
 }
+
+// function clearSelection(x, y, dx, dy){
+//     highlightContext.clearRect(x, y, dx, dy)
+// }
 
 function highlightButton(e) {
     // console.log("loaded")
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
-    if (mouseX > 155 - 10 && mouseX < 345 - 10 && mouseY >= 445 - 20  && mouseY <= 505 - 20){
+    if (mouseX > 155  && mouseX < 345  && mouseY >= 445   && mouseY <= 505 ){
         highlightContext.clearRect(0, 0, 888, 512)
         drawSelection(155, 445, 190, 60)
         // alert("highlighting fight button!")
     } else {
-        if (mouseX > 355 - 10 && mouseX < 555 - 10 && mouseY >= 445 - 20 && mouseY <= 505 - 20) {
+        if (mouseX > 355  && mouseX < 555  && mouseY >= 445  && mouseY <= 505 ) {
             highlightContext.clearRect(0, 0, 888, 512)
             drawSelection(355, 445, 190, 60)
             // alert("highlighting switch button")
         } else {
-            if (mouseX > 555 - 10 && mouseX < 745 - 10 && mouseY >= 445 - 20 && mouseY <= 505 - 20) {
+            if (mouseX > 555  && mouseX < 745  && mouseY >= 445  && mouseY <= 505 ) {
                 highlightContext.clearRect(0, 0, 888, 512)
                 drawSelection(555, 445, 190, 60)
                 // alert("highlighting quit button")
@@ -181,17 +191,69 @@ function highlightButton(e) {
     }
 }
 
+function animatePokemon(e) { // interval will go into render team
+    let mouseX = e.clientX// - teamHighlightCanvas.offsetParent.offsetLeft // minus the bounding areas
+    let mouseY = e.clientY// - teamHighlightCanvas.offsetParent.offsetTop
+    if (mouseX > 160 && mouseX < 260 && mouseY > 600 && mouseY < 700) {
+        console.log("JUMPING")
+        hopOn = true
+        // requestAnimationFrame(hopper)
+    } else {
+        hopOn = false
+    }
+}
+
+
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
-    window.addEventListener('mousemove', highlightButton, false)
+    gameButtonCanvas.addEventListener('mousemove', highlightButton, false)
+    teamHighlightCanvas.addEventListener('mousemove', animatePokemon, false)
+    // teamHighlightCanvas.addEventListener('mouseout',  clearInterval(hop), false)
+    // window.addEventListener('mouseover', animatePokemon, false)
     // gameButtonCanvas.addEventListener('click', (e)=>{
     //     console.log(e.clientX - 8, e.clientY - 39)})   
-    // window.onmousemove = function(e){console.log("mouse location:", e.clientX - 102, e.clientY - 31)}
+    // window.onmousemove = function(e){console.log("mouse location:", e.clientX 2, e.clientY - 31)}
     // gameButtonCanvas.addEventListener("mouseout", (e))
-    // drawSelection(155, 445, 190, 60)
+    // drawSelection(155, 445, 190, 60) // buttons
+    teamDrawSelection(70, 50, 100, 100)
+    teamDrawSelection(70, 200, 100, 100)
+    teamDrawSelection(70, 350, 100, 100)
+    teamDrawSelection(520, 50, 100, 100)
+    teamDrawSelection(520, 200, 100, 100)
+    teamDrawSelection(520, 350, 100, 100)
 })
 
+// // With setInterval
+// var speed = 1000/60; // 60 Frame per second
+// var opacity = 100;
+// var timerId = setInterval(function() {
+//     opacity--;
+//     div.style.opacity = opacity/100;
+//     if (opacity >= 0){
+//         clearInterval(timeId);
+//         console.log("Look at me, I'm done!");
+//     }
+// },speed);
+
+// // With requestAnimationFramet // my super favorite
+// var opacity = 100;
+// function fadeOut() {
+//     opacity--;
+//     div.style.opacity = opacity/100;
+//     if (opacity > 0){
+//         requestAnimationFrame(fadeOut);
+//     }
+// }
+// requestAnimationFrame(fadeOut);
+
+// function hopper() {
+//     funcArray[funcIndex++ % funcArray.length]()
+//     if (hopOn) {
+//         requestAnimationFrame(hopper)
+//     }
+// }
+// requestAnimationFrame(hopper)
