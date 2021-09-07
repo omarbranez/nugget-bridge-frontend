@@ -1,3 +1,8 @@
+const baseURL = 'http://localhost:3000'
+const teamsURL = `${baseURL}/team_pokemons`
+const pokemonsURL = `${baseURL}/pokemons`
+const usersURL = `${baseURL}/users`
+
 const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
 const highlightCanvas = document.getElementById("highlight-button-top")
@@ -15,7 +20,7 @@ var canvas = document.getElementsByTagName("canvas")
 
 let currentScreen = "battle" 
 let ongoingBattle = false   
-// let hop
+let playerTeam = []
 function renderGameWindowOverlay(){
 
 }
@@ -62,6 +67,7 @@ function renderGameWindow() {
             battleBackgroundDisplay(gameBackground)
             // spritesheetStatic(3, 4, 737, 466, gameBackground)
             ongoingBattle = true
+            // setPlayerTeam()
             renderBattleButtons()
             renderPlayerPokemon()
             renderCPUPokemon()
@@ -203,12 +209,25 @@ function animatePokemon(e) { // interval will go into render team
     }
 }
 
-
+function setPlayerTeam(){
+    return fetch(`${usersURL}/1`)
+    .then(res => res.json())
+    .then(json => {
+        for (const pokemon of json.data.attributes.myTeam){
+            // debugger
+            playerTeam.push(pokemon)
+            // debugger
+            // currentPokemon = playerTeam.first
+        }
+    })
+}
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
+    setPlayerTeam()
     renderGameWindow()
     renderTeamWindow()
+    // debugger
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
     gameButtonCanvas.addEventListener('mousemove', highlightButton, false)
     teamHighlightCanvas.addEventListener('mousemove', animatePokemon, false)
@@ -226,34 +245,3 @@ document.addEventListener('DOMContentLoaded', () => {
     teamDrawSelection(520, 200, 100, 100)
     teamDrawSelection(520, 350, 100, 100)
 })
-
-// // With setInterval
-// var speed = 1000/60; // 60 Frame per second
-// var opacity = 100;
-// var timerId = setInterval(function() {
-//     opacity--;
-//     div.style.opacity = opacity/100;
-//     if (opacity >= 0){
-//         clearInterval(timeId);
-//         console.log("Look at me, I'm done!");
-//     }
-// },speed);
-
-// // With requestAnimationFramet // my super favorite
-// var opacity = 100;
-// function fadeOut() {
-//     opacity--;
-//     div.style.opacity = opacity/100;
-//     if (opacity > 0){
-//         requestAnimationFrame(fadeOut);
-//     }
-// }
-// requestAnimationFrame(fadeOut);
-
-// function hopper() {
-//     funcArray[funcIndex++ % funcArray.length]()
-//     if (hopOn) {
-//         requestAnimationFrame(hopper)
-//     }
-// }
-// requestAnimationFrame(hopper)

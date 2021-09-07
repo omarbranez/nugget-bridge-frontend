@@ -5,13 +5,15 @@
 const battlePokemonCanvas = document.getElementById("battle-pokemon")
 const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 
-// let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+// = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
 let cpuTeam = ["Mewtwo", "Venusaur"]
 
 battlePokemonContext.font = "2em sans-serif";
 
 function renderPlayerPokemon(){
+    // setPlayerTeam()
     const currentPokemon = playerTeam[0]
+    // debugger
     console.log(`My current Pokemon is ${currentPokemon}`)
     const currentPokemonRear = new Image()
     currentPokemonRear.src = `./assets/pokemon-battle/${currentPokemon.toLowerCase()}-rear.png`

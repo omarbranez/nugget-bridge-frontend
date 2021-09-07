@@ -4,12 +4,26 @@ teamPokemonTextContext.font = "1.2em sans-serif";
 // let playerTeam = ["Charizard", "Venusaur"] //already declared in environment for now
 let teamWindowSlots = []
 let x = 0
-let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+// let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
+// let playerTeam = []
 
 let funcArray = [ drawNormal, drawHigher ]
 let funcIndex = 0
 
 let hopOn = false
+
+function setPlayerTeam(){
+    return fetch(`${usersURL}/1`)
+    .then(res => res.json())
+    .then(json => {
+        for (const pokemon of json.data.attributes.myTeam){
+
+            playerTeam.push(pokemon.name)
+            // debugger
+            // currentPokemon = playerTeam.first
+        }
+    })
+}
 
 window.setInterval(function(){
     if (hopOn) {
