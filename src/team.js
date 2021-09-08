@@ -41,7 +41,8 @@ function drawHigher(){
     console.log("Jumping Down!")
 }
 
-function renderPlayerTeam(){
+async function renderPlayerTeam(){
+    await renderPlayerPokemon()
     teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
     for (const pokemon of playerTeam) {
         console.log(`I'm going to render ${pokemon.name} in the bottom window!`)

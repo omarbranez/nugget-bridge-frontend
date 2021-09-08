@@ -1,5 +1,3 @@
-const hpBarCanvas = document.getElementById("hp-bar")
-const hpBarContext = hpBarCanvas.getContext("2d")
 
 // temp stuff
 let playerPokemonCurrentHP
@@ -7,12 +5,14 @@ let playerPokemonMaxHP
 const cpuPokemonCurrentHP = 114
 const cpuPokemonMaxHP = 416
 
-let displayDialog = "The enemy Mewtwo is Paralyzed! It may not attack!"
+// let displayDialog = `The enemy ${currentCPUPokemon} is Paralyzed! It may not attack!`
 
 const wideChars = ["R", "w", "W", "E"]
 const narrowChars = ["", " ", "I", "!"]
 
-function drawHpBar(){
+async function drawHpBar(){
+    await renderCPUPokemon() 
+    // debugger
     hpBarContext.font = '1em sans-serif'; 
     hpBarContext.strokeStyle = "black";
     // hpBarContext.fillStyle = "white"; // will need to wrap this inside a function
@@ -48,7 +48,7 @@ function drawHpBar(){
         }
         console.log(`${cpuTeam[0]} has ${cpuPokemonCurrentHP} out of ${cpuPokemonMaxHP} HP remaining!`)
     }
-    animateText(displayDialog.toUpperCase())
+    // animateText(displayDialog.toUpperCase())
 }
 
 function animateText(text){
@@ -85,4 +85,20 @@ function renderText(letter, newX) {
     } else {
         gameButtonContext.fillText(letter, newX - 688, 410)
     }
+}
+
+function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {
+    let frameWidth = sheetWidth / numColumns //2220
+    let frameHeight = sheetHeight / numRows // 10250
+    let currentFrame = 0;
+    setInterval( function() { // animate spritesheet
+        currentFrame++ // pick new frame
+        let maxFrame = numColumns * numRows - 1
+        if (currentFrame > maxFrame){ // loop frames
+            currentFrame = 0
+        }
+        let column = currentFrame % numColumns // update rows and columns
+        let row = Math.floor(currentFrame / numColumns) // Clear and draw
+        gameBackgroundContext.drawImage(bgImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, 0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
+    }, 100)    //wait for next step in the loop
 }

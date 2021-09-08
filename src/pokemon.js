@@ -25,18 +25,18 @@ class Pokemon {
     
 }
 
-function setPlayerTeam() {
-    for (const pokemon of Pokemon.all) {
-        if (pokemon.userID === currentPlayer){
-            playerTeam.push(pokemon)
-        }
-    }
-}
+// function setPlayerTeam() {
+//     for (const pokemon of Pokemon.all) {
+//         if (pokemon.userID === currentPlayer){
+//             playerTeam.push(pokemon)
+//         }
+//     }
+// }
 
-function setCPUTeam() {
-    for (const pokemon of Pokemon.all) {
-        if (pokemon.userID === cpuPlayer){
-            cpuTeam.push(pokemon)
-        }
-    }
-}
+// function setCPUTeam() {
+//     for (const pokemon of Pokemon.all) {
+//         if (pokemon.userID === cpuPlayer){
+//             cpuTeam.push(pokemon)
+//         }
+//     }
+// }

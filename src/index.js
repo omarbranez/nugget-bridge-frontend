@@ -1,7 +1,9 @@
+
 const baseURL = 'http://localhost:3000'
 const teamsURL = `${baseURL}/team_pokemons`
 const pokemonsURL = `${baseURL}/pokemons`
 const usersURL = `${baseURL}/users`
+const movesURL = `${baseURL}/moves`
 
 const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
@@ -29,15 +31,126 @@ teamPokemonTextContext.font = "1.2em sans-serif";
 const teamHighlightCanvas = document.getElementById("team-highlight")
 const teamHighlightContext = teamHighlightCanvas.getContext("2d")
 
-
+const hpBarCanvas = document.getElementById("hp-bar")
+const hpBarContext = hpBarCanvas.getContext("2d")
 
 var canvas = document.getElementsByTagName("canvas")
 let currentPlayer
 let cpuPlayer
+let currentPokemon
+let currentCPUPokemon
 let currentScreen = "battle" 
 let ongoingBattle = false   
 let playerTeam = []
 let cpuTeam = []
+let menuState = "battle"
+let displayDialog //= `The enemy ${currentCPUPokemon.name} is Paralyzed! It may not attack!`
+
+function getPlayerTeam(){
+    currentPlayer = 1 //argument of whatever
+    return fetch(`${usersURL}/1`)
+    .then(res => res.json())
+    .then(json => {
+        if (json.data.id === "1") {
+        for (const pokemon of json.data.attributes.myTeam){
+            new Pokemon(pokemon)
+        }
+    }})
+}
+
+async function setPlayerTeam() {
+    await getPlayerTeam()
+    for (const pokemon of Pokemon.all) {
+        if (pokemon.userID === currentPlayer){
+            console.log("setPlayerTeam has been invoked")
+            playerTeam.push(pokemon)
+        }
+    }
+}
+
+async function getCPUTeam(){
+    await setPlayerTeam()
+    cpuPlayer = 2 // argument of whatever
+    return fetch(`${usersURL}/2`)
+    .then(res => res.json())
+    .then(json => {
+        if (json.data.id === "2") {
+        for (const pokemon of json.data.attributes.myTeam){
+            new Pokemon(pokemon)
+        }
+    }})
+}
+
+async function setCPUTeam(){
+    await getCPUTeam()
+    for (const pokemon of Pokemon.all){
+        if (pokemon.userID === cpuPlayer) {
+            console.log("setCPUTeam has been invoked")
+            cpuTeam.push(pokemon)
+        }
+    }
+}
+
+async function renderPlayerPokemon(){
+    await setCPUTeam()
+    currentPokemon = playerTeam[0]
+    const currentPokemonRear = new Image()
+    currentPokemonRear.src = `./assets/pokemon-battle/${currentPokemon.name.toLowerCase()}-rear.png`
+    drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
+    battlePokemonContext.fillText(currentPokemon.name, 500, 250)
+}
+
+async function renderPlayerTeam(){
+    await renderPlayerPokemon()
+    teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
+    for (const pokemon of playerTeam) {
+        console.log(`I'm going to render ${pokemon.name} in the bottom window!`)
+    }
+    let pokemonOnePic = new Image()
+    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].name.toLowerCase()}-mini.png`
+    renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
+    teamPokemonTextContext.fillText(`${playerTeam[0].name}`, 200, 75)
+    if (playerTeam[1]) {
+        let pokemonTwoPic = new Image()
+        pokemonTwoPic.src = `./assets/pokemon-battle/${playerTeam[1].name.toLowerCase()}-mini.png`
+        renderFirstTeam(pokemonTwoPic, 50, 200, 133, 100)
+        teamPokemonTextContext.fillText(`${playerTeam[1].name}`, 200, 225)
+    }
+    if (playerTeam[2]) {
+        let pokemonThreePic = new Image()
+        pokemonThreePic.src = `./assets/pokemon-battle/${playerTeam[2].name.toLowerCase()}-mini.png`
+        renderFirstTeam(pokemonThreePic, 50, 350, 133, 100)
+        teamPokemonTextContext.fillText(`${playerTeam[2].name}`, 200, 375)
+    }
+    if (playerTeam[3]) {
+        let pokemonFourPic = new Image()
+        pokemonFourPic.src = `./assets/pokemon-battle/${playerTeam[3].name.toLowerCase()}-mini.png`
+        renderFirstTeam(pokemonFourPic, 500, 50, 133, 100)
+        teamPokemonTextContext.fillText(`${playerTeam[3].name}`, 650, 75)
+    }
+    if (playerTeam[4]) {
+        let pokemonFivePic = new Image()
+        pokemonFivePic.src = `./assets/pokemon-battle/${playerTeam[4].name.toLowerCase()}-mini.png`
+        renderFirstTeam(pokemonFivePic, 500, 200, 133, 100)
+        teamPokemonTextContext.fillText(`${playerTeam[4].name}`, 650, 225)
+    }
+    if (playerTeam[5]) {
+        let pokemonSixPic = new Image()
+        pokemonSixPic.src = `./assets/pokemon-battle/${playerTeam[5].name.toLowerCase()}-mini.png`
+        renderFirstTeam(pokemonSixPic, 500, 350, 133, 100)
+        teamPokemonTextContext.fillText(`${playerTeam[5].name}`, 650, 375)
+    }
+}
+
+async function renderCPUPokemon(){
+    await renderPlayerTeam()
+    currentCPUPokemon = cpuTeam[0]
+    const currentPokemonFront = new Image()
+    currentPokemonFront.src = `./assets/pokemon-battle/${currentCPUPokemon.name.toLowerCase()}-front.png`
+    drawBattlePokemon(currentPokemonFront, 550, 20, 200, 200)
+    battlePokemonContext.fillText(currentCPUPokemon.name, 175, 50)
+}
+
 
 
 function renderGameWindow() {
@@ -46,7 +159,7 @@ function renderGameWindow() {
     // const screens = ["title", "creation", "login", "options", "overworld", "battle", "result"]
     gameBackgroundContext.fillStyle = "#285068"
     let gameBackground = new Image()
-    
+
     switch (currentScreen) {
         case "title":
             clearScreen()
@@ -76,21 +189,20 @@ function renderGameWindow() {
             staticDisplay(gameBackground)
             console.log("rendering overworld")
             break
-        case "battle":
+        case "battle": // this is being run first
             clearScreen()
             gameBackground.src = "./assets/battle-background-2.png"
             battleBackgroundDisplay(gameBackground)
             // spritesheetStatic(3, 4, 737, 466, gameBackground)
             ongoingBattle = true
-            // getPlayerTeam()
-            // getCPUTeam()
-            // setPlayerTeam()
             renderBattleButtons()
-            renderPlayerPokemon()
-            renderCPUPokemon()
-            renderPlayerTeam()
             gameBackgroundContext.fillRect(0, 320, 888, 190)
-            drawHpBar()
+            // debugger
+            // renderPlayerPokemon()
+            // renderPlayerTeam()
+            // renderCPUPokemon()
+            // drawHpBar()
+            renderBattleChain()
             // renderTeamWindowText()
             break
         case "result":
@@ -98,10 +210,12 @@ function renderGameWindow() {
             break
         default:
             gameBackground.src = "./assets/title-screen-logo.gif"
+            console.log("top window loaded")
     }
-    console.log("top window loaded")
 }
-
+async function renderBattleChain(){
+    await drawHpBar()
+}
 function renderTeamWindow() {
     teamBackgroundCanvas.height = 512
     teamBackgroundCanvas.width = 888
@@ -120,31 +234,28 @@ function renderTeamWindow() {
 //     }
 // }, false);
 
-
-function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {
-    // const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
-    // clearScreen()
-    let frameWidth = sheetWidth / numColumns //2220
-    let frameHeight = sheetHeight / numRows // 10250
-    let currentFrame = 0;
-    setInterval( function() { // animate spritesheet
-        currentFrame++ // pick new frame
-        let maxFrame = numColumns * numRows - 1
-        if (currentFrame > maxFrame){ // loop frames
-            currentFrame = 0
-        }
-        let column = currentFrame % numColumns // update rows and columns
-        let row = Math.floor(currentFrame / numColumns) // Clear and draw
-        gameBackgroundContext.drawImage(bgImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, 0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
-    }, 100)    //wait for next step in the loop
-}
-
 function staticDisplay(bgImage) {
     bgImage.onload = function() {
         gameBackgroundContext.drawImage(bgImage, 0, 0, 888, 512)
         console.log("i'm displaying the static background!")
     }
 }
+
+function save(){
+    let save = {
+        userID: currentPlayer,
+        playerTeam: playerTeam,
+        cpuTeam: cpuTeam, // specifically, the ID
+        victories: victories,
+    }
+    // send update fetch request
+}
+
+function load(){
+    // get fetch request for user data
+    // add attribute for team player is currently battling
+}
+
 
 // function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
 //     let frameWidth = sheetWidth / numColumns
@@ -226,45 +337,16 @@ function animatePokemon(e) { // interval will go into render team
     }
 }
 
-function getPlayerTeam(){
-    currentPlayer = 1 //argument of whatever
-    return fetch(`${usersURL}/1`)
-    .then(res => res.json())
-    .then(json => {
-        if (json.data.id === "1") {
-        for (const pokemon of json.data.attributes.myTeam){
-            new Pokemon(pokemon)
-        }
-    }})
-}
 
-function getCPUTeam(){
-    cpuPlayer = 2 // argument of whatever
-    return fetch(`${usersURL}/2`)
-    .then(res => res.json())
-    .then(json => {
-        if (json.data.id === "2") {
-        for (const pokemon of json.data.attributes.myTeam){
-            new Pokemon(pokemon)
-        }
-    }})
-}
+function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
+    pokemon.onload = function() {
+        battlePokemonContext.drawImage(pokemon, xLocation, yLocation, width, height)
+    }
+} // this can probably just be a draw all objects thing
 
-// function setPlayerTeam() {
-//     for (const pokemon of Pokemon.all) {
-//         debugger
-//         if (pokemon.userID === currentPlayer){
-//             playerTeam.push(pokemon)
-//         }
-//     }
-//     // return playerTeam
-// }
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
-    getPlayerTeam()
-    getCPUTeam()
-    // setPlayerTeam()
     renderGameWindow()
     renderTeamWindow()
     // debugger
