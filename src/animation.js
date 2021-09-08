@@ -2,8 +2,8 @@ const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 
 // temp stuff
-const playerPokemonCurrentHP = 266
-const playerPokemonMaxHP = 362
+let playerPokemonCurrentHP
+let playerPokemonMaxHP
 const cpuPokemonCurrentHP = 114
 const cpuPokemonMaxHP = 416
 

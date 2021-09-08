@@ -1,5 +1,5 @@
 console.log(`i'm in the team window`)
-teamPokemonTextContext.font = "1.2em sans-serif";
+// teamPokemonTextContext.font = "1.2em sans-serif";
 
 // let playerTeam = ["Charizard", "Venusaur"] //already declared in environment for now
 let teamWindowSlots = []
@@ -12,18 +12,6 @@ let funcIndex = 0
 
 let hopOn = false
 
-function setPlayerTeam(){
-    return fetch(`${usersURL}/1`)
-    .then(res => res.json())
-    .then(json => {
-        for (const pokemon of json.data.attributes.myTeam){
-
-            playerTeam.push(pokemon.name)
-            // debugger
-            // currentPokemon = playerTeam.first
-        }
-    })
-}
 
 window.setInterval(function(){
     if (hopOn) {
@@ -56,41 +44,41 @@ function drawHigher(){
 function renderPlayerTeam(){
     teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
     for (const pokemon of playerTeam) {
-        console.log(`I'm going to render ${pokemon} in the bottom window!`)
+        console.log(`I'm going to render ${pokemon.name} in the bottom window!`)
     }
     let pokemonOnePic = new Image()
-    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
+    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].name.toLowerCase()}-mini.png`
     renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
-    teamPokemonTextContext.fillText(`${playerTeam[0]}`, 200, 75)
+    teamPokemonTextContext.fillText(`${playerTeam[0].name}`, 200, 75)
     if (playerTeam[1]) {
         let pokemonTwoPic = new Image()
-        pokemonTwoPic.src = `./assets/pokemon-battle/${playerTeam[1].toLowerCase()}-mini.png`
+        pokemonTwoPic.src = `./assets/pokemon-battle/${playerTeam[1].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonTwoPic, 50, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[1]}`, 200, 225)
+        teamPokemonTextContext.fillText(`${playerTeam[1].name}`, 200, 225)
     }
     if (playerTeam[2]) {
         let pokemonThreePic = new Image()
-        pokemonThreePic.src = `./assets/pokemon-battle/${playerTeam[2].toLowerCase()}-mini.png`
+        pokemonThreePic.src = `./assets/pokemon-battle/${playerTeam[2].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonThreePic, 50, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[2]}`, 200, 375)
+        teamPokemonTextContext.fillText(`${playerTeam[2].name}`, 200, 375)
     }
     if (playerTeam[3]) {
         let pokemonFourPic = new Image()
-        pokemonFourPic.src = `./assets/pokemon-battle/${playerTeam[3].toLowerCase()}-mini.png`
+        pokemonFourPic.src = `./assets/pokemon-battle/${playerTeam[3].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonFourPic, 500, 50, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[3]}`, 650, 75)
+        teamPokemonTextContext.fillText(`${playerTeam[3].name}`, 650, 75)
     }
     if (playerTeam[4]) {
         let pokemonFivePic = new Image()
-        pokemonFivePic.src = `./assets/pokemon-battle/${playerTeam[4].toLowerCase()}-mini.png`
+        pokemonFivePic.src = `./assets/pokemon-battle/${playerTeam[4].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonFivePic, 500, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[4]}`, 650, 225)
+        teamPokemonTextContext.fillText(`${playerTeam[4].name}`, 650, 225)
     }
     if (playerTeam[5]) {
         let pokemonSixPic = new Image()
-        pokemonSixPic.src = `./assets/pokemon-battle/${playerTeam[5].toLowerCase()}-mini.png`
+        pokemonSixPic.src = `./assets/pokemon-battle/${playerTeam[5].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonSixPic, 500, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[5]}`, 650, 375)
+        teamPokemonTextContext.fillText(`${playerTeam[5].name}`, 650, 375)
     }
 }
     
