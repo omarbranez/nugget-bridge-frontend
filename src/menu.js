@@ -29,10 +29,10 @@
 
 // const { clear } = require("console");
 
-let menuState = "battle"
+// let menuState = "battle"
 
-const gameButtonCanvas = document.getElementById("menu-buttons")
-const gameButtonContext = gameButtonCanvas.getContext("2d")
+// const gameButtonCanvas = document.getElementById("menu-buttons")
+// const gameButtonContext = gameButtonCanvas.getContext("2d")
 // const highlightCanvas = document.getElementById("highlight")
 // const highlightContext = highlightCanvas.getContext("2d")
 

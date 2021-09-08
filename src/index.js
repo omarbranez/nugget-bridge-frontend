@@ -6,6 +6,9 @@ const usersURL = `${baseURL}/users`
 const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
 
+const gameButtonCanvas = document.getElementById("menu-buttons")
+const gameButtonContext = gameButtonCanvas.getContext("2d")
+
 const battlePokemonCanvas = document.getElementById("battle-pokemon")
 const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 battlePokemonContext.font = "2em sans-serif";
@@ -29,14 +32,13 @@ const teamHighlightContext = teamHighlightCanvas.getContext("2d")
 
 
 var canvas = document.getElementsByTagName("canvas")
-
+let currentPlayer
+let cpuPlayer
 let currentScreen = "battle" 
 let ongoingBattle = false   
 let playerTeam = []
 let cpuTeam = []
-function renderGameWindowOverlay(){
 
-}
 
 function renderGameWindow() {
     gameBackgroundCanvas.height = 512
@@ -80,14 +82,15 @@ function renderGameWindow() {
             battleBackgroundDisplay(gameBackground)
             // spritesheetStatic(3, 4, 737, 466, gameBackground)
             ongoingBattle = true
+            // getPlayerTeam()
+            // getCPUTeam()
+            // setPlayerTeam()
             renderBattleButtons()
             renderPlayerPokemon()
             renderCPUPokemon()
             renderPlayerTeam()
             gameBackgroundContext.fillRect(0, 320, 888, 190)
             drawHpBar()
-            setCPUTeam()
-            setPlayerTeam()
             // renderTeamWindowText()
             break
         case "result":
@@ -223,35 +226,20 @@ function animatePokemon(e) { // interval will go into render team
     }
 }
 
-function setPlayerTeam(){
+function getPlayerTeam(){
+    currentPlayer = 1 //argument of whatever
     return fetch(`${usersURL}/1`)
     .then(res => res.json())
     .then(json => {
-        // debugger
         if (json.data.id === "1") {
         for (const pokemon of json.data.attributes.myTeam){
-            // debugger
             new Pokemon(pokemon)
-            // debugger
-            // currentPokemon = playerTeam.first
         }
     }})
 }
 
-// function getTeamPokemons(){
-//     return fetch(`${teamsURL}/1`)
-//     .then(res => res.json())
-//     .then(json => {
-//         if (json.data.id === "2") {
-//         for (const pokemon of json.data.attributes.myTeam){
-//             // debugger
-//             new Pokemon(pokemon)
-//             // debugger
-//             // currentPokemon = playerTeam.first
-//         }
-//     }})
-// }
-function setCPUTeam(){
+function getCPUTeam(){
+    cpuPlayer = 2 // argument of whatever
     return fetch(`${usersURL}/2`)
     .then(res => res.json())
     .then(json => {
@@ -261,10 +249,22 @@ function setCPUTeam(){
         }
     }})
 }
+
+// function setPlayerTeam() {
+//     for (const pokemon of Pokemon.all) {
+//         debugger
+//         if (pokemon.userID === currentPlayer){
+//             playerTeam.push(pokemon)
+//         }
+//     }
+//     // return playerTeam
+// }
 //check that nothing is hideously broken    
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
-    setPlayerTeam()
+    getPlayerTeam()
+    getCPUTeam()
+    // setPlayerTeam()
     renderGameWindow()
     renderTeamWindow()
     // debugger

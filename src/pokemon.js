@@ -1,6 +1,7 @@
 class Pokemon {
     static all = []
     constructor(src) {
+        this.userID = src.userID
         this.name = src.name
         this.position = src.position
         this.currentHP = src.currentHP
@@ -17,5 +18,25 @@ class Pokemon {
         this.fourthMove = src.fourthMove
         this.constructor.all.push(this)
     }
+    
+    // renderTeamWindowPokemon(){
+    //     this.
+    // }
+    
+}
 
+function setPlayerTeam() {
+    for (const pokemon of Pokemon.all) {
+        if (pokemon.userID === currentPlayer){
+            playerTeam.push(pokemon)
+        }
+    }
+}
+
+function setCPUTeam() {
+    for (const pokemon of Pokemon.all) {
+        if (pokemon.userID === cpuPlayer){
+            cpuTeam.push(pokemon)
+        }
+    }
 }
