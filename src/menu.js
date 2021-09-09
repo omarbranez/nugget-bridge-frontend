@@ -56,7 +56,11 @@ function menuButtonListener(e){
             if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505) {
                 // alert("clicked fightButton")
                 // debugger
-                Button.all[0].renderMoveButton(150, 450)
+                gameButtonContext.clearRect(0, 0, 888, 512)
+                Button.all[0].renderMoveButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
+                Button.all[1].renderMoveButton(150, 425, 195, 485)
+                Button.all[2].renderMoveButton(550, 325, 595, 385)
+                Button.all[3].renderMoveButton(550, 425, 595, 485)
             } else {
                 if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
                     alert("clicked switchButton")
