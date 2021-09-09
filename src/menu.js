@@ -54,7 +54,9 @@ function menuButtonListener(e){
     } else {
         if (menuState === "battle") {
             if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505) {
-                alert("clicked fightButton")
+                // alert("clicked fightButton")
+                // debugger
+                Button.all[0].renderMoveButton(150, 450)
             } else {
                 if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
                     alert("clicked switchButton")
@@ -150,3 +152,4 @@ function renderBattleButtons(){
     drawSelection()
     console.log("displaying battle buttons")
 }
+

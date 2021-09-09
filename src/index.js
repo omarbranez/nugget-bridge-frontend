@@ -34,7 +34,7 @@ const teamHighlightContext = teamHighlightCanvas.getContext("2d")
 const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 
-var canvas = document.getElementsByTagName("canvas")
+// var canvas = document.getElementsByTagName("canvas")
 let currentPlayer
 let cpuPlayer
 let currentPokemon
@@ -45,9 +45,16 @@ let playerTeam = []
 let cpuTeam = []
 let menuState = "battle"
 let displayDialog //= `The enemy ${currentCPUPokemon.name} is Paralyzed! It may not attack!`
+let moveButton1 // will be button objects later
+let moveButton2
+let moveButton3
+let moveButton4
+
 
 function getPlayerTeam(){
-    currentPlayer = 1 //argument of whatever
+    // await renderBattleButtons()
+    currentPlayer = 1 //argument of whatever, once implemented
+    console.log("i go first! fetching current user's team from the backend!")
     return fetch(`${usersURL}/1`)
     .then(res => res.json())
     .then(json => {
@@ -60,9 +67,9 @@ function getPlayerTeam(){
 
 async function setPlayerTeam() {
     await getPlayerTeam()
+    console.log("i go second! setting the current user's team in the frontend!")
     for (const pokemon of Pokemon.all) {
         if (pokemon.userID === currentPlayer){
-            console.log("setPlayerTeam has been invoked")
             playerTeam.push(pokemon)
         }
     }
@@ -70,6 +77,8 @@ async function setPlayerTeam() {
 
 async function getCPUTeam(){
     await setPlayerTeam()
+    // debugger
+    console.log("i go third! fetching a CPU owned team from the backend!")
     cpuPlayer = 2 // argument of whatever
     return fetch(`${usersURL}/2`)
     .then(res => res.json())
@@ -83,9 +92,10 @@ async function getCPUTeam(){
 
 async function setCPUTeam(){
     await getCPUTeam()
+    console.log("i go fourth! setting the current CPU player's team in the frontend")
     for (const pokemon of Pokemon.all){
         if (pokemon.userID === cpuPlayer) {
-            console.log("setCPUTeam has been invoked")
+            // console.log("setCPUTeam has been invoked")
             cpuTeam.push(pokemon)
         }
     }
@@ -93,18 +103,23 @@ async function setCPUTeam(){
 
 async function renderPlayerPokemon(){
     await setCPUTeam()
+    console.log("i go fifth! rendering the rear view of the player's current pokemon!")
     currentPokemon = playerTeam[0]
     const currentPokemonRear = new Image()
     currentPokemonRear.src = `./assets/pokemon-battle/${currentPokemon.name.toLowerCase()}-rear.png`
     drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
     battlePokemonContext.fillText(currentPokemon.name, 500, 250)
+    // moveButton1 = 
+    // moveButton2 =
+    // moveButton3 =
+    // moveButton4 = 
 }
 
 async function renderPlayerTeam(){
     await renderPlayerPokemon()
+    console.log("i go sixth! rendering the mini pokemon in the team window below!")
     teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
     for (const pokemon of playerTeam) {
-        console.log(`I'm going to render ${pokemon.name} in the bottom window!`)
     }
     let pokemonOnePic = new Image()
     pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].name.toLowerCase()}-mini.png`
@@ -144,14 +159,13 @@ async function renderPlayerTeam(){
 
 async function renderCPUPokemon(){
     await renderPlayerTeam()
+    console.log("i go seventh! rendering the front view of the CPU player's current pokemon!")
     currentCPUPokemon = cpuTeam[0]
     const currentPokemonFront = new Image()
     currentPokemonFront.src = `./assets/pokemon-battle/${currentCPUPokemon.name.toLowerCase()}-front.png`
     drawBattlePokemon(currentPokemonFront, 550, 20, 200, 200)
     battlePokemonContext.fillText(currentCPUPokemon.name, 175, 50)
 }
-
-
 
 function renderGameWindow() {
     gameBackgroundCanvas.height = 512
@@ -169,7 +183,7 @@ function renderGameWindow() {
         case "initial":
             clearScreen()
             gameBackground.src = "./assets/menu-background.png"
-            // debugger
+
             staticDisplay(gameBackground)
             renderInitialMenu()
             console.log("calling menu.js")
@@ -197,12 +211,8 @@ function renderGameWindow() {
             ongoingBattle = true
             renderBattleButtons()
             gameBackgroundContext.fillRect(0, 320, 888, 190)
-            // debugger
-            // renderPlayerPokemon()
-            // renderPlayerTeam()
-            // renderCPUPokemon()
-            // drawHpBar()
             renderBattleChain()
+            // currentPokemon.createMoveButtons()
             // renderTeamWindowText()
             break
         case "result":
@@ -213,9 +223,14 @@ function renderGameWindow() {
             console.log("top window loaded")
     }
 }
+
 async function renderBattleChain(){
     await drawHpBar()
+    // debugger
+    currentPokemon.createMoveButtons()
+    console.log("i go last! i just start the chain!")
 }
+
 function renderTeamWindow() {
     teamBackgroundCanvas.height = 512
     teamBackgroundCanvas.width = 888
@@ -367,3 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     teamDrawSelection(520, 200, 100, 100)
     teamDrawSelection(520, 350, 100, 100)
 })
+
+function createMoveButtons(){
+
+}
