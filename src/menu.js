@@ -43,67 +43,77 @@ function menuButtonListener(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
     console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
-
-    if (menuState === "main") {
-        if (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330) {
-            alert("clicked continueButton")
-        } else {
-            if (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230) {
-            alert("clicked newGameButton")
+    // DEAR LORD THIS NEEDS TO BECOME A SWITCH // YAY WE DID IT
+    switch (menuState) {
+        case "main":
+            switch(true) {
+                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330 && menuState === "main"):
+                    alert("clicked continueButton")
+                    break
+                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230 && menuState === "main"):
+                    alert("clicked newGameButton")
+                    break
             }
-        }
-        } else {
-            if (menuState === "battle") {
-                if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505) {
-                    replaceBattleOptionsWithMoves()
+        case "battle":
+            switch(true) {
+                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
                     // menuState = "move"
-                } else {
-                    if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
-                        replaceBattleOptionsWithPokemon()
-                            // menuState = "switch"
-                    } else {
-                        if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505) {
-                            alert("clicked quitButton")
-                        }
-                    }      
-                }   
-            } else {
-            if (menuState === "move") {
-                if (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410) {
+                    changeStateToMove()
+                    break
+                
+                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                    // menuState = "switch"
+                    changeStateToSwitch()
+                    break
+                
+                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                    alert("clicked quitButton")
+                    break
+            }
+        case "move":
+            switch(true) {
+                case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
                     alert("clicked reflect")
-                    } else {
-                        if (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510) {
-                            alert("clicked take down")
-                        } else {
-                            if (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410) {
-                                alert("clicked return")
-                            } else {
-                                if (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510) {
-                                    alert("clicked u-turn")
-                    }}}}
-            } else {
-                if (menuState === "switch") {
-                    if (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375){
-                        alert("clicked moltres")
-                    } else {
-                        if (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435){
-                            alert("clicked weepinbell")
-                        } else {
-                            if (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495){
-                                alert("clicked jynx")
-                            } else {
-                                if (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375){
-                                    alert("clicked snorlax")
-                                } else {
-                                    if (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435){
-                                        alert("clicked rattata")
-                                    } else {
-                                        if (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495){
-                                            alert("clicked rhydon")
-                                        } else {
-                                            if ((mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485)){
-                                            alert("clicked go back")
-}}}}}}}}}}}}
+                    break
+                case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
+                    alert("clicked take down")
+                    break
+                case (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
+                    alert("clicked return")
+                    break
+                case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
+                    alert("clicked u-turn")
+                    break
+            }
+        case "switch":
+            switch(true) {
+                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
+                    // debugger
+                    alert("clicked moltres")
+                    break
+                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
+                    alert("clicked weepinbell")
+                    break
+                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
+                    alert("clicked jynx")
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
+                    alert("clicked snorlax")
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
+                    alert("clicked rattata")
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
+                    alert("clicked rhydon")
+                    break
+                case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "switch"):
+                    alert("clicked go back")
+                    break            
+                
+            }
+    }
+}
+
      
             
 function highlightButtonListener(e) {
@@ -179,20 +189,11 @@ function highlightButtonListener(e) {
                                             drawSelection(100,415,200,70)
                                         } else {
                                             highlightContext.clearRect(0,0,888,512)
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-        }}
-    }}
+}}}}}}}}}}}
 
 function replaceBattleOptionsWithMoves(){
+    highlightContext.clearRect(0, 0, 888, 512)
     gameButtonContext.clearRect(0, 0, 888, 512)
-    menuState = "move"
     Button.all[0].renderButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
     Button.all[1].renderButton(150, 425, 195, 485)
     Button.all[2].renderButton(550, 325, 595, 385)
@@ -200,8 +201,8 @@ function replaceBattleOptionsWithMoves(){
 }
 
 function replaceBattleOptionsWithPokemon(){
+    highlightContext.clearRect(0, 0, 888, 512)
     gameButtonContext.clearRect(0,0,888,512)
-    menuState = "switch"
     battlePokemonContext.font = "1.25em sans-serif"
     battlePokemonContext.fillStyle = "white"
     battlePokemonContext.fillText("Please select a Pokemon", 100, 375)
@@ -212,10 +213,18 @@ function replaceBattleOptionsWithPokemon(){
     Button.all[7].renderButton(550,320,585,365,0.75) // 6 letter Snorlax
     Button.all[8].renderButton(550,380,585,425,0.75) // 7 letter Rattata
     Button.all[9].renderButton(550,440,585,485,0.75) // 6 letter Rhydon
-    // let cancel = new Button(cancel, "./assets/button-blank.png", 200, 100, "Go Back", "menu-option")
     renderStaticButton()
 }
 
+async function changeStateToSwitch(){
+    await replaceBattleOptionsWithPokemon()
+    menuState = "switch"
+}
+
+async function changeStateToMove(){
+    await replaceBattleOptionsWithMoves()
+    menuState = "move"
+}
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
      // X > 400, X < 550
@@ -266,3 +275,65 @@ function renderBattleButtons(){
     console.log("displaying battle buttons")
 }
 
+// switch (menuState) {
+//     case "main":
+//         switch(true) {
+//             case (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330):
+//                 alert("clicked continueButton")
+//                 break
+//             case (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230):
+//                 alert("clicked newGameButton")
+//                 break
+//         }
+//     case "battle":
+//         switch(true) {
+//             case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505):
+//                 replaceBattleOptionsWithMoves()
+//                 break
+//             case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505):
+//                 replaceBattleOptionsWithPokemon()
+//                 break
+//             case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505):
+//                 alert("clicked quitButton")
+//                 break
+//         }
+//     case "move":
+//         switch(true) {
+//             case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410):
+//                 alert("clicked reflect")
+//                 break
+//             case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510):
+//                 alert("clicked take down")
+//                 break
+//             case (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410):
+//                 alert("clicked return")
+//                 break
+//             case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510):
+//                 alert("clicked u-turn")
+//                 break
+//         }
+//     case "switch":
+//         switch(true) {
+//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375):
+//                 alert("clicked moltres")
+//                 break
+//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435):
+//                 alert("clicked weepinbell")
+//                 break
+//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495):
+//                 alert("clicked jynx")
+//                 break
+//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375):
+//                 alert("clicked snorlax")
+//                 break
+//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435):
+//                 alert("clicked rattata")
+//                 break
+//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495):
+//                 alert("clicked rhydon")
+//                 break
+//             case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485):
+//                 alert("clicked go back")
+//                 break                
+//         }
+// }
