@@ -57,12 +57,10 @@ function menuButtonListener(e){
         case "battle":
             switch(true) {
                 case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
-                    // menuState = "move"
                     changeStateToMove()
                     break
                 
                 case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
-                    // menuState = "switch"
                     changeStateToSwitch()
                     break
                 
@@ -114,82 +112,87 @@ function menuButtonListener(e){
     }
 }
 
-     
-            
 function highlightButtonListener(e) {
     // console.log("loaded")
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
-    if (menuState === "battle") {
-        if (mouseX > 155  && mouseX < 345  && mouseY >= 445   && mouseY <= 505 ){
-            highlightContext.clearRect(0, 0, 888, 512)
-            drawSelection(155, 445, 190, 60)
-            // alert("highlighting fight button!")
-        } else {
-            if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 ) {
-                highlightContext.clearRect(0, 0, 888, 512)
-                drawSelection(355, 445, 190, 60)
-                // alert("highlighting switch button")
-            } else {
-                if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 ) {
+    switch(menuState) {
+        case "battle": 
+            switch(true){
+                case (mouseX > 155  && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                    highlightContext.clearRect(0, 0, 888, 512)
+                    drawSelection(155, 445, 190, 60)
+                    break
+                // alert("highlighting fight button!")
+                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle" ):
+                    highlightContext.clearRect(0, 0, 888, 512)
+                    drawSelection(355, 445, 190, 60)
+                    // alert("highlighting switch button")
+                    break
+                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle" ):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(555, 445, 190, 60)
                     // alert("highlighting quit button")
-                } else {
+                    break
+                case (menuState === "battle"):
                     highlightContext.clearRect(0, 0, 888, 512)
-        }}}
-        } else {
-            if (menuState === "move") {
-                if (mouseX >= 155 && mouseX <= 345 && mouseY >= 345 && mouseY <= 415){
+            } 
+        case "move":
+            switch(true){
+                case (mouseX >= 155 && mouseX <= 345 && mouseY >= 345 && mouseY <= 415 && menuState === "move"):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(155,345,190,60)
-                } else {
-                    if (mouseX >= 155 && mouseX <= 345 && mouseY >= 445 && mouseY <= 515) {
-                        highlightContext.clearRect(0,0,888,512)
-                        drawSelection(155,445,190,60)
-                } else {
-                    if (mouseX >= 555 && mouseX <= 745 && mouseY >= 345 && mouseY <=415) {
-                        highlightContext.clearRect(0,0,888,512)
-                        drawSelection(555,345,190,60)
-                } else {
-                    if (mouseX >= 555 && mouseX <= 745 && mouseY >= 445 && mouseY <= 515 ){
-                        highlightContext.clearRect(0,0,888,512)
-                        drawSelection(555,445,190,60)
-                } else {
+                    break
+                case (mouseX >= 155 && mouseX <= 345 && mouseY >= 445 && mouseY <= 515 && menuState === "move"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(155,445,190,60)
+                    break
+                case (mouseX >= 555 && mouseX <= 745 && mouseY >= 345 && mouseY <=415 && menuState === "move"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(555,345,190,60)
+                    break
+                case (mouseX >= 555 && mouseX <= 745 && mouseY >= 445 && mouseY <= 515 && menuState === "move"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(555,445,190,60)
+                    break
+                case (menuState === "move"):
                     highlightContext.clearRect(0, 0, 888, 512)
-            }}}}
-        } else {
-            if (menuState === "switch") {
-                if (mouseX >= 350 && mouseX <= 500 && mouseY >= 335 && mouseY <= 385){
+            }
+        case "switch":
+            switch(true){
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 335 && mouseY <= 385 && menuState === "switch"):
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(350,330,150,55)
-                } else {
-                    if (mouseX >= 350 && mouseX <= 500 && mouseY >= 395 && mouseY <= 445){
-                        highlightContext.clearRect(0,0,888,512)
-                        drawSelection(350,390,150,55)
-                    } else {
-                        if (mouseX >= 350 && mouseX <= 500 && mouseY >= 445 && mouseY <= 505){
-                            highlightContext.clearRect(0,0,888,512)
-                            drawSelection(350,450,150,55)
-                        } else {
-                            if (mouseX >= 555 && mouseX <= 700 && mouseY >= 335 && mouseY <= 385){
-                                highlightContext.clearRect(0,0,888,512)
-                                drawSelection(550,330,150,55)
-                            } else {
-                                if (mouseX >= 555 && mouseX <= 700 && mouseY >= 395 && mouseY <= 445){
-                                    highlightContext.clearRect(0,0,888,512)
-                                    drawSelection(550,390,150,55)
-                                } else {
-                                    if (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 505){
-                                        highlightContext.clearRect(0,0,888,512)
-                                        drawSelection(550,450,150,55)
-                                    } else {
-                                        if (mouseX >= 100 && mouseX <= 300 && mouseY >= 420 && mouseY <= 480){
-                                            highlightContext.clearRect(0,0,888,512)
-                                            drawSelection(100,415,200,70)
-                                        } else {
-                                            highlightContext.clearRect(0,0,888,512)
-}}}}}}}}}}}
+                    break
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 395 && mouseY <= 445 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(350,390,150,55)
+                    break
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 445 && mouseY <= 505 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(350,450,150,55)
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 335 && mouseY <= 385 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(550,330,150,55)
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 395 && mouseY <= 445 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(550,390,150,55)
+                    break
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 505 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(550,450,150,55)
+                    break
+                case (mouseX >= 100 && mouseX <= 300 && mouseY >= 420 && mouseY <= 480 && menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(100,415,200,70)
+                    break
+                case (menuState === "switch"):
+                    highlightContext.clearRect(0,0,888,512)
+            }
+    }
+}
 
 function replaceBattleOptionsWithMoves(){
     highlightContext.clearRect(0, 0, 888, 512)
@@ -274,66 +277,3 @@ function renderBattleButtons(){
     drawSelection()
     console.log("displaying battle buttons")
 }
-
-// switch (menuState) {
-//     case "main":
-//         switch(true) {
-//             case (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330):
-//                 alert("clicked continueButton")
-//                 break
-//             case (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230):
-//                 alert("clicked newGameButton")
-//                 break
-//         }
-//     case "battle":
-//         switch(true) {
-//             case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505):
-//                 replaceBattleOptionsWithMoves()
-//                 break
-//             case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505):
-//                 replaceBattleOptionsWithPokemon()
-//                 break
-//             case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505):
-//                 alert("clicked quitButton")
-//                 break
-//         }
-//     case "move":
-//         switch(true) {
-//             case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410):
-//                 alert("clicked reflect")
-//                 break
-//             case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510):
-//                 alert("clicked take down")
-//                 break
-//             case (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410):
-//                 alert("clicked return")
-//                 break
-//             case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510):
-//                 alert("clicked u-turn")
-//                 break
-//         }
-//     case "switch":
-//         switch(true) {
-//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375):
-//                 alert("clicked moltres")
-//                 break
-//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435):
-//                 alert("clicked weepinbell")
-//                 break
-//             case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495):
-//                 alert("clicked jynx")
-//                 break
-//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375):
-//                 alert("clicked snorlax")
-//                 break
-//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435):
-//                 alert("clicked rattata")
-//                 break
-//             case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495):
-//                 alert("clicked rhydon")
-//                 break
-//             case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485):
-//                 alert("clicked go back")
-//                 break                
-//         }
-// }
