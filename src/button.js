@@ -1,6 +1,6 @@
 class Button {
     static all = []
-    constructor(name, src, width, height, text, purpose) {
+    constructor(name, src, width, height, text, purpose, context=battleButtonContext) {
         this.name = name
         this.src = src
         // this.xCoordinate
@@ -9,26 +9,28 @@ class Button {
         this.height = height
         this.text = text
         this.purpose = purpose
-        this.canvas = document.getElementById("battle-buttons")
-        this.context = document.getElementById("battle-buttons").getContext("2d")
-        // this.textContext = gameTe
+        this.context = context
         this.constructor.all.push(this)
     }
 
-    renderButton(buttonX, buttonY, textX, textY, percent = 1){
+    async renderButton(buttonX, buttonY, textX, textY, percent = 1){
+        this.drawButtonText(textX, textY, percent,buttonX, buttonY, )
+    }
+
+    drawButton(buttonX, buttonY, percent = 1){
         const name = new Image()
         name.src = this.src
         name.onload = () => {
-            // debugger
             this.context.drawImage(name, buttonX, buttonY, this.width * percent, this.height * percent)
-        }
-        battlePokemonContext.fillStyle = "white"
-        if (percent === 0.75){
-            battlePokemonContext.font = "1.5em sans-serif"
-        }
-        battlePokemonContext.fillText(this.text, textX, textY)
+        }    
     }
 
-    // renderPokemonButtons()
-    
+    async drawButtonText(textX, textY, percent = 1, buttonX, buttonY){
+        await this.drawButton(buttonX, buttonY, percent)
+        battleTextContext.fillStyle = "white"
+        if (percent === 0.75){
+            battleTextContext.font = "1.5em sans-serif"
+        }
+        battleTextContext.fillText(this.text, textX, textY)
+    }    
 }

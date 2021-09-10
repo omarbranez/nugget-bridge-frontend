@@ -15,6 +15,14 @@ const battlePokemonCanvas = document.getElementById("battle-pokemon")
 const battlePokemonContext = battlePokemonCanvas.getContext("2d")
 battlePokemonContext.font = "2em sans-serif";
 
+const battleButtonCanvas = document.getElementById("battle-buttons")
+const battleButtonContext = battlePokemonCanvas.getContext("2d")
+
+const battleTextCanvas = document.getElementById("battle-text")
+const battleTextContext = battleTextCanvas.getContext("2d")
+battleTextContext.fillStyle = "white"
+battleTextContext.font = "2em sans-serif"
+
 const highlightCanvas = document.getElementById("highlight-button-top")
 const highlightContext = highlightCanvas.getContext("2d")
 

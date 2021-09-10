@@ -82,6 +82,10 @@ function menuButtonListener(e){
                 case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
                     alert("clicked u-turn")
                     break
+                case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "move"):
+                    // alert("clicked go back")
+                    changeStateToBattle()
+                    break     
             }
         case "switch":
             switch(true) {
@@ -105,9 +109,9 @@ function menuButtonListener(e){
                     alert("clicked rhydon")
                     break
                 case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "switch"):
-                    alert("clicked go back")
+                    // alert("clicked go back")
+                    changeStateToBattle()
                     break            
-                
             }
     }
 }
@@ -195,21 +199,23 @@ function highlightButtonListener(e) {
 }
 
 function replaceBattleOptionsWithMoves(){
-    highlightContext.clearRect(0, 0, 888, 512)
-    gameButtonContext.clearRect(0, 0, 888, 512)
+    clearBlueWindow()
+    battleTextContext.font = "1.25em sans-serif"
+    battleTextContext.fillStyle = "white"
+    battleTextContext.fillText("Please select an attack", 100, 375)
     Button.all[0].renderButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
     Button.all[1].renderButton(150, 425, 195, 485)
     Button.all[2].renderButton(550, 325, 595, 385)
     Button.all[3].renderButton(550, 425, 595, 485)
+    renderStaticButton()
 }
 
 function replaceBattleOptionsWithPokemon(){
-    highlightContext.clearRect(0, 0, 888, 512)
-    gameButtonContext.clearRect(0,0,888,512)
-    battlePokemonContext.font = "1.25em sans-serif"
-    battlePokemonContext.fillStyle = "white"
-    battlePokemonContext.fillText("Please select a Pokemon", 100, 375)
-    battlePokemonContext.fillText("to switch-in", 100, 400)
+    clearBlueWindow()
+    battleTextContext.font = "1.25em sans-serif"
+    battleTextContext.fillStyle = "white"
+    battleTextContext.fillText("Please select a Pokemon", 100, 375)
+    battleTextContext.fillText("to switch-in", 100, 400)
     Button.all[4].renderButton(350,320,385,365,0.75) // 6 letter Moltres
     Button.all[5].renderButton(350,380,365,425,0.75) // 10 letter Weepinbell
     Button.all[6].renderButton(350,440,400,485,0.75) // 4 letter Jynx
@@ -228,6 +234,11 @@ async function changeStateToMove(){
     await replaceBattleOptionsWithMoves()
     menuState = "move"
 }
+
+async function changeStateToBattle(){
+    await renderBattleButtons()
+    menuState = "battle"
+}
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
      // X > 400, X < 550
@@ -244,9 +255,12 @@ function renderButton(gameButton, xLocation, yLocation, width, height){
     }
 }
 
-// function clearSelection(x, y, dx, dy){
-//     highlightContext.clearRect(x, y, dx, dy)
-// }
+function clearBlueWindow(){
+    highlightContext.clearRect(0, 0, 888, 512)
+    battleButtonContext.clearRect(0,325,888,512)
+    battleTextContext.clearRect(0,325,888,512)
+    gameButtonContext.clearRect(0,325,888,512)
+}
 
 // function testSelection(){ // see how big the clickable area is, for eventlisteners
 //     gameButtonContext.beginPath()
@@ -263,6 +277,7 @@ function renderStaticButton(){ // arguments for the others
     renderButton(goBack, 100, 400, 200, 100)
 }
 function renderBattleButtons(){
+    clearBlueWindow()
     const fightButton = new Image()
     fightButton.src = "./assets/battle-fight-button.png"
     // renderButton(fightButton, 150, 300, 200, 100) // moving this down to fit dialog box

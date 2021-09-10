@@ -29,7 +29,7 @@ class Pokemon {
 
     createPokemonButton() {
         if (this.userID === currentPlayer){
-            new Button(this.name, "./assets/button-blank.png", 200, 100, this.name, "pokemon-select" )
+            new Button(this.name, "./assets/button-blank.png", 200, 100, this.name, "pokemon-select")
         }
     }
     
