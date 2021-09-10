@@ -15,23 +15,20 @@ class Button {
         this.constructor.all.push(this)
     }
 
-    renderMoveButton(buttonX, buttonY, textX, textY){
+    renderButton(buttonX, buttonY, textX, textY, percent = 1){
         const name = new Image()
         name.src = this.src
         name.onload = () => {
-            this.context.drawImage(name, buttonX, buttonY, this.width, this.height)
+            // debugger
+            this.context.drawImage(name, buttonX, buttonY, this.width * percent, this.height * percent)
         }
         battlePokemonContext.fillStyle = "white"
+        if (percent === 0.75){
+            battlePokemonContext.font = "1.5em sans-serif"
+        }
         battlePokemonContext.fillText(this.text, textX, textY)
     }
 
-    replaceBattleOptionsWithMoves(){
-        gameButtonContext.clearRect(0, 0, 888, 512)
-        menuState = "move"
-        Button.all[0].renderMoveButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
-        Button.all[1].renderMoveButton(150, 425, 195, 485)
-        Button.all[2].renderMoveButton(550, 325, 595, 385)
-        Button.all[3].renderMoveButton(550, 425, 595, 485)
-    }
+    // renderPokemonButtons()
     
 }

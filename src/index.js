@@ -46,7 +46,7 @@ let cpuTeam = []
 let menuState = "battle"
 let displayDialog //= `The enemy ${currentCPUPokemon.name} is Paralyzed! It may not attack!`
 let moveButton1 // will be button objects later
-let moveButton2
+let moveButton2 // destructure these, i guess
 let moveButton3
 let moveButton4
 
