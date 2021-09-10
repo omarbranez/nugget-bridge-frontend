@@ -228,6 +228,9 @@ async function renderBattleChain(){
     await drawHpBar()
     // debugger
     currentPokemon.createMoveButtons()
+    for (const pokemon of Pokemon.all){
+        pokemon.createPokemonButton()
+    }
     console.log("i go last! i just start the chain!")
 }
 
@@ -241,13 +244,6 @@ function renderTeamWindow() {
     }
     console.log("started from the bottom")
 }
-
-// controls are keyboard. maybe mouse too?
-// gameBackgroundCanvas.addEventListener("keydown", function(e) {
-//     if ([13, 37, 38, 39, 40].indexOf(e.key) > -1){
-//         e.preventDefault(); // arrow keys and enter
-//     }
-// }, false);
 
 function staticDisplay(bgImage) {
     bgImage.onload = function() {
@@ -315,30 +311,6 @@ function teamDrawSelection(x, y, dx, dy) {
 //     highlightContext.clearRect(x, y, dx, dy)
 // }
 
-function highlightButton(e) {
-    // console.log("loaded")
-    let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
-    let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
-    if (mouseX > 155  && mouseX < 345  && mouseY >= 445   && mouseY <= 505 ){
-        highlightContext.clearRect(0, 0, 888, 512)
-        drawSelection(155, 445, 190, 60)
-        // alert("highlighting fight button!")
-    } else {
-        if (mouseX > 355  && mouseX < 555  && mouseY >= 445  && mouseY <= 505 ) {
-            highlightContext.clearRect(0, 0, 888, 512)
-            drawSelection(355, 445, 190, 60)
-            // alert("highlighting switch button")
-        } else {
-            if (mouseX > 555  && mouseX < 745  && mouseY >= 445  && mouseY <= 505 ) {
-                highlightContext.clearRect(0, 0, 888, 512)
-                drawSelection(555, 445, 190, 60)
-                // alert("highlighting quit button")
-            } else {
-                highlightContext.clearRect(0, 0, 888, 512)
-            }
-        }
-    }
-}
 
 function animatePokemon(e) { // interval will go into render team
     let mouseX = e.clientX// - teamHighlightCanvas.offsetParent.offsetLeft // minus the bounding areas
@@ -366,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTeamWindow()
     // debugger
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
-    gameButtonCanvas.addEventListener('mousemove', highlightButton, false)
+    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener, false)
     teamHighlightCanvas.addEventListener('mousemove', animatePokemon, false)
     // teamHighlightCanvas.addEventListener('mouseout',  clearInterval(hop), false)
     // window.addEventListener('mouseover', animatePokemon, false)
@@ -382,7 +354,3 @@ document.addEventListener('DOMContentLoaded', () => {
     teamDrawSelection(520, 200, 100, 100)
     teamDrawSelection(520, 350, 100, 100)
 })
-
-function createMoveButtons(){
-
-}

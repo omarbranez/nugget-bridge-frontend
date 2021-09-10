@@ -38,11 +38,11 @@ function renderInitialMenu(){
     testSelection()
     console.log("new game menu rendering")
 }
+
 function menuButtonListener(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
     console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
-    // alert ( mouseX + "," + mouseY)
     if (menuState === "main") {
         if (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330) {
             alert("clicked continueButton")
@@ -51,28 +51,101 @@ function menuButtonListener(e){
             alert("clicked newGameButton")
             }
         }
-    } else {
-        if (menuState === "battle") {
-            if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505) {
-                // alert("clicked fightButton")
-                // debugger
-                gameButtonContext.clearRect(0, 0, 888, 512)
-                Button.all[0].renderMoveButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
-                Button.all[1].renderMoveButton(150, 425, 195, 485)
-                Button.all[2].renderMoveButton(550, 325, 595, 385)
-                Button.all[3].renderMoveButton(550, 425, 595, 485)
-            } else {
-                if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
-                    alert("clicked switchButton")
-            } else {
-                if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505) {
-                    alert("clicked quitButton")
-                    }
+        } else {
+            if (menuState === "battle") {
+                if (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505) {
+                    gameButtonContext.clearRect(0, 0, 888, 512)
+                    Button.all[0].renderMoveButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
+                    Button.all[1].renderMoveButton(150, 425, 195, 485)
+                    Button.all[2].renderMoveButton(540, 325, 595, 385)
+                    Button.all[3].renderMoveButton(540, 425, 595, 485)
+                    menuState = "move"
+                } else {
+                    if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505) {
+                        alert("clicked switchButton")
+                        menuState = "switch"
+                    } else {
+                        if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505) {
+                            alert("clicked quitButton")
+                        }
+                    }      
                 }   
-            }   
+            } else {
+            if (menuState === "move") {
+                if (mouseX > 155 && mouseX < 375 && mouseY > 345 && mouseY < 410) {
+                    alert("clicked reflect")
+                    } else {
+                        if (mouseX > 155 && mouseX < 375 && mouseY > 445 && mouseY < 510) {
+                            alert("clicked take down")
+                        } else {
+                            if (mouseX > 555 && mouseX < 775 && mouseY > 345 && mouseY < 410) {
+                                alert("clicked return")
+                            } else {
+                                if (mouseX > 555 && mouseX < 775 && mouseY > 445 && mouseY < 510) {
+                                    alert("clicked u-turn")
+                                }
+                            }
+                        }
+                   }
+                
+            } else {
+                if (menuState === "switch") {
+                    alert("menu state is now switch")
+                }
+            }
         }
     }
-
+}
+     
+            
+function highlightButtonListener(e) {
+    // console.log("loaded")
+    let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
+    let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
+    if (menuState === "battle") {
+        if (mouseX > 155  && mouseX < 345  && mouseY >= 445   && mouseY <= 505 ){
+            highlightContext.clearRect(0, 0, 888, 512)
+            drawSelection(155, 445, 190, 60)
+            // alert("highlighting fight button!")
+        } else {
+            if (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 ) {
+                highlightContext.clearRect(0, 0, 888, 512)
+                drawSelection(355, 445, 190, 60)
+                // alert("highlighting switch button")
+            } else {
+                if (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 ) {
+                    highlightContext.clearRect(0, 0, 888, 512)
+                    drawSelection(555, 445, 190, 60)
+                    // alert("highlighting quit button")
+                } else {
+                    highlightContext.clearRect(0, 0, 888, 512)
+                }
+            }
+        }
+    } else {
+        if (menuState === "move") {
+            if (mouseX >= 155 && mouseX <= 345 && mouseY >= 345 && mouseY <= 415){
+                highlightContext.clearRect(0, 0, 888, 512)
+                drawSelection(155,345,190,60)
+            } else {
+                if (mouseX >= 155 && mouseX <= 345 && mouseY >= 445 && mouseY <= 515) {
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(155,445,190,60)
+            } else {
+                if (mouseX >= 555 && mouseX <= 745 && mouseY >= 345 && mouseY <=415) {
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(555,345,190,60)
+            } else {
+                if (mouseX >= 555 && mouseX <= 745 && mouseY >= 445 && mouseY <= 515 ){
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(555,445,190,60)
+                } else {
+                    highlightContext.clearRect(0, 0, 888, 512)
+                }
+                
+            }}}}
+    }
+}
 
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
@@ -82,7 +155,6 @@ function menuButtonListener(e){
      // X > 400, X < 550
      // Y > 170, Y < 230
      //fight 155, 320, 190, 60
-}
 
 function renderButton(gameButton, xLocation, yLocation, width, height){
     gameButton.onload = function() {

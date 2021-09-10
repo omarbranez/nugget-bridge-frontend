@@ -22,17 +22,16 @@ class Pokemon {
     }
     
     createMoveButtons() {
-        // await drawHpBar()
-        // const moveArray = [this.firstMove, this.secondMove, this.thirdMove, this.fourthMove]
         for (const move of [this.firstMove, this.secondMove, this.thirdMove, this.fourthMove]){
-            // debugger
             new Button(move, "./assets/button-blank.png", 200, 100, move, "move-select")
         }
     }
 
-    // renderTeamWindowPokemon(){
-    //     this.
-    // }
+    createPokemonButton() {
+        if (this.userID === currentPlayer){
+            new Button(this.name, "./assets/button-blank.png", 200, 100, this.name, "pokemon-select" )
+        }
+    }
     
 }
 
