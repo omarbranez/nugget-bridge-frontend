@@ -14,19 +14,19 @@ class Pokemon {
         this.specialAttackStat = src.specialAttackStat
         this.specialDefenseStat = src.specialDefenseStat
         this.speedStat = src.speedStat
-        this.firstMove = src.firstMove
-        this.firstMoveType = src.firstMoveType
-        this.secondMove = src.secondMove
-        this.secondMoveType = src.secondMoveType
-        this.thirdMove = src.thirdMove
-        this.thirdMoveType = src.thirdMoveType
-        this.fourthMove = src.fourthMove
-        this.fourthMoveType = src.fourthMoveType
+        this.move1 = src.firstMove["data"]["attributes"]
+        // this.firstMoveType = src.firstMoveType
+        this.move2 = src.secondMove["data"]["attributes"]
+        // this.secondMoveType = src.secondMoveType
+        this.move3 = src.thirdMove["data"]["attributes"]
+        // this.thirdMoveType = src.thirdMoveType
+        this.move4 = src.fourthMove["data"]["attributes"]
+        // this.fourthMoveType = src.fourthMoveType
         this.constructor.all.push(this)
     }
     
     createMoveButtons() {
-        for (const move of [this.firstMove, this.secondMove, this.thirdMove, this.fourthMove]){
+        for (const move of [this.move1, this.move2, this.move3, this.move4]){
             new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
         }
     }
