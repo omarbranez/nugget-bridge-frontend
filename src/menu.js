@@ -200,9 +200,7 @@ function highlightButtonListener(e) {
 
 function replaceBattleOptionsWithMoves(){
     clearBlueWindow()
-    battleTextContext.font = "1.25em sans-serif"
-    battleTextContext.fillStyle = "white"
-    battleTextContext.fillText("Please select an attack", 100, 375)
+    textLeftSide("Please select an attack")
     Button.all[0].renderButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
     Button.all[1].renderButton(150, 425, 195, 485)
     Button.all[2].renderButton(550, 325, 595, 385)
@@ -212,9 +210,7 @@ function replaceBattleOptionsWithMoves(){
 
 function replaceBattleOptionsWithPokemon(){
     clearBlueWindow()
-    battleTextContext.font = "1.25em sans-serif"
-    battleTextContext.fillStyle = "white"
-    battleTextContext.fillText("Please select a Pokemon", 100, 375)
+    textLeftSide("Please select a Pokemon")
     battleTextContext.fillText("to switch-in", 100, 400)
     Button.all[4].renderButton(350,320,385,365,0.75) // 6 letter Moltres
     Button.all[5].renderButton(350,380,365,425,0.75) // 10 letter Weepinbell
@@ -238,6 +234,11 @@ async function changeStateToMove(){
 async function changeStateToBattle(){
     await renderBattleButtons()
     menuState = "battle"
+}
+
+function textLeftSide(text){
+    battleTextContext.font = "1.25em sans-serif"
+    battleTextContext.fillText(text, 100, 375)
 }
      //continuebutton is 400, 270, 150, 60 
      // continueButton 
@@ -276,7 +277,7 @@ function renderStaticButton(){ // arguments for the others
     goBack.src = "./assets/button-go-back.png"
     renderButton(goBack, 100, 400, 200, 100)
 }
-function renderBattleButtons(){
+function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
     clearBlueWindow()
     const fightButton = new Image()
     fightButton.src = "./assets/battle-fight-button.png"

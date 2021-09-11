@@ -1,21 +1,40 @@
-// flow
+// flow // this should really be a module
 
 // make sure battle screen is loaded
 // make sure battle enabled is true 
-// 
+function runBattle(attack){
+    if (currentScreen === "battle" && menuState === "resolve" && !!(ongoingBattle) ){
+        await playerAttack(attack)
+    } else {
+        alert("A battle is not currently ongoing!")
+    }
+    //start a chain
+}
 
 // generate opponent team and name
-// display message : trainer ${ name } wants to fight!
+// display message : trainer ${ name } wants to fight! // shouldve happened already
 
 // beginning state of battle //
-// let ongoingBattle = true
-// let turnNumber = 0
-// let goesFirst
-// let goesSecond
+// let ongoingBattle = true // it's already true
+
+
+class BattleTurn { // attacker and defender
+    constructor(currentPokemon, currentCPUPokemon, currentPokemonAttack, currentCPUPokemonAttack) {
+        this.currentPokemon = currentPokemon
+        this.currentCPUPokemon = currentCPUPokemon
+    }
+
+    currentPokemonAttack(){
+
+    }
+}
 // let currentTurn
-// let player.currentPokemon
-// let computer.currentPokemon
-// let playerMove
+// let currentPokemon
+// let currentCPUPokemon
+competitors = [currentPokemon, currentCPUPokemon]
+turnNumber = 0 // this will be declared on domload
+goesFirst = checkSpeed()
+goesSecond // the other one
 // let computerMove
 // if currentPlayer.currentPokemon.empty
 //      if player.pokemonTeam is not empty
@@ -25,35 +44,46 @@
 //          ongoingBattle = false
 //          render RESULTS <<<< separate method
 //  else
-//      newTurn
+//      newTurn AT END OF ATTACK
+function cpuMove(){ // selected randomly
+    let moveArray = [currentCPUPokemon.firstMove, currentCPUPokemon.secondMove, currentCPUPokemon.thirdMove, currentCPUPokemon.fourthMove]
+    let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
+    return randomMove
+}
 
-// send out pokemon that is first in array // 
-// let player.currentPokemon = player.pokemonTeam[0]
-// render player.currentPokemon BUTT VIEW in player pokemon space in -X, -Y quadrant
-// let computer.currentPokemon = computer.pokemonTeam[0]
-// render computer.currentPokemon FRONT VIEW in computer pokemon space +X, +Y quadrant
+
 
 // compare speed of pokemon //
 // goesFirst = math.max(player.currentPokemon.speed, computer.currentPokemon.speed)
 // if player.currentPokemon.speed === computer.currentPokemon.speed
 // add a random number and run goesFirst again
 // goesFirst = math.max((player.currentPokemon.speed + math.random(), computer.currentPokemon.speed + math.random())
-
+function whosFaster(){ //what if its equal
+    if (currentPokemon.speedStat === currentCPUPokemon.speedStat) {
+        let choice = [currentPokemon, currentCPUPokemon] //if tied, select at random
+        let randomChoice = choice[Math.floor(Math.random()*choice.length)]
+        return randomChoice
+    }
+    [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
+}
 // determine whose turn it is, and allow them to make move //
 // if goesFirst = player
 //      currentTurn = player
 // else 
-//      currentTurn = computer
-//
-// if currentTurn = player // there's probably a way to refactor this to take the state into account, switch turns, and just add in the menu if it's the player's turn
-//      render moveMenu
-//      let playerMove = X
-//      currentTurn = computer
-// else
-//      currentTurn = computer     
-//      let computerMove = Y
-//      currentTurn = player
-// if playerMove exists and computerMove exists 
+//      currentTurn = computer //
+let goesFirst = whosFaster()
+let attacker = goesFirst // a pokemon object, with STATS
+let defender = !goesFirst
+let attackMove //= // whosFaster's move
+let attackStatUsed
+let defenseStatUsed
+
+let randomFactor
+
+
+function calculateDamageToDefender(){ //this would work better if moves were passed as objects //we'll do that tomorrow
+}
+
 // MOVE TO NEXT PHASE
 
 // once both moves are made //
@@ -72,10 +102,23 @@
 // else 
 //      attackStat = attacker.specialAttack.value
 //      defenseStat = defender.specialDefense.value
+function attackType(){
+    if (attackMove.damage_type = "physical") { //damageType after serialization
+        attackStatUsed = attacker.attackStat
+        defenseStatUsed = defender.defenseStat
+    } else {
+        attackStatUsed = attacker.specialAttackStat
+        defenseStatUsed = defender.specialDefenseStat
+    }
+}
 // let criticalCheck
 // if Math.floor(Math.random() *  17) // 1/16 chance for critical hit
 //      criticalCheck = true 
 // 
+function critCheck(){
+    randomFactor = Math.floor(Math.random() * ( (Math.ceil(85) - Math.floor(100)) + Math.floor(100) ) / 100)
+    return randomFactor
+}
 // let randomFactor = Math.floor(Math.random() * ( (Math.ceil(85) - Math.floor(100)) + Math.floor(100) ) / 100 // a decimal between 0.85 and 1.00 inclusive
 // 
 // let typeCheck 
