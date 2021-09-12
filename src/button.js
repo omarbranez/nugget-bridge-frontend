@@ -19,6 +19,7 @@ class Button {
 
     drawButton(buttonX, buttonY, percent = 1){
         const name = new Image()
+        debugger
         name.src = this.src
         name.onload = () => {
             this.context.drawImage(name, buttonX, buttonY, this.width * percent, this.height * percent)
