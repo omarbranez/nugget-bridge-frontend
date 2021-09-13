@@ -32,6 +32,9 @@ class Battle { // attacker and defender // this will run twice
     // HIT CHECK => IF MISS, SWAP ATTACKER DEFENDER 
     // PROC CHECK
     // MODIFIER CHECKS
+    // they can run concurrently, they arent dependable on each other
+
+    // calcdamage has to be run separately
 
     selectCPUMove(){ // selected randomly
         let moveArray = [currentCPUPokemon.move1, currentCPUPokemon.move2, currentCPUPokemon.move3, currentCPUPokemon.move4]
@@ -51,14 +54,17 @@ class Battle { // attacker and defender // this will run twice
     }
 
     hitCheck(){
-        let stageEvasion = 1 // not accounting for double team
-        let stageAccuracy = 1 // not accounting for accuracy boosting moves
-        let accuracyModified = this.attacker.move.accuracy * stageEvasion * stageAccuracy
-        let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100)) / 100
-        if (randomFactor <= accuracyModified) {
+        if (this.attacker.move.name === "Swift"){
             this.accuracyCheck = true
-        }
-    }
+        } else {
+            let stageEvasion = 1 // not accounting for double team
+            let stageAccuracy = 1 // not accounting for accuracy boosting moves
+            let accuracyModified = this.attacker.move.accuracy * stageEvasion * stageAccuracy
+            let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100)) / 100
+            // debugger
+            if (randomFactor <= accuracyModified) {
+                this.accuracyCheck = true
+    }}}   
 
     attackCheck(){ // if damageType is not status
         if (this.attacker.move.damageType === "Physical"){ //UNLESS THOSE STUPID MOVES LIKE PSYSTRIKE
@@ -111,24 +117,47 @@ class Battle { // attacker and defender // this will run twice
     }
 
     stabCheck(){
+        // debugger
         if (!!(this.attacker.type2)) {
             if (this.attacker.type1.name === this.attacker.move.type.name) {
                 this.stabModifier = 1.5
-            } else {
+            }} 
+            else {
                 if (this.attacker.type1.name === this.attacker.move.type.name) {
                     this.stabModifier = 1.5
                 } else {
                     this.stabModifier = 1
-    }}}}
+    }}}
 
     calculateDamage(){ // skip if self status move
-        this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
-        debugger
+        displayDialog = `${this.attacker.name} used ${this.attacker.move}!`
+        if (this.accuracyCheck === true) {
+            // debugger
+            this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
+        } else {
+            this.attackDamage = 0
+            if (!!(this.attacker.move.accuracy)){
+                displayDialog = `${this.attacker.name}'s attack missed!`
+            } else {
+                // debugger
+                displayDialog = "Lol this move doesn't do anything yet"
+                // ()
+            }
+        }   
     }
 
-    static async resolveDamage(){
-        await calculateDamage()
-        this.defender.currentHP = this.defender.currentHP - attackDamage
+    resolveEffects(){
+        debugger
+        if (this.attacker.move.name === "Magnet Rise" || this.attacker.move.name === "Double Team"){
+            displayDialog = "Lol this move doesn't do anything yet"
+        }
+    }
+
+    resolveDamage(){
+        // await calculateDamage()
+        this.defender.currentHP = this.defender.currentHP - this.attackDamage
+        redrawHP(currentPokemon, 565, 275, 600, 288)
+        redrawHP(currentCPUPokemon, 245, 75, 290, 88)
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             this.faintedPokemon.push(this.defender)

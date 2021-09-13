@@ -41,6 +41,9 @@ const teamHighlightContext = teamHighlightCanvas.getContext("2d")
 
 const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
+hpBarContext.font = '1em sans-serif'; 
+hpBarContext.strokeStyle = "black";
+hpBarContext.fillStyle = "green";
 
 
 let currentPlayer
