@@ -1,197 +1,191 @@
-// flow // this should really be a module
-// ongoingBattle = true
-
-let goesFirst = whosFaster()
-let attacker = goesFirst // a pokemon object, with STATS
-let defender = !goesFirst
-let attackMove //= // whosFaster's move
-let attackStatUsed
-let defenseStatUsed
-// let attackDamage
-
-let moveSuccessful
-let randomModifier
-let stabModifier
-let burnModifier
-let effectiveModifier
-let critModifier
-let faintedPokemon //boolean
-
-class BattleTurn { // attacker and defender
-    constructor(currentPokemon, currentCPUPokemon, currentPokemonAttack, currentCPUPokemonAttack) {
+class Battle { // attacker and defender // this will run twice
+    constructor(move) {
         this.currentPokemon = currentPokemon
+        this.currentPokemon.move = move
+
         this.currentCPUPokemon = currentCPUPokemon
+        
+        this.turn = 1
+        this.attacker //determined by goesFirst/whosFaster, then switches unless someone fainted
+        this.defender //determined by goesFirst, then switches unless someone fainted
+        this.attackStatUsed
+        this.defenseStatUsed
+        
+        this.accuracyCheck = false// this should run first! unless something dumb like jump kick
+        this.procCheck
+        
+        this.critModifier
+        this.randomModifier
+        this.effectiveModifier
+        this.stabModifier
+        this.burnModifier
+
+        this.attackDamage
+
+        this.faintedPokemon = [] // boolean
+        this.selectCPUMove()
+        // run battle after creation
     }
 
-    currentPokemonAttack(){
+    // RUNS IN THIS ORDER
+    // SPEED CHECK
+    // HIT CHECK => IF MISS, SWAP ATTACKER DEFENDER 
+    // PROC CHECK
+    // MODIFIER CHECKS
 
+    selectCPUMove(){ // selected randomly
+        let moveArray = [currentCPUPokemon.move1, currentCPUPokemon.move2, currentCPUPokemon.move3, currentCPUPokemon.move4]
+        let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
+        this.currentCPUPokemon.move = randomMove
     }
-}
 
-function runBattle(attack){
-    if (currentScreen === "battle" && menuState === "resolve" && !!(ongoingBattle) ){
-        await playerAttack(attack)
-    } else {
-        alert("A battle is not currently ongoing!")
-    }
-    //start a chain
-}
-
-competitors = [currentPokemon, currentCPUPokemon]
-attacker = whosFaster()
-defender // the other one
-
-
-function cpuMove(){ // selected randomly
-    let moveArray = [currentCPUPokemon.firstMove, currentCPUPokemon.secondMove, currentCPUPokemon.thirdMove, currentCPUPokemon.fourthMove]
-    let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
-    return randomMove
-}
-
-function whosFaster(){ //what if its equal
-    if (currentPokemon.speedStat === currentCPUPokemon.speedStat) {
-        let choice = [currentPokemon, currentCPUPokemon] //if tied, select at random
-        let randomChoice = choice[Math.floor(Math.random()*choice.length)]
-        return randomChoice
-    }
-    [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
-}
-
-
-
-function attackType(){
-    if (attackMove.damage_type = "physical") { //damageType after serialization
-        attackStatUsed = attacker.attackStat
-        defenseStatUsed = defender.defenseStat
-    } else {
-        attackStatUsed = attacker.specialAttackStat
-        defenseStatUsed = defender.specialDefenseStat
-    }
-}
-
-function critCheck(){
-    Math.floor(Math.random() * 17) === 16 ? critModifier = 1.5 : critModifier = 1
-}
-
-function randomCheck(){
-    randomModifier = Math.floor(Math.random() * (Math.ceil(85) - Math.floor(100)) + Math.floor(100)) / 100
-}
-
-function effectiveCheck(){ // need to check if type 2 exists
-    const noDamage = attackMove.type.no_damage_to.split(", ")
-    const halfDamage = attackMove.type.half_damage_to.split(", ")
-    const doubleDamage = attackMove.type.double_damage_to.split(", ")
-    if (noDamage.includes(defender.type1.name)|| noDamage.includes(defender.type2.name)){ // maybe a switch, if it doesnt break anything again!
-        effectiveModifier = 0
-    } else {
-        if (halfDamage.includes(defender.type1.name) && halfDamage.includes(defender.type2.name)) {
-            effectiveModifier = 0.25
-    } else {
-        if ((halfDamage.includes(defender.type1.name) || halfDamage.includes(defender.type2.name)) && !(halfDamage.includes(defender.type1.name) && halfDamage.includes(defender.type.name))){
-            effectiveModifier = 0.5
-    } else {
-        if ((doubleDamage.includes(defender.type1.name) || doubleDamage.includes(defender.type2.name)) && !(doubleDamage.includes(defender.type1.name) && doubleDamage.includes(defender.type.name))) {
-            effectiveModifier = 2
-    } else {
-        if (doubleDamage.includes(defender.type1.name) && doubleDamage.includes(defender.type2.name)) {
-            effectiveModifier = 4
-    } else {
-        effectiveModifier = 1
-}}}}}}
-
-function burnCheck(){
-    if (attacker.Status === "Burn" && attackMove.damageType === "Physical"){
-        burnModifier = 0.5
-    } else {
-        burnModifier = 1
-    }
-}
-
-function stabCheck(){
-    if (attacker.type1.name === attackMove.type.name || attacker.type2.name === attackMove.type.name){
-        stabModifier = 1.5
-    } else {
-        stabModifier = 1
-    }
-}
-
-function accuracyCheck(){
-    let stageEvasion = 0
-    let stageAccuracy = 0
-    let accuracyModified = attackMove.accuracy * stageEvasion * 1
-    let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100)) / 100
-    if (randomFactor <= accuracyModified) {
-        moveSuccessful = true
-    }
-}
-
-function writeBattleDialogue(){
-    displayDialog = `${attacker.name} used ${attackMove.name}!`
-}
-
-async function calculateDamage(){
-    attackDamage = Math.floor(((((42 * attackMove.power * (attackStatUsed / defenseStatUsed)) / 50)) + 2) * critModifier * randomModifier * effectiveModifier * stabModifier * burnModifier)
-}
-
-async function resolveDamage(){
-    await calculateDamage()
-    defender.currentHP = defender.currentHP - attackDamage
-    if (defender.currentHP <= 0) {
-        defender.currentStatus = "Faint"
-        faintedPokemon.push(defender)
-    }
-}
-
-async function resolveEffectDamageForAttacker(){
-    if (defender){
-        await resolveDamage()
-        if (attacker.currentStatus === "Burn" || attacker.currentStatus === "Poison"){
-            attacker.currentHP = attacker.currentHP - Math.floor(attacker.hpStat / 16)
-        }
-        if (attacker.currentStatus === "Leech Seed"){
-            let hpLeeched = Math.floor(attacker.hpStat / 8)
-            attacker.currentHP = attacker.currentHP - hpLeeched
-            defender.currentHP = defender.currentHP + hpLeeched
-        }
-        if (attacker.currentHP <= 0){
-            attacker.currentStatus = "Faint"
-            faintedPokemon.push(attacker)
-        }
-    } 
-
-}
-
-async function resolveEffectDamageForDefender(){ //refactor
-    if (defender){
-        await resolveEffectDamageForAttacker()
-        if (defender.currentStatus === "Burn" || defender.currentStatus === "Poison"){
-            defender.currentHP = defender.currentHP - Math.floor(defender.hpStat / 16)
-        }
-        if (defender.currentStatus === "Leech Seed"){
-            let hpLeeched = Math.floor(defender.hpStat / 8)
-            defender.currentHP = defender.currentHP - hpLeeched
-            attacker.currentHP = attacker.currentHP + hpLeeched
-        }
-        if (defender.currentHP <= 0){
-            defender.currentStatus = "Faint"
-            faintedPokemon.push(defender)
+    speedCheck(){
+        if (this.turn == 1){ //remove in chain later
+            if (currentPokemon.speedStat === currentCPUPokemon.speedStat){ // if tied
+                this.attacker = [currentPokemon, currentCPUPokemon][Math.floor(Math.random()*2)]
+            } else {
+                this.attacker = [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
+            }
+            this.defender = [currentPokemon, currentCPUPokemon].filter(poke => poke !== this.attacker)[0]
         }
     }
-}
 
-async function setSecondPhase(){
-    if (defender){
+    hitCheck(){
+        let stageEvasion = 1 // not accounting for double team
+        let stageAccuracy = 1 // not accounting for accuracy boosting moves
+        let accuracyModified = this.attacker.move.accuracy * stageEvasion * stageAccuracy
+        let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100)) / 100
+        if (randomFactor <= accuracyModified) {
+            this.accuracyCheck = true
+        }
+    }
+
+    attackCheck(){ // if damageType is not status
+        if (this.attacker.move.damageType === "Physical"){ //UNLESS THOSE STUPID MOVES LIKE PSYSTRIKE
+            this.attackStatUsed = this.attacker.attackStat
+            this.defenseStatUsed = this.defender.defenseStat
+        } else {
+            if (this.attacker.move.damageType === "Special"){
+                this.attackStatUsed = this.attacker.specialAttackStat
+                this.defenseStatUsed = this.defender.specialDefenseStat
+            }
+        }
+    }
+
+    critCheck(){
+        this.critModifier = Math.floor(Math.random() * 17) === 16 ? 1.5 : 1
+    }
+
+    randomCheck(){
+        this.randomModifier = Math.floor(Math.random() * (Math.ceil(85) - Math.floor(100)) + Math.floor(100)) / 100
+    }
+
+    effectiveCheck(){ // need to check if type 2 exists
+        const noDamage = this.attacker.move.type.no_damage_to.split(", ")
+        const halfDamage = this.attacker.move.type.half_damage_to.split(", ")
+        const doubleDamage = this.attacker.move.type.double_damage_to.split(", ")
+        if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name = this.defender.type1.name)){ // maybe a switch, if it doesnt break anything again!
+            this.effectiveModifier = 0
+        } else {
+            if (!!(this.defender.type2) && halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
+                this.effectiveModifier = 0.25
+        } else {
+            if ((halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name = this.defender.type1.name)) && !(halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name = this.defender.type1.name))){
+                this.effectiveModifier = 0.5
+        } else {
+            if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name = this.defender.type1.name)) && !(doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name = this.defender.type1.name))) {
+                this.effectiveModifier = 2
+        } else {
+            if (!!(this.defender.type2) && doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name)) {
+                this.effectiveModifier = 4
+        } else {
+            this.effectiveModifier = 1 
+    }}}}}}
+
+    burnCheck(){
+        if (this.attacker.status === "Burn" && this.attacker.move.damageType === "Physical"){
+            this.burnModifier = 0.5
+        } else {
+            this.burnModifier = 1
+        }
+    }
+
+    stabCheck(){
+        if (!!(this.attacker.type2)) {
+            if (this.attacker.type1.name === this.attacker.move.type.name) {
+                this.stabModifier = 1.5
+            } else {
+                if (this.attacker.type1.name === this.attacker.move.type.name) {
+                    this.stabModifier = 1.5
+                } else {
+                    this.stabModifier = 1
+    }}}}
+
+    calculateDamage(){ // skip if self status move
+        this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
+        debugger
+    }
+
+    static async resolveDamage(){
+        await calculateDamage()
+        this.defender.currentHP = this.defender.currentHP - attackDamage
+        if (this.defender.currentHP <= 0) {
+            this.defender.currentStatus = "Faint"
+            this.faintedPokemon.push(this.defender)
+            this.attacker = ''        
+        }
+    }
+
+    static async resolveEffectDamageForAttacker(){
+        if (this.defender){
+            await resolveDamage()
+            if (this.attacker.currentStatus === "Burn" || this.attacker.currentStatus === "Poison"){
+                this.attacker.currentHP = this.attacker.currentHP - Math.floor(this.attacker.hpStat / 16)
+            }
+            if (this.attacker.currentStatus === "Leech Seed"){
+                let hpLeeched = Math.floor(this.attacker.hpStat / 8)
+                this.attacker.currentHP = this.attacker.currentHP - hpLeeched
+                this.defender.currentHP = this.defender.currentHP + hpLeeched
+            }
+            if (this.attacker.currentHP <= 0){
+                this.attacker.currentStatus = "Faint"
+                this.faintedPokemon.push(this.attacker)
+                this.attacker = ''
+            }
+        } 
+    }
+
+    static async resolveEffectDamageForDefender(){ //refactor
+        if (this.defender){
+            await resolveEffectDamageForAttacker()
+            if (this.defender.currentStatus === "Burn" || this.defender.currentStatus === "Poison"){
+                this.defender.currentHP = this.defender.currentHP - Math.floor(this.defender.hpStat / 16)
+            }
+            if (this.defender.currentStatus === "Leech Seed"){
+                let hpLeeched = Math.floor(defender.hpStat / 8)
+                this.defender.currentHP = this.defender.currentHP - hpLeeched
+                this.attacker.currentHP = this.attacker.currentHP + hpLeeched
+            }
+            if (this.defender.currentHP <= 0){
+                this.defender.currentStatus = "Faint"
+                this.faintedPokemon.push(this.defender)
+                this.defender = ''   
+            }
+        }
+    }
+
+    static async setSecondPhase(){
         await resolveEffectDamageForDefender()
-        attacker = defender //something like this
-        new Turn() //or something like that
-    } else {
-        await resolveEffectDamageForDefender()
+        if ((this.defender) && (this.attacker)){
+            [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
+            // new Turn() //or something like that
+        } else {
+            resolveFaintedPokemon()
+        }
     }
-}
 
-async function resolveFaintedPokemon(){
-    await setSecondPhase()
-    if (faintedPokemon) {
+    static resolveFaintedPokemon(){
+        // if (faintedPokemon) {
         if (currentPokemon.currentStatus = "Faint"){
             displayDialog = `${currentPokemon.userID}'s ${curretPokemon.name} has fainted!`
             //clear screen for user // or animate it dropping
@@ -208,7 +202,13 @@ async function resolveFaintedPokemon(){
             displayDialog = `Opposing trainer has sent out ${currentCPUPokemon}!`
             renderCPUPokemon() // without the initial setup chain
         }
+        // }
     }
+
+}
+
+function writeBattleDialogue(){
+    displayDialog = `${attacker.name} used ${attackMove.name}!`
 }
 
 async function newTurn(){
@@ -225,9 +225,9 @@ async function newTurn(){
 // 
 // if ongoingBattle = false && playerTeam.length > 0
 // this will trigger an after_update callback
-async function deleteFaintedPokemon(){
-    if (faintedPokemon){
-        for (const pokemon of faintedPokemon){
+function deleteFaintedPokemon(){
+    if (Battle.faintedPokemon.length > 0){
+        for (const pokemon of Battle.faintedPokemon){
             fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
                 method: 'DELETE',
             })
@@ -237,7 +237,7 @@ async function deleteFaintedPokemon(){
 }
 
 async function regeneratePokemon(id){ // probably not necessary
-    await // end of battle
+    // await // end of battle
     if (playerTeam.length < 6){
         fetch(`${usersURL}/${id}`, {
             method: 'POST',
