@@ -3,7 +3,7 @@ const narrowChars = ["", " ", "I", "!"]
 
 async function drawHpBar(){
     await renderCPUPokemon() 
-    console.log("i go eigth! rendering the hp bars for both current pokemon!")
+    console.log("i go eixgth! rendering the hp bars for both current pokemon!")
     // debugger
     hpBarContext.font = '1em sans-serif'; 
     hpBarContext.strokeStyle = "black";

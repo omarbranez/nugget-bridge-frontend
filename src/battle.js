@@ -1,67 +1,6 @@
 // flow // this should really be a module
 // ongoingBattle = true
-function runBattle(attack){
-    if (currentScreen === "battle" && menuState === "resolve" && !!(ongoingBattle) ){
-        await playerAttack(attack)
-    } else {
-        alert("A battle is not currently ongoing!")
-    }
-    //start a chain
-}
 
-class BattleTurn { // attacker and defender
-    constructor(currentPokemon, currentCPUPokemon, currentPokemonAttack, currentCPUPokemonAttack) {
-        this.currentPokemon = currentPokemon
-        this.currentCPUPokemon = currentCPUPokemon
-    }
-
-    currentPokemonAttack(){
-
-    }
-}
-// let currentTurn
-// let currentPokemon
-// let currentCPUPokemon
-competitors = [currentPokemon, currentCPUPokemon]
-turnNumber = 0 // this will be declared on domload
-goesFirst = checkSpeed()
-goesSecond // the other one
-// let computerMove
-// if currentPlayer.currentPokemon.empty
-//      if player.pokemonTeam is not empty
-//          prompt to select new pokemon from party
-//      else
-//          winner = currentOpponent
-//          ongoingBattle = false
-//          render RESULTS <<<< separate method
-//  else
-//      newTurn AT END OF ATTACK
-function cpuMove(){ // selected randomly
-    let moveArray = [currentCPUPokemon.firstMove, currentCPUPokemon.secondMove, currentCPUPokemon.thirdMove, currentCPUPokemon.fourthMove]
-    let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
-    return randomMove
-}
-
-
-
-// compare speed of pokemon //
-// goesFirst = math.max(player.currentPokemon.speed, computer.currentPokemon.speed)
-// if player.currentPokemon.speed === computer.currentPokemon.speed
-// add a random number and run goesFirst again
-// goesFirst = math.max((player.currentPokemon.speed + math.random(), computer.currentPokemon.speed + math.random())
-function whosFaster(){ //what if its equal
-    if (currentPokemon.speedStat === currentCPUPokemon.speedStat) {
-        let choice = [currentPokemon, currentCPUPokemon] //if tied, select at random
-        let randomChoice = choice[Math.floor(Math.random()*choice.length)]
-        return randomChoice
-    }
-    [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
-}
-// determine whose turn it is, and allow them to make move //
-// if goesFirst = player
-//      currentTurn = player
-// else 
-//      currentTurn = computer //
 let goesFirst = whosFaster()
 let attacker = goesFirst // a pokemon object, with STATS
 let defender = !goesFirst
@@ -78,24 +17,48 @@ let effectiveModifier
 let critModifier
 let faintedPokemon //boolean
 
-// MOVE TO NEXT PHASE
+class BattleTurn { // attacker and defender
+    constructor(currentPokemon, currentCPUPokemon, currentPokemonAttack, currentCPUPokemonAttack) {
+        this.currentPokemon = currentPokemon
+        this.currentCPUPokemon = currentCPUPokemon
+    }
 
-// once both moves are made //
-// DAMAGE PHASE using gen 8 formula, minus the double-battle "targets" and "weather" modifiers(for now). badge boosts dont exist
-//      assume level is 100. assume PRIORITY MOVES dont exist yet
-// if attacker and defender(
-// goesFirst's attack
-// let attacker = goesFirst >>>>>>>
-// let defender = goesSecond >>>>>>>
-// let attackStat
-// let defenseStat 
-// let turnsDone 
-// if move.type = physical
-//      attackStat = attacker.attack.value
-//      defenseStat = defender.defense.value
-// else 
-//      attackStat = attacker.specialAttack.value
-//      defenseStat = defender.specialDefense.value
+    currentPokemonAttack(){
+
+    }
+}
+
+function runBattle(attack){
+    if (currentScreen === "battle" && menuState === "resolve" && !!(ongoingBattle) ){
+        await playerAttack(attack)
+    } else {
+        alert("A battle is not currently ongoing!")
+    }
+    //start a chain
+}
+
+competitors = [currentPokemon, currentCPUPokemon]
+attacker = whosFaster()
+defender // the other one
+
+
+function cpuMove(){ // selected randomly
+    let moveArray = [currentCPUPokemon.firstMove, currentCPUPokemon.secondMove, currentCPUPokemon.thirdMove, currentCPUPokemon.fourthMove]
+    let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
+    return randomMove
+}
+
+function whosFaster(){ //what if its equal
+    if (currentPokemon.speedStat === currentCPUPokemon.speedStat) {
+        let choice = [currentPokemon, currentCPUPokemon] //if tied, select at random
+        let randomChoice = choice[Math.floor(Math.random()*choice.length)]
+        return randomChoice
+    }
+    [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
+}
+
+
+
 function attackType(){
     if (attackMove.damage_type = "physical") { //damageType after serialization
         attackStatUsed = attacker.attackStat
@@ -254,11 +217,47 @@ async function newTurn(){
     new Turn() // something like that
 }
 
+
 // AFTER BATTLE //
 //
 //  let regenerateTeam
 //      generate newpokemon and add to team until there are 6
 // 
+// if ongoingBattle = false && playerTeam.length > 0
+// this will trigger an after_update callback
+async function deleteFaintedPokemon(){
+    if (faintedPokemon){
+        for (const pokemon of faintedPokemon){
+            fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
+                method: 'DELETE',
+            })
+            .then((resp) => resp.json())
+        }
+    }
+}
+
+async function regeneratePokemon(id){ // probably not necessary
+    await // end of battle
+    if (playerTeam.length < 6){
+        fetch(`${usersURL}/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+        }, 
+        body: JSON.stringify({
+            teamSize: playerTeam.length
+        })
+    }) // do i need an else to just move forward? to call new pokemon?
+}}
+
+function switchPokemonFromMenu(e){
+    //switch case depending on which button was clicked
+    
+}
+
+
+
 //  render results
 //      if pokemonTeam.length === 0
 //          render game over with number of battles won

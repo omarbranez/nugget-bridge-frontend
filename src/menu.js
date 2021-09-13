@@ -72,15 +72,20 @@ function menuButtonListener(e){
             switch(true) {
                 case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
                     alert("clicked reflect")
+                    runBattle(currentPokemon.move1)
+                    // new battleTurn(currentPokemon, currentCPUPokemon, currentPokemon.firstMove)
                     break
                 case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
                     alert("clicked take down")
+                    runBattle(currentPokemon.move2)
                     break
                 case (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
                     alert("clicked return")
+                    runBattle(currentPokemon.move3)
                     break
                 case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
                     alert("clicked u-turn")
+                    runBattle(currentPokemon.move4)
                     break
                 case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "move"):
                     // alert("clicked go back")
@@ -91,6 +96,7 @@ function menuButtonListener(e){
             switch(true) {
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
                     // debugger
+                    debugger
                     alert("clicked moltres")
                     break
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
@@ -201,10 +207,11 @@ function highlightButtonListener(e) {
 function replaceBattleOptionsWithMoves(){
     clearBlueWindow()
     textLeftSide("Please select an attack")
-    Button.all[0].renderButton(150, 325, 195, 385) // we will change the text size depending on the length of the move name string
-    Button.all[1].renderButton(150, 425, 195, 485)
-    Button.all[2].renderButton(550, 325, 595, 385)
-    Button.all[3].renderButton(550, 425, 595, 485)
+    for (const button of Button.all) {
+        if (button.purpose === "move-select"){
+            Button.renderButton(button)
+        }
+    }
     renderStaticButton()
 }
 
@@ -212,12 +219,11 @@ function replaceBattleOptionsWithPokemon(){
     clearBlueWindow()
     textLeftSide("Please select a Pokemon")
     battleTextContext.fillText("to switch-in", 100, 400)
-    Button.all[4].renderButton(350,320,385,365,0.75) // 6 letter Moltres
-    Button.all[5].renderButton(350,380,365,425,0.75) // 10 letter Weepinbell
-    Button.all[6].renderButton(350,440,400,485,0.75) // 4 letter Jynx
-    Button.all[7].renderButton(550,320,585,365,0.75) // 6 letter Snorlax
-    Button.all[8].renderButton(550,380,585,425,0.75) // 7 letter Rattata
-    Button.all[9].renderButton(550,440,585,485,0.75) // 6 letter Rhydon
+    for (const button of Button.all){
+        if (button.purpose === "pokemon-select"){
+            Button.renderButton(button)
+        }
+    }
     renderStaticButton()
 }
 
@@ -293,3 +299,4 @@ function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
     drawSelection()
     console.log("displaying battle buttons")
 }
+    // Button.renderButton(Button.find(playerTeam[0].name))

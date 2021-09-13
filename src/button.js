@@ -3,8 +3,6 @@ class Button {
     constructor(name, src, width, height, text, purpose, context=battleButtonContext) {
         this.name = name
         this.src = src
-        // this.xCoordinate
-        // this.yCoordinate
         this.width = width
         this.height = height
         this.text = text
@@ -13,25 +11,32 @@ class Button {
         this.constructor.all.push(this)
     }
 
-    async renderButton(buttonX, buttonY, textX, textY, percent = 1){
-        this.drawButtonText(textX, textY, percent,buttonX, buttonY, )
-    }
-
-    drawButton(buttonX, buttonY, percent = 1){
+    static drawButton(button){
         const name = new Image()
-        debugger
-        name.src = this.src
+        name.src = button.src
         name.onload = () => {
-            this.context.drawImage(name, buttonX, buttonY, this.width * percent, this.height * percent)
+            battleButtonContext.drawImage(name, button.xStart, button.yStart, button.width * button.percent, button.height * button.percent)
         }    
     }
 
-    async drawButtonText(textX, textY, percent = 1, buttonX, buttonY){
-        await this.drawButton(buttonX, buttonY, percent)
+    static async drawButtonText(button){
+        // debugger
+        await Button.drawButton(button)
         battleTextContext.fillStyle = "white"
-        if (percent === 0.75){
+        if (button.percent === 0.75){
             battleTextContext.font = "1.5em sans-serif"
         }
-        battleTextContext.fillText(this.text, textX, textY)
+        battleTextContext.fillText(button.text, button.textX, button.textY)
     }    
+
+    static find(button){
+        // debugger
+        return Button.all.find( b => b.name === button)
+    }
+
+    static async renderButton(button){
+        // debugger
+        await Button.drawButtonText(button)
+    }
+
 }
