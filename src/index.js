@@ -43,18 +43,18 @@ const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 hpBarContext.font = '1em sans-serif'; 
 hpBarContext.strokeStyle = "black";
-hpBarContext.fillStyle = "green";
+// hpBarContext.fillStyle = "green";
 
 
 let currentPlayer
 let cpuPlayer
 let currentPokemon
 let currentCPUPokemon
-let currentScreen = "battle" 
+let currentScreen = "initial" 
 let ongoingBattle = false   
 let playerTeam = []
 let cpuTeam = []
-let menuState = "battle"
+let menuState = "initial"
 let displayDialog 
 let moveButton1 // will be button objects later
 let moveButton2 // destructure these, i guess
@@ -200,19 +200,22 @@ function renderGameWindow() {
         case "initial":
             clearScreen()
             gameBackground.src = "./assets/menu-background.png"
-
             staticDisplay(gameBackground)
             renderInitialMenu()
             console.log("calling menu.js")
             break
         case "creation":
-            gameBackground.src = "./assets/nugget-bridge-creation.png"
+            clearScreen()
+            gameBackground.src = "./assets/menu-background.png"
+            staticDisplay(gameBackground)
+            renderNewUserModal()
             break
         case "options":
             gameBackground.src = "./assets/nugget-bridge-options.png"
             break
         case "login":
             gameBackground.src = "./assets/nugget-bridge-login.png"
+            renderContinueModal()
             break
         case "overworld":
             clearScreen()
@@ -258,20 +261,81 @@ function staticDisplay(bgImage) {
 
 function save(){
     let save = {
-        userID: currentPlayer,
+        userID: currentPlayer.userID,
         playerTeam: playerTeam,
         cpuTeam: cpuTeam, // specifically, the ID
         victories: victories,
     }
-    // send update fetch request
+    return fetch(`${usersURL}/${userID}`, {
+        method: 'PUT', 
+        headers: {
+          'Content-Type': "application/json",
+          "Accept": "application/json"
+        },
+          body: JSON.stringify(save)
+        })
+    .then(response => response.json())  
 }
+    // send update fetch request
 
 function load(){
     // get fetch request for user data
     // add attribute for team player is currently battling
 }
+function renderNewUserModal(){
+    const modal = document.getElementById("modal")
+    modal.style.display="block"
+    modal.innerHTML = `
+    <h3>Create a new profile</h3>
+    <form>
+    <label for="username">Username:</label><br>
+    <input type="text" name= "username"><br>
+    <input type="submit" value="Log in"><br>
+    </form>
+    `
+    modal.querySelector("form").addEventListener("submit", handleSubmit)
+    // modal.open()
+}
+function renderContinueModal(){
+    const modal = document.getElementById("modal")
+    modal.style.display="block"
+    modal.innerHTML = `
+    <h3>Log in to your profile</h3>
+    <form>
+    <label for="name">Name:</label><br>
+    <input type="text" name="name"><br>
+    <input type="hidden" name="user_type" value="player">
+    <input type="submit" value="Log in"><br>
+    </form>
+    `
+    modal.querySelector("form").addEventListener("submit", handleSubmit)
+    // modal.open()
+}
 
-
+function handleSubmit(e) {
+    e.preventDefault()
+    // let credentials = {
+    //     name: e.target.username.value
+    // }
+    // debugger
+    fetch(`${usersURL}`, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            name: e.target.username.value,
+            user_type: "player"
+        })
+    })
+    modal.style.display="none"
+    // .then(response => response.json())
+    // const modal = document.getElementById("modal")
+    // modal.style.display="none"
+        
+        
+}
 // function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
 //     let frameWidth = sheetWidth / numColumns
 //     let frameHeight = sheetHeight / numRows
@@ -291,13 +355,9 @@ function clearScreen() {
 }
 
 function drawSelection(x, y, dx, dy) { //draws rectangle if chosen
-    // console.log("loaded")
     highlightContext.beginPath()
     highlightContext.lineWidth = "5"
     highlightContext.strokeStyle = "red"
-    // gameButtonContext.rect(375, 150, 200, 100);
-    // gameButtonContext.rect(380, 170, 190, 60)
-    //gameButtonContext.rect(155, 445, 190, 60) // fight button
     highlightContext.rect(x, y, dx, dy)
     highlightContext.stroke()
     // console.log("drew red rectangle over selection")

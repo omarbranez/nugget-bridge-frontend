@@ -35,7 +35,7 @@ function renderInitialMenu(){
     renderButton(newGameButton, 375, 150, 200, 100) // fixed aspect ratio
     renderButton(continueButton, 375, 250, 200, 100)
     drawSelection()
-    testSelection()
+    // testSelection()
     console.log("new game menu rendering")
 }
 
@@ -45,13 +45,15 @@ function menuButtonListener(e){
     console.log(mouseX, mouseY) //alerts if inside gameButtonCanvas
     // DEAR LORD THIS NEEDS TO BECOME A SWITCH // YAY WE DID IT
     switch (menuState) {
-        case "main":
+        case "initial":
             switch(true) {
-                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330 && menuState === "main"):
-                    alert("clicked continueButton")
+                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 270 && mouseY <= 330 && menuState === "initial"):
+                    // alert("clicked continueButton")
+                    renderContinueModal()
                     break
-                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230 && menuState === "main"):
-                    alert("clicked newGameButton")
+                case (mouseX >= 380 && mouseX <= 570 && mouseY >= 170 && mouseY <= 230 && menuState === "initial"):
+                    // alert("clicked newGameButton")
+                    renderNewUserModal()
                     break
             }
         case "battle":
@@ -127,9 +129,22 @@ function highlightButtonListener(e) {
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
     switch(menuState) {
+        case "initial":
+            switch(true){
+                case (mouseX >= 380 && mouseX <= 575 && mouseY >= 170 && mouseY <= 235 && menuState === "initial"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(380,170,190,60)
+                    break
+                case (mouseX >= 380 && mouseX <= 575 && mouseY >= 270 && mouseY <= 335 && menuState === "initial"):
+                    highlightContext.clearRect(0,0,888,512)
+                    drawSelection(380,270,190,60)
+                    break
+                case (menuState === "initial"):
+                    highlightContext.clearRect(0,0,888,512)
+            }
         case "battle": 
             switch(true){
-                case (mouseX > 155  && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(155, 445, 190, 60)
                     break
@@ -296,7 +311,7 @@ function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
     const quitButton = new Image()
     quitButton.src = "./assets/battle-save-quit-button.png"
     renderButton(quitButton, 550, 425, 200, 100)
-    drawSelection()
+    // drawSelection()
     console.log("displaying battle buttons")
 }
     // Button.renderButton(Button.find(playerTeam[0].name))
