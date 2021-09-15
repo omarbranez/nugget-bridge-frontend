@@ -212,26 +212,7 @@ class Battle { // attacker and defender // this will run twice
         }
     }
 
-    resolveFaintedPokemon(){
-        // if (faintedPokemon) {
-        if (currentPokemon.currentStatus = "Faint"){
-            animateText(`${currentPokemon.attributes.name}'s ${currentPokemon.name} has fainted!`)
-            //clear screen for user // or animate it dropping
-            playerTeam.shift()
-            replaceBattleOptionsWithPokemon() // account for the missing pokemon // finish writing the switch method
-            //check on scope with the array switch
-        }
-        if (currentCPUPokemon.currentStatus = "Faint"){
-            animateText(`Enemy ${currentCPUPokemon.attributes.name}'s ${currentCPUPokemon.name} has fainted!`)
-            //clear screen for cpu // or animate it dropping
-            cpuTeam.shift()
-            //send out pokemon in position 2, now 1
-            currentCPUPokemon = cpuTeam[0]
-            displayDialog = `Opposing trainer has sent out ${currentCPUPokemon}!`
-            renderCPUPokemon() // without the initial setup chain
-        }
-        // }
-    }
+  
 
     runBattle(){
         this.hitCheck()
@@ -259,6 +240,40 @@ class Battle { // attacker and defender // this will run twice
 
 }
 
+function resolveFaintedPokemon(){
+    for (let pokemon of faintedPokemon){
+        debugger
+        let mourner = [currentPlayer, cpuPlayer].find( user => String(user.id) == pokemon.userID)
+        animateText(`${mourner.attributes.name}'s ${pokemon.name} has fainted!`)
+        mourner.currentPokemon = ''
+        mourner.team.shift()
+        if (mourner == player) {
+            changeStateToSwitch()
+        } else {
+            mourner.currentPokemon = mourner.team[0]
+            animateText(`Enemy ${mourner.attributes.name} has sent out ${mourner.currentPokemon}!`)
+            //render CPU Pokemon
+        }
+    }
+    // if (!currentPokemon){
+    //     // animateText(`${currentPlayer.attributes.name}'s ${currentPokemon.name} has fainted!`)
+    //     //clear screen for user // or animate it dropping
+    //     playerTeam.shift()
+    //     replaceBattleOptionsWithPokemon() // account for the missing pokemon // finish writing the switch method
+    //     //check on scope with the array switch
+    // }
+    // if (!currentCPUPokemon){
+    //     animateText(`Enemy ${cpuPlayer.attributes.name}'s ${currentCPUPokemon.name} has fainted!`)
+    //     //clear screen for cpu // or animate it dropping
+    //     cpuTeam.shift()
+    //     //send out pokemon in position 2, now 1
+    //     currentCPUPokemon = cpuTeam[0]
+    //     displayDialog = `Opposing trainer has sent out ${currentCPUPokemon}!`
+    //     renderCPUPokemon() // without the initial setup chain
+    // }
+    // // }
+}
+
 function writeBattleDialogue(){
     displayDialog = `${attacker.name} used ${attackMove.name}!`
 }
@@ -278,34 +293,52 @@ async function newTurn(){
 // if ongoingBattle = false && playerTeam.length > 0
 // this will trigger an after_update callback
 function deleteFaintedPokemon(){
-    if (Battle.faintedPokemon.length > 0){
-        for (const pokemon of Battle.faintedPokemon){
-            fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
+    if (faintedPokemon.length > 0){
+        for (const pokemon of faintedPokemon){
+            return fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
                 method: 'DELETE',
             })
-            .then((resp) => resp.json())
+            // .then((resp) => resp.json())
         }
+        faintedPokemon = []
     }
 }
 
-async function regeneratePokemon(id){ // probably not necessary
+function regeneratePokemon(){ // probably not necessary
     // await // end of battle
-    if (playerTeam.length < 6){
-        fetch(`${usersURL}/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-        }, 
-        body: JSON.stringify({
-            teamSize: playerTeam.length
+    if (player.team.length < 6){ // or if BEFORE i call it
+        return fetch(`${usersURL}/${player.id}`)
+        .then(res = res.json())
+        .then(json => {
+            // while (player.team.length < 6){ // they've already been created, just merge them!
+            if (!Pokemon.all.includes(json.included)){
+                new Pokemon(json.included)
+            }
         })
-    }) // do i need an else to just move forward? to call new pokemon?
-}}
+    } // do i need an else to just move forward? to call new pokemon?
+}
 
-function switchPokemonFromMenu(e){
+function switchPokemonFromMenu(position){
     //switch case depending on which button was clicked
-    
+    let temp = playerTeam[0]
+    playerTeam[0] = playerTeam[position]
+    playerTeam[position] = temp
+    currentPokemon = playerTeam[0] 
+}
+
+function updatePokemonStates(pokemon){
+    return fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            current_hp: pokemon.currentHP,
+            current_status: pokemon.status,
+            position: pokemon.position
+        })
+    })
 }
 
 //  render results

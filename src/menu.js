@@ -98,22 +98,27 @@ function menuButtonListener(e){
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
                     // debugger
                     debugger
-                    alert("clicked moltres")
+                    alert("clicked moltres") //cant switch first with first
                     break
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
                     alert("clicked weepinbell")
+                    switchPokemonFromMenu(1)
                     break
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
                     alert("clicked jynx")
+                    switchPokemonFromMenu(2)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
                     alert("clicked snorlax")
+                    switchPokemonFromMenu(3)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
                     alert("clicked rattata")
+                    switchPokemonFromMenu(4)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
                     alert("clicked rhydon")
+                    switchPokemonFromMenu(5)
                     break
                 case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "switch"):
                     // alert("clicked go back")
