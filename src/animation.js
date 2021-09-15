@@ -3,7 +3,7 @@ const narrowChars = ["", " ", "I", "!"]
 
 async function drawHpBar(){
     await renderCPUPokemon() 
-    console.log("i go eixgth! rendering the hp bars for both current pokemon!")
+    console.log("i go eigth! rendering the hp bars for both current pokemon!")
     // debugger
     // hpBarContext.fillStyle = "white"; // will need to wrap this inside a function
     const hpBar = new Image() // for each player
@@ -50,7 +50,15 @@ function redrawHP(pokemon, xBarStart, yBarStart, textXStart, textYStart){
         hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
     }
 }
-
+function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
+    hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
+    hpBarContext.fillStyle = "green";
+    if (!!(pokemon)) {
+        hpBarContext.fillRect(xBarStart, yBarStart, (pokemon.currentHP/pokemon.hpStat) * 190, 14)
+        hpBarContext.fillStyle = "black"
+        hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
+    }
+}
 function animateText(text){
     const textLength = text.length
     gameButtonContext.font = '2em sans-serif'; 

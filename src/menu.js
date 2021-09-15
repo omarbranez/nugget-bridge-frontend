@@ -56,42 +56,41 @@ function menuButtonListener(e){
                     renderNewUserModal()
                     break
             }
-        case "battle":
+        case "battle-options":
             switch(true) {
-                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options"):
                     changeStateToMove()
                     break
                 
-                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options"):
                     changeStateToSwitch()
                     break
                 
-                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options"):
                     alert("clicked quitButton")
                     break
             }
         case "move":
             switch(true) {
                 case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
-                    alert("clicked reflect")
-                    runBattle(currentPokemon.move1)
-                    // new battleTurn(currentPokemon, currentCPUPokemon, currentPokemon.firstMove)
+                    battle = new Battle(currentPokemon.move1)
+                    // debugger
+                    battle.runBattle()
                     break
                 case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
-                    alert("clicked take down")
-                    runBattle(currentPokemon.move2)
+                    battle = new Battle(currentPokemon.move2)
+                    battle.runBattle()
                     break
                 case (mouseX >= 555 && mouseX <= 775 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
-                    alert("clicked return")
-                    runBattle(currentPokemon.move3)
+                    battle = new Battle(currentPokemon.move3)
+                    battle.runBattle()
                     break
                 case (mouseX >= 555 && mouseX <= 775 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
-                    alert("clicked u-turn")
-                    runBattle(currentPokemon.move4)
+                    battle = new Battle(currentPokemon.move4)
+                    battle.runBattle()
                     break
                 case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "move"):
-                    // alert("clicked go back")
-                    changeStateToBattle()
+                    changeStateToBattleOptions()
                     break     
             }
         case "switch":
@@ -118,7 +117,7 @@ function menuButtonListener(e){
                     break
                 case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "switch"):
                     // alert("clicked go back")
-                    changeStateToBattle()
+                    changeStateToBattleOptions()
                     break            
             }
     }
@@ -142,24 +141,24 @@ function highlightButtonListener(e) {
                 case (menuState === "initial"):
                     highlightContext.clearRect(0,0,888,512)
             }
-        case "battle": 
+        case "battle-options": 
             switch(true){
-                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle"):
+                case (mouseX > 155 && mouseX < 345 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options"):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(155, 445, 190, 60)
                     break
                 // alert("highlighting fight button!")
-                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle" ):
+                case (mouseX > 355 && mouseX < 555 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options" ):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(355, 445, 190, 60)
                     // alert("highlighting switch button")
                     break
-                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle" ):
+                case (mouseX > 555 && mouseX < 745 && mouseY >= 445 && mouseY <= 505 && menuState === "battle-options" ):
                     highlightContext.clearRect(0, 0, 888, 512)
                     drawSelection(555, 445, 190, 60)
                     // alert("highlighting quit button")
                     break
-                case (menuState === "battle"):
+                case (menuState === "battle-options"):
                     highlightContext.clearRect(0, 0, 888, 512)
             } 
         case "move":
@@ -252,9 +251,9 @@ async function changeStateToMove(){
     menuState = "move"
 }
 
-async function changeStateToBattle(){
+async function changeStateToBattleOptions(){
     await renderBattleButtons()
-    menuState = "battle"
+    menuState = "battle-options"
 }
 
 function textLeftSide(text){

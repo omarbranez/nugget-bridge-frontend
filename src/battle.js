@@ -6,7 +6,7 @@ class Battle { // attacker and defender // this will run twice
         this.currentCPUPokemon = currentCPUPokemon
         
         this.turn = 1
-        this.attacker //determined by goesFirst/whosFaster, then switches unless someone fainted
+        this.attacker//determined by goesFirst/whosFaster, then switches unless someone fainted
         this.defender //determined by goesFirst, then switches unless someone fainted
         this.attackStatUsed
         this.defenseStatUsed
@@ -23,6 +23,7 @@ class Battle { // attacker and defender // this will run twice
         this.attackDamage
 
         this.faintedPokemon = [] // boolean
+        this.speedCheck()
         this.selectCPUMove()
         // run battle after creation
     }
@@ -54,7 +55,7 @@ class Battle { // attacker and defender // this will run twice
     }
 
     hitCheck(){
-        if (this.attacker.move.name === "Swift"){
+        if (this.attacker.move.name === "Swift" || this.attacker.move.name === "Feint Attack" || this.attacker.move.name === "Aerial Ace" || this.attacker.move.name === "Aura Sphere"){
             this.accuracyCheck = true
         } else {
             let stageEvasion = 1 // not accounting for double team
@@ -66,7 +67,7 @@ class Battle { // attacker and defender // this will run twice
                 this.accuracyCheck = true
     }}}   
 
-    attackCheck(){ // if damageType is not status
+    statCheck(){ // if damageType is not status
         if (this.attacker.move.damageType === "Physical"){ //UNLESS THOSE STUPID MOVES LIKE PSYSTRIKE
             this.attackStatUsed = this.attacker.attackStat
             this.defenseStatUsed = this.defender.defenseStat
@@ -86,29 +87,29 @@ class Battle { // attacker and defender // this will run twice
         this.randomModifier = Math.floor(Math.random() * (Math.ceil(85) - Math.floor(100)) + Math.floor(100)) / 100
     }
 
-    effectiveCheck(){ // need to check if type 2 exists
+    effectiveCheck(){ 
         const noDamage = this.attacker.move.type.no_damage_to.split(", ")
         const halfDamage = this.attacker.move.type.half_damage_to.split(", ")
         const doubleDamage = this.attacker.move.type.double_damage_to.split(", ")
-        if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name = this.defender.type1.name)){ // maybe a switch, if it doesnt break anything again!
+        // debugger
+        if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name)){ // maybe a switch, if it doesnt break anything again!
             this.effectiveModifier = 0
+        } else if (halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
+            this.effectiveModifier = 0.25
+        } else if (halfDamage.includes(this.defender.type2.name)) {//|| halfDamage.includes(this.defender.type2.name)) && !((halfDamage.includes(this.defender.type1.name)) && halfDamage.includes(this.defender.type2.name))){
+            this.effectiveModifier = 0.5
+        } else if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name)) && !(doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name))) {
+            this.effectiveModifier = 2
+        } else if (doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name)) {
+            this.effectiveModifier = 4
         } else {
-            if (!!(this.defender.type2) && halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
-                this.effectiveModifier = 0.25
-        } else {
-            if ((halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name = this.defender.type1.name)) && !(halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name = this.defender.type1.name))){
-                this.effectiveModifier = 0.5
-        } else {
-            if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name = this.defender.type1.name)) && !(doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name = this.defender.type1.name))) {
-                this.effectiveModifier = 2
-        } else {
-            if (!!(this.defender.type2) && doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name)) {
-                this.effectiveModifier = 4
-        } else {
-            this.effectiveModifier = 1 
-    }}}}}}
+            // debugger
+            this.effectiveModifier = 1
+        }
+    }   
 
     burnCheck(){
+        // debugger
         if (this.attacker.status === "Burn" && this.attacker.move.damageType === "Physical"){
             this.burnModifier = 0.5
         } else {
@@ -118,16 +119,16 @@ class Battle { // attacker and defender // this will run twice
 
     stabCheck(){
         // debugger
-        if (!!(this.attacker.type2)) {
-            if (this.attacker.type1.name === this.attacker.move.type.name) {
+        // if (!!(this.attacker.type2)) {
+            if (this.attacker.type1.name === this.attacker.move.type.name || this.attacker.type2.name === this.attacker.move.type.name){
                 this.stabModifier = 1.5
-            }} 
-            else {
-                if (this.attacker.type1.name === this.attacker.move.type.name) {
-                    this.stabModifier = 1.5
-                } else {
+            }
+            // else {
+            //     if (this.attacker.type1.name === this.attacker.move.type.name) {
+            //         this.stabModifier = 1.5
+                 else {
                     this.stabModifier = 1
-    }}}
+    }}
 
     calculateDamage(){ // skip if self status move
         displayDialog = `${this.attacker.name} used ${this.attacker.move}!`
@@ -167,7 +168,7 @@ class Battle { // attacker and defender // this will run twice
 
     static async resolveEffectDamageForAttacker(){
         if (this.defender){
-            await resolveDamage()
+            await resolveDamage() //if status is NOT None
             if (this.attacker.currentStatus === "Burn" || this.attacker.currentStatus === "Poison"){
                 this.attacker.currentHP = this.attacker.currentHP - Math.floor(this.attacker.hpStat / 16)
             }
@@ -180,7 +181,7 @@ class Battle { // attacker and defender // this will run twice
                 this.attacker.currentStatus = "Faint"
                 this.faintedPokemon.push(this.attacker)
                 this.attacker = ''
-            }
+            }// redraw hp again
         } 
     }
 
@@ -203,8 +204,8 @@ class Battle { // attacker and defender // this will run twice
         }
     }
 
-    static async setSecondPhase(){
-        await resolveEffectDamageForDefender()
+    setSecondPhase(){
+        // await resolveEffectDamageForDefender()
         if ((this.defender) && (this.attacker)){
             [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
             // new Turn() //or something like that
@@ -232,6 +233,31 @@ class Battle { // attacker and defender // this will run twice
             renderCPUPokemon() // without the initial setup chain
         }
         // }
+    }
+
+    runBattle(){
+        // let battle = new Battle(move)
+        // if (this.turn == 1){
+        //     battle.speedCheck()
+        // }
+        this.hitCheck()
+        this.statCheck()
+        this.critCheck()
+        this.randomCheck()
+        // debugger
+        this.effectiveCheck()
+        this.burnCheck()
+        this.stabCheck()
+        this.calculateDamage()
+        // debugger
+        this.resolveDamage()
+        console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
+        this.turn++
+        if (this.turn == 2) {
+            this.setSecondPhase()
+            this.runBattle()
+        }
+        changeStateToBattleOptions()
     }
 
 }
@@ -285,7 +311,29 @@ function switchPokemonFromMenu(e){
     
 }
 
-
+// function runBattle(){
+//     // let battle = new Battle(move)
+//     // if (this.turn == 1){
+//     //     battle.speedCheck()
+//     // }
+//     battle.hitCheck()
+//     battle.statCheck()
+//     battle.critCheck()
+//     battle.randomCheck()
+//     // debugger
+//     battle.effectiveCheck()
+//     battle.burnCheck()
+//     battle.stabCheck()
+//     battle.calculateDamage()
+//     // debugger
+//     battle.resolveDamage()
+//     console.log(`${battle.attacker.name} did ${battle.attackDamage} damage to ${battle.defender.name}!`)
+//     this.turn++
+//     if (this.turn == 2) {
+//         battle.setSecondPhase()
+//         battle.runBattle()
+//     }
+// }
 
 //  render results
 //      if pokemonTeam.length === 0

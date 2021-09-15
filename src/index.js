@@ -50,30 +50,34 @@ let currentPlayer
 let cpuPlayer
 let currentPokemon
 let currentCPUPokemon
-let currentScreen = "initial" 
+let currentScreen = "battle" 
 let ongoingBattle = false   
 let playerTeam = []
 let cpuTeam = []
-let menuState = "initial"
+let menuState = "battle-options"
 let displayDialog 
 let moveButton1 // will be button objects later
 let moveButton2 // destructure these, i guess
 let moveButton3
 let moveButton4
-let playerID = 1 //assuming login successful for userid 1
-let cpuPlayerID = 2 //assuming cpu player fetched
+let playerID = 3 //assuming login successful for userid 1
+let battle
+ //assuming cpu player fetched
 
 function getPlayer(){
     console.log("i go first! fetching current user's team from the backend!")
+    // debugger
     return fetch(`${usersURL}/${playerID}`)
     .then(res => res.json())
     .then(json => {
-        if (json.data.id === String(playerID)) {
+        // debugger
+        // if (json.data.id === String(playerID)) {
         currentPlayer = json.data
-        for (const pokemon of json.data.attributes.myTeam){
+        for (const pokemon of json.included){
+            // debugger
             new Pokemon(pokemon)
         }
-    }})
+    })
 }
 
 async function setPlayerTeam() {
@@ -90,15 +94,15 @@ async function setPlayerTeam() {
 async function getCPUTeam(){
     await setPlayerTeam()
     console.log("i go third! fetching a CPU owned team from the backend!")
-    return fetch(`${usersURL}/2`)
+    return fetch(`${usersURL}/${playerID + 1}`) // this will work for the first battle, i guess
     .then(res => res.json())
     .then(json => {
-        if (json.data.id === String(cpuPlayerID)) {
+        // if (json.data.id === String(cpuPlayerID)) {
             cpuPlayer = json.data
-        for (const pokemon of json.data.attributes.myTeam){
+        for (const pokemon of json.included){
             new Pokemon(pokemon)
         }
-    }})
+    })
 }
 
 async function setCPUTeam(){
@@ -282,6 +286,7 @@ function load(){
     // get fetch request for user data
     // add attribute for team player is currently battling
 }
+
 function renderNewUserModal(){
     const modal = document.getElementById("modal")
     modal.style.display="block"
@@ -318,6 +323,7 @@ function handleSubmit(e) {
     //     name: e.target.username.value
     // }
     // debugger
+    modal.style.display="none"
     fetch(`${usersURL}`, {
         method: 'POST', 
         headers: {
@@ -329,12 +335,8 @@ function handleSubmit(e) {
             user_type: "player"
         })
     })
-    modal.style.display="none"
-    // .then(response => response.json())
-    // const modal = document.getElementById("modal")
-    // modal.style.display="none"
-        
-        
+        .then(res => res.json())
+        .then(user => {playerID = user.data.id}) // this takes a while. maybe a progress bar?    
 }
 // function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
 //     let frameWidth = sheetWidth / numColumns
