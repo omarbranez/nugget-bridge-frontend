@@ -62,6 +62,7 @@ let moveButton3
 let moveButton4
 let playerID = 3 //assuming login successful for userid 1
 let battle
+let faintedPokemon = []
  //assuming cpu player fetched
 
 function getPlayer(){

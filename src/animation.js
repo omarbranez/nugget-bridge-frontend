@@ -15,28 +15,40 @@ async function drawHpBar(){
         hpBarContext.fillStyle = "green";
         if (currentPokemon.currentHP === currentPokemon.hpStat) {
             hpBarContext.fillRect(565, 275, 190, 14) // full hp
+        } else if (currentPokemon.currentHP <= 0){
+                hpBarContext.fillRect(565, 275, 0, 14)            
         } else {
             hpBarContext.fillRect(565, 275, (currentPokemon.currentHP/currentPokemon.hpStat) * 190, 14)
         }
         if (playerTeam) {
             hpBarContext.fillStyle = "black"
-            hpBarContext.fillText(`HP: ${currentPokemon.currentHP}/${currentPokemon.hpStat}`, 600, 288)
-        }
+            if (currentPokemon.currentHP <= 0){
+                hpBarContext.fillText(`HP: 0/${currentPokemon.hpStat}`, 600, 288)
+            } else {
+                hpBarContext.fillText(`HP: ${currentPokemon.currentHP}/${currentPokemon.hpStat}`, 600, 288)
+            }   
         console.log(`${currentPokemon.name} has ${currentPokemon.currentHP} out of ${currentPokemon.hpStat} HP remaining!`)
+        }
     }
     cpuHPBar.onload = function() {
         hpBarContext.drawImage(hpBar, 175, 60, 275, 50)
         hpBarContext.fillStyle = "green";
         if (currentCPUPokemon.currentHP === currentCPUPokemon.hpStat) {
             hpBarContext.fillRect(245, 75, 190, 14) // full hp
+        } else if (currentCPUPokemon.currentHP <= 0){
+            hpBarContext.fillRect(245, 75, 0, 14)            
         } else {
             hpBarContext.fillRect(245, 75, (currentCPUPokemon.currentHP/currentCPUPokemon.hpStat) * 190, 14)
         }
         if (cpuTeam) {
             hpBarContext.fillStyle = "black"
-            hpBarContext.fillText(`HP: ${currentCPUPokemon.currentHP}/${currentCPUPokemon.hpStat}`, 280, 88)
-        }
+            if (currentPokemon.currentHP <= 0){
+                hpBarContext.fillText(`HP: 0/${currentPokemon.hpStat}`, 600, 288)
+            } else {
+                hpBarContext.fillText(`HP: ${currentCPUPokemon.currentHP}/${currentCPUPokemon.hpStat}`, 280, 88)
+            }
         console.log(`${currentCPUPokemon.name} has ${currentCPUPokemon.currentHP} out of ${currentCPUPokemon.hpStat} HP remaining!`)
+        }
     }
     // animateText(displayDialog.toUpperCase())
 }
@@ -45,9 +57,17 @@ function redrawHP(pokemon, xBarStart, yBarStart, textXStart, textYStart){
     hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
     hpBarContext.fillStyle = "green";
     if (!!(pokemon)) {
-        hpBarContext.fillRect(xBarStart, yBarStart, (pokemon.currentHP/pokemon.hpStat) * 190, 14)
+        if (pokemon.currentHP <= 0){
+            hpBarContext.fillRect(xBarStart, yBarStart, 0, 14)
+        } else {
+            hpBarContext.fillRect(xBarStart, yBarStart, (pokemon.currentHP/pokemon.hpStat) * 190, 14)
+        }
         hpBarContext.fillStyle = "black"
-        hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
+        if (pokemon.currentHP <= 0) {
+            hpBarContext.fillText(`HP: 0/${pokemon.hpStat}`, textXStart, textYStart)
+        } else {
+            hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
+        }
     }
 }
 function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
@@ -60,6 +80,7 @@ function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
     }
 }
 function animateText(text){
+    clearBlueWindow()
     const textLength = text.length
     gameButtonContext.font = '2em sans-serif'; 
     gameButtonContext.fillStyle = "white";
@@ -84,6 +105,7 @@ function animateText(text){
             // console.log(`${letterX}, ${text[i]}`)
         }
     }, 30)
+    // clearBlueWindow()
 }
 
 function renderText(letter, newX) {

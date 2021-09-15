@@ -9,7 +9,7 @@ class Pokemon {
         this.currentHP = src.attributes.currentHp
         this.status = src.attributes.status
         this.type1 = src.attributes.type1
-        this.type2 = src.attributes.type2 || "None"
+        this.type2 = src.attributes.type2
         this.hpStat = src.attributes.hpStat
         this.attackStat = src.attributes.attackStat
         this.defenseStat = src.attributes.defenseStat

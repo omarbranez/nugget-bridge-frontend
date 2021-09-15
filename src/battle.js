@@ -22,7 +22,7 @@ class Battle { // attacker and defender // this will run twice
 
         this.attackDamage
 
-        this.faintedPokemon = [] // boolean
+        // this.faintedPokemon = [] // boolean
         this.speedCheck()
         this.selectCPUMove()
         // run battle after creation
@@ -161,7 +161,7 @@ class Battle { // attacker and defender // this will run twice
         redrawHP(currentCPUPokemon, 245, 75, 290, 88)
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
-            this.faintedPokemon.push(this.defender)
+            faintedPokemon.push(this.defender)
             this.attacker = ''        
         }
     }
@@ -179,7 +179,7 @@ class Battle { // attacker and defender // this will run twice
             }
             if (this.attacker.currentHP <= 0){
                 this.attacker.currentStatus = "Faint"
-                this.faintedPokemon.push(this.attacker)
+                faintedPokemon.push(this.attacker)
                 this.attacker = ''
             }// redraw hp again
         } 
@@ -198,33 +198,31 @@ class Battle { // attacker and defender // this will run twice
             }
             if (this.defender.currentHP <= 0){
                 this.defender.currentStatus = "Faint"
-                this.faintedPokemon.push(this.defender)
+                faintedPokemon.push(this.defender)
                 this.defender = ''   
             }
         }
     }
 
     setSecondPhase(){
-        // await resolveEffectDamageForDefender()
-        if ((this.defender) && (this.attacker)){
+        if (!!this.defender && !!this.attacker){
             [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
-            // new Turn() //or something like that
         } else {
             resolveFaintedPokemon()
         }
     }
 
-    static resolveFaintedPokemon(){
+    resolveFaintedPokemon(){
         // if (faintedPokemon) {
         if (currentPokemon.currentStatus = "Faint"){
-            displayDialog = `${currentPokemon.userID}'s ${curretPokemon.name} has fainted!`
+            animateText(`${currentPokemon.attributes.name}'s ${currentPokemon.name} has fainted!`)
             //clear screen for user // or animate it dropping
             playerTeam.shift()
             replaceBattleOptionsWithPokemon() // account for the missing pokemon // finish writing the switch method
             //check on scope with the array switch
         }
         if (currentCPUPokemon.currentStatus = "Faint"){
-            displayDialog = `Enemy ${currentCPUPokemon.name} has fainted!`
+            animateText(`Enemy ${currentCPUPokemon.attributes.name}'s ${currentCPUPokemon.name} has fainted!`)
             //clear screen for cpu // or animate it dropping
             cpuTeam.shift()
             //send out pokemon in position 2, now 1
@@ -236,10 +234,6 @@ class Battle { // attacker and defender // this will run twice
     }
 
     runBattle(){
-        // let battle = new Battle(move)
-        // if (this.turn == 1){
-        //     battle.speedCheck()
-        // }
         this.hitCheck()
         this.statCheck()
         this.critCheck()
@@ -249,13 +243,16 @@ class Battle { // attacker and defender // this will run twice
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
+        animateText(`${this.attacker.name} USED ${this.attacker.move.name}!`)
         // debugger
         this.resolveDamage()
         console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         this.turn++
         if (this.turn == 2) {
             this.setSecondPhase()
-            this.runBattle()
+            if (!!this.attacker && !!this.defender){
+                this.runBattle()
+            }
         }
         changeStateToBattleOptions()
     }
@@ -310,30 +307,6 @@ function switchPokemonFromMenu(e){
     //switch case depending on which button was clicked
     
 }
-
-// function runBattle(){
-//     // let battle = new Battle(move)
-//     // if (this.turn == 1){
-//     //     battle.speedCheck()
-//     // }
-//     battle.hitCheck()
-//     battle.statCheck()
-//     battle.critCheck()
-//     battle.randomCheck()
-//     // debugger
-//     battle.effectiveCheck()
-//     battle.burnCheck()
-//     battle.stabCheck()
-//     battle.calculateDamage()
-//     // debugger
-//     battle.resolveDamage()
-//     console.log(`${battle.attacker.name} did ${battle.attackDamage} damage to ${battle.defender.name}!`)
-//     this.turn++
-//     if (this.turn == 2) {
-//         battle.setSecondPhase()
-//         battle.runBattle()
-//     }
-// }
 
 //  render results
 //      if pokemonTeam.length === 0
