@@ -29,14 +29,14 @@ window.setInterval(function(){
 function drawNormal(){
     teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
     let pokemonOnePic = new Image()
-    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
+    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].toLowerCase()}-mini.png`
     renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
     console.log("Jumping Up!")
 }
 function drawHigher(){
     teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
     let pokemonOnePic = new Image()
-    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].toLowerCase()}-mini.png`
+    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].toLowerCase()}-mini.png`
     renderFirstTeam(pokemonOnePic, 50, 45, 133, 100)
     console.log("Jumping Down!")
 }

@@ -1,4 +1,3 @@
-
 const baseURL = 'http://localhost:3000'
 const teamsURL = `${baseURL}/team_pokemons`
 const pokemonsURL = `${baseURL}/pokemons`
@@ -46,147 +45,194 @@ hpBarContext.strokeStyle = "black";
 // hpBarContext.fillStyle = "green";
 
 
-let currentPlayer
-let cpuPlayer
-let currentPokemon
-let currentCPUPokemon
+let player // player
+let cpu // cpu
 let currentScreen = "battle" 
 let ongoingBattle = false   
-let playerTeam = []
-let cpuTeam = []
 let menuState = "battle-options"
-let displayDialog 
 let moveButton1 // will be button objects later
 let moveButton2 // destructure these, i guess
 let moveButton3
 let moveButton4
-let playerID = 3 //assuming login successful for userid 1
+let playerID = 3 //= 3 //assuming login successful for userid 1
 let battle
 let faintedPokemon = []
- //assuming cpu player fetched
 
 function getPlayer(){
-    console.log("i go first! fetching current user's team from the backend!")
-    // debugger
+    console.log("i go first! fetching a user and their team from the backend!")
     return fetch(`${usersURL}/${playerID}`)
     .then(res => res.json())
     .then(json => {
-        // debugger
-        // if (json.data.id === String(playerID)) {
-        currentPlayer = json.data
+        player = new Player(json.data)
         for (const pokemon of json.included){
             // debugger
-            new Pokemon(pokemon)
+            let poke = new Pokemon(pokemon)
+            player.team.push(poke)
         }
+        player.currentPokemon = player.team[0]
     })
 }
 
-async function setPlayerTeam() {
-    await getPlayer()
-    console.log("i go second! setting the current user's team in the frontend!")
-    for (const pokemon of Pokemon.all) {
-        // if (pokemon.userID === currentPlayer.id){ // make a user object?
-        if ((String(pokemon.userID) === currentPlayer.id)) {
-            playerTeam.push(pokemon)
-        }
-    }
-}
-
-async function getCPUTeam(){
-    await setPlayerTeam()
-    console.log("i go third! fetching a CPU owned team from the backend!")
+function getCPU(){ //async
+    console.log("i go second! fetching a cpu and their team from the backend!")
     return fetch(`${usersURL}/${playerID + 1}`) // this will work for the first battle, i guess
     .then(res => res.json())
     .then(json => {
-        // if (json.data.id === String(cpuPlayerID)) {
-            cpuPlayer = json.data
+        cpu = new Player(json.data)
         for (const pokemon of json.included){
             new Pokemon(pokemon)
+            let poke = new Pokemon(pokemon)
+            cpu.team.push(poke)
         }
+        cpu.currentPokemon = cpu.team[0]
     })
+    // })
 }
 
-async function setCPUTeam(){
-    await getCPUTeam()
-    console.log("i go fourth! setting the current CPU player's team in the frontend")
-    for (const pokemon of Pokemon.all){
-        if (String(pokemon.userID) === cpuPlayer.id) {
-            cpuTeam.push(pokemon)
-        }
+function renderPokemon(side){ //async
+    // debugger
+    const pokemonBattleImage = new Image()
+    if (side == "player"){
+        pokemonBattleImage.src = `./assets/pokemon-battle/${player.currentPokemon.name.toLowerCase()}-rear.png`
+        drawBattlePokemon(pokemonBattleImage, 150, 140, 200, 200)
+        battlePokemonContext.fillText(player.currentPokemon.name, 500, 250)
+    } else {
+        pokemonBattleImage.src = `./assets/pokemon-battle/${cpu.currentPokemon.name.toLowerCase()}-front.png`
+        drawBattlePokemon(pokemonBattleImage, 550, 20, 200, 200)
+        battlePokemonContext.fillText(cpu.currentPokemon.name, 175, 50)
     }
+    console.log("i go third! rendering the views of both the player's and cpu's current pokemon")
+
 }
 
-async function renderPlayerPokemon(){
-    await setCPUTeam()
-    console.log("i go fifth! rendering the rear view of the player's current pokemon!")
-    currentPokemon = playerTeam[0]
-    const currentPokemonRear = new Image()
-    currentPokemonRear.src = `./assets/pokemon-battle/${currentPokemon.name.toLowerCase()}-rear.png`
-    drawBattlePokemon(currentPokemonRear, 150, 140, 200, 200)
-    battlePokemonContext.fillText(currentPokemon.name, 500, 250)
-}
-
-async function renderPlayerTeam(){
-    await renderPlayerPokemon()
-    console.log("i go sixth! rendering the mini pokemon in the team window below!")
+function renderPlayerTeam(){ //async
+    console.log("i go fourth! rendering the mini pokemon in the team window below!")
     teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
-    // for (const pokemon of playerTeam) { set their locations depending on position
+    // for (const pokemon of player.team) { set their locations depending on position
     // }
     let pokemonOnePic = new Image() //refactor this
-    pokemonOnePic.src = `./assets/pokemon-battle/${playerTeam[0].name.toLowerCase()}-mini.png`
+    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].name.toLowerCase()}-mini.png`
     renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
-    teamPokemonTextContext.fillText(`${playerTeam[0].name}`, 200, 75)
-    if (playerTeam[1]) {
+    teamPokemonTextContext.fillText(`${player.team[0].name}`, 200, 75)
+    if (player.team[1]) {
         let pokemonTwoPic = new Image()
-        pokemonTwoPic.src = `./assets/pokemon-battle/${playerTeam[1].name.toLowerCase()}-mini.png`
+        pokemonTwoPic.src = `./assets/pokemon-battle/${player.team[1].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonTwoPic, 50, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[1].name}`, 200, 225)
+        teamPokemonTextContext.fillText(`${player.team[1].name}`, 200, 225)
     }
-    if (playerTeam[2]) {
+    if (player.team[2]) {
         let pokemonThreePic = new Image()
-        pokemonThreePic.src = `./assets/pokemon-battle/${playerTeam[2].name.toLowerCase()}-mini.png`
+        pokemonThreePic.src = `./assets/pokemon-battle/${player.team[2].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonThreePic, 50, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[2].name}`, 200, 375)
+        teamPokemonTextContext.fillText(`${player.team[2].name}`, 200, 375)
     }
-    if (playerTeam[3]) {
+    if (player.team[3]) {
         let pokemonFourPic = new Image()
-        pokemonFourPic.src = `./assets/pokemon-battle/${playerTeam[3].name.toLowerCase()}-mini.png`
+        pokemonFourPic.src = `./assets/pokemon-battle/${player.team[3].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonFourPic, 500, 50, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[3].name}`, 650, 75)
+        teamPokemonTextContext.fillText(`${player.team[3].name}`, 650, 75)
     }
-    if (playerTeam[4]) {
+    if (player.team[4]) {
         let pokemonFivePic = new Image()
-        pokemonFivePic.src = `./assets/pokemon-battle/${playerTeam[4].name.toLowerCase()}-mini.png`
+        pokemonFivePic.src = `./assets/pokemon-battle/${player.team[4].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonFivePic, 500, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[4].name}`, 650, 225)
+        teamPokemonTextContext.fillText(`${player.team[4].name}`, 650, 225)
     }
-    if (playerTeam[5]) {
+    if (player.team[5]) {
         let pokemonSixPic = new Image()
-        pokemonSixPic.src = `./assets/pokemon-battle/${playerTeam[5].name.toLowerCase()}-mini.png`
+        pokemonSixPic.src = `./assets/pokemon-battle/${player.team[5].name.toLowerCase()}-mini.png`
         renderFirstTeam(pokemonSixPic, 500, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${playerTeam[5].name}`, 650, 375)
+        teamPokemonTextContext.fillText(`${player.team[5].name}`, 650, 375)
     }
 }
 
-async function renderCPUPokemon(){
-    await renderPlayerTeam()
-    console.log("i go seventh! rendering the front view of the CPU player's current pokemon!")
-    currentCPUPokemon = cpuTeam[0]
-    const currentPokemonFront = new Image()
-    currentPokemonFront.src = `./assets/pokemon-battle/${currentCPUPokemon.name.toLowerCase()}-front.png`
-    drawBattlePokemon(currentPokemonFront, 550, 20, 200, 200)
-    battlePokemonContext.fillText(currentCPUPokemon.name, 175, 50)
+function createMoveButtons() { 
+    // debugger
+    for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
+        new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
+    }
+    // debugger
+    Object.assign(Button.find(player.currentPokemon.move1.name), {
+        xStart: 150,
+        yStart: 325,
+        textX: 195,
+        textY: 385,
+        percent: 1
+    })
+    Object.assign(Button.find(player.currentPokemon.move2.name), {
+        xStart: 150,
+        yStart: 425,
+        textX: 195,
+        textY: 485,
+        percent: 1
+    })
+    Object.assign(Button.find(player.currentPokemon.move3.name), {
+        xStart: 550,
+        yStart: 325,
+        textX: 595,
+        textY: 385,
+        percent: 1
+    })
+    Object.assign(Button.find(player.currentPokemon.move4.name), {
+        xStart: 550,
+        yStart: 425,
+        textX: 595,
+        textY: 485,
+        percent: 1
+    })
+    
 }
 
-async function renderBattleChain(){
-    await drawHpBar()
+function createPokemonButtons() { // 
+    // remove all old mini pokemon
     // debugger
-    currentPokemon.createMoveButtons()
-    // for (const pokemon of Pokemon.all){
-    //     // debugger
-    Pokemon.createPokemonButtons()
-    // }
-    console.log("i go last! i just start the chain!")
+    for (const pokemon of Pokemon.all){
+        if (pokemon.userID === playerID){
+            new Button(pokemon.name, "./assets/button-blank.png", 200, 100, pokemon.name, "pokemon-select")
+        }
+    }   
+    Object.assign(Button.find(player.team[0].name), { // position vs player team
+        xStart: 350,
+        yStart: 320,
+        textX: 385, // 6 letter Moltres // position 1 // we can probably assign the different textX with a loop
+        textY: 365,
+        percent: 0.75
+    })
+    Object.assign(Button.find(player.team[1].name), { // position vs player team
+        xStart: 350,
+        yStart: 380,
+        textX: 365, // 10 letter Weepinbell // position 2
+        textY: 425,
+        percent: 0.75
+    })
+    Object.assign(Button.find(player.team[2].name), { // position vs player team
+        xStart: 350,
+        yStart: 440,
+        textX: 400, // 4 letter Jynx // position 3
+        textY: 485,
+        percent: 0.75
+    })
+    Object.assign(Button.find(player.team[3].name), { // position vs player team
+        xStart: 550,
+        yStart: 320,
+        textX: 585, // 6 letter Snorlax // position 4
+        textY: 365,
+        percent: 0.75
+    })
+    Object.assign(Button.find(player.team[4].name), { // position vs player team
+        xStart: 550,
+        yStart: 380,
+        textX: 585, // 7 letter Rattata // position 5
+        textY: 425,
+        percent: 0.75
+    })
+    Object.assign(Button.find(player.team[5].name), { // position vs player team
+        xStart: 550,
+        yStart: 440,
+        textX: 585, // 6 letter Rhydon // position 6
+        textY: 485,
+        percent: 0.75
+    })
 }
 
 function renderGameWindow() {
@@ -235,7 +281,14 @@ function renderGameWindow() {
             ongoingBattle = true
             renderBattleButtons()
             gameBackgroundContext.fillRect(0, 320, 888, 190)
-            renderBattleChain()
+            getPlayer()
+            .then(getCPU)
+            .then(renderPokemon.bind(null, "player"))
+            .then(renderPokemon.bind(null, "cpu"))
+            .then(renderPlayerTeam)
+            .then(drawHpBar)
+            .then(createMoveButtons)
+            .then(createPokemonButtons)
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
@@ -245,6 +298,8 @@ function renderGameWindow() {
             console.log("top window loaded")
     }
 }
+
+
 
 function renderTeamWindow() {
     teamBackgroundCanvas.height = 512
@@ -264,23 +319,23 @@ function staticDisplay(bgImage) {
     }
 }
 
-function save(){
-    let save = {
-        userID: currentPlayer.userID,
-        playerTeam: playerTeam,
-        cpuTeam: cpuTeam, // specifically, the ID
-        victories: victories,
-    }
-    return fetch(`${usersURL}/${userID}`, {
-        method: 'PUT', 
-        headers: {
-          'Content-Type': "application/json",
-          "Accept": "application/json"
-        },
-          body: JSON.stringify(save)
-        })
-    .then(response => response.json())  
-}
+// function save(){
+//     let save = {
+//         userID: player.userID,
+//         player.team: player.team,
+//         cpuTeam: cpuTeam, // specifically, the ID
+//         victories: victories,
+//     }
+//     return fetch(`${usersURL}/${userID}`, {
+//         method: 'PUT', 
+//         headers: {
+//           'Content-Type': "application/json",
+//           "Accept": "application/json"
+//         },
+//           body: JSON.stringify(save)
+//         })
+//     .then(response => response.json())  
+// }
     // send update fetch request
 
 function load(){
@@ -320,10 +375,6 @@ function renderContinueModal(){
 
 function handleSubmit(e) {
     e.preventDefault()
-    // let credentials = {
-    //     name: e.target.username.value
-    // }
-    // debugger
     modal.style.display="none"
     fetch(`${usersURL}`, {
         method: 'POST', 
@@ -398,22 +449,14 @@ function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
     }
 } // this can probably just be a draw all objects thing
 
-//check that nothing is hideously broken    
+ 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
-    // debugger
     gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
     gameButtonCanvas.addEventListener('mousemove', highlightButtonListener, false)
     teamHighlightCanvas.addEventListener('mousemove', animatePokemon, false)
-    // teamHighlightCanvas.addEventListener('mouseout',  clearInterval(hop), false)
-    // window.addEventListener('mouseover', animatePokemon, false)
-    // gameButtonCanvas.addEventListener('click', (e)=>{
-    //     console.log(e.clientX - 8, e.clientY - 39)})   
-    // window.onmousemove = function(e){console.log("mouse location:", e.clientX 2, e.clientY - 31)}
-    // gameButtonCanvas.addEventListener("mouseout", (e))
-    // drawSelection(155, 445, 190, 60) // buttons
     teamDrawSelection(70, 50, 100, 100)
     teamDrawSelection(70, 200, 100, 100)
     teamDrawSelection(70, 350, 100, 100)

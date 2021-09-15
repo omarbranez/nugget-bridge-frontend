@@ -1,8 +1,8 @@
 const wideChars = ["R", "w", "W", "E"]
 const narrowChars = ["", " ", "I", "!"]
 
-async function drawHpBar(){
-    await renderCPUPokemon() 
+function drawHpBar(){ //async
+    // await renderCPUPokemon() 
     console.log("i go eigth! rendering the hp bars for both current pokemon!")
     // debugger
     // hpBarContext.fillStyle = "white"; // will need to wrap this inside a function
@@ -13,41 +13,41 @@ async function drawHpBar(){
     hpBar.onload = function() { // refactor
         hpBarContext.drawImage(hpBar, 495, 260, 275, 50)
         hpBarContext.fillStyle = "green";
-        if (currentPokemon.currentHP === currentPokemon.hpStat) {
+        if (player.currentPokemon.currentHP === player.currentPokemon.hpStat) {
             hpBarContext.fillRect(565, 275, 190, 14) // full hp
-        } else if (currentPokemon.currentHP <= 0){
+        } else if (player.currentPokemon.currentHP <= 0){
                 hpBarContext.fillRect(565, 275, 0, 14)            
         } else {
-            hpBarContext.fillRect(565, 275, (currentPokemon.currentHP/currentPokemon.hpStat) * 190, 14)
+            hpBarContext.fillRect(565, 275, (player.currentPokemon.currentHP/player.currentPokemon.hpStat) * 190, 14)
         }
-        if (playerTeam) {
+        if (player.team) {
             hpBarContext.fillStyle = "black"
-            if (currentPokemon.currentHP <= 0){
-                hpBarContext.fillText(`HP: 0/${currentPokemon.hpStat}`, 600, 288)
+            if (player.currentPokemon.currentHP <= 0){
+                hpBarContext.fillText(`HP: 0/${player.currentPokemon.hpStat}`, 600, 288)
             } else {
-                hpBarContext.fillText(`HP: ${currentPokemon.currentHP}/${currentPokemon.hpStat}`, 600, 288)
+                hpBarContext.fillText(`HP: ${player.currentPokemon.currentHP}/${player.currentPokemon.hpStat}`, 600, 288)
             }   
-        console.log(`${currentPokemon.name} has ${currentPokemon.currentHP} out of ${currentPokemon.hpStat} HP remaining!`)
+        console.log(`${player.currentPokemon.name} has ${player.currentPokemon.currentHP} out of ${player.currentPokemon.hpStat} HP remaining!`)
         }
     }
     cpuHPBar.onload = function() {
         hpBarContext.drawImage(hpBar, 175, 60, 275, 50)
         hpBarContext.fillStyle = "green";
-        if (currentCPUPokemon.currentHP === currentCPUPokemon.hpStat) {
+        if (cpu.currentPokemon.currentHP === cpu.currentPokemon.hpStat) {
             hpBarContext.fillRect(245, 75, 190, 14) // full hp
         } else if (currentCPUPokemon.currentHP <= 0){
             hpBarContext.fillRect(245, 75, 0, 14)            
         } else {
-            hpBarContext.fillRect(245, 75, (currentCPUPokemon.currentHP/currentCPUPokemon.hpStat) * 190, 14)
+            hpBarContext.fillRect(245, 75, (cpu.currentPokemon.currentHP/cpu.currentPokemon.hpStat) * 190, 14)
         }
-        if (cpuTeam) {
+        if (cpu.team) {
             hpBarContext.fillStyle = "black"
-            if (currentPokemon.currentHP <= 0){
-                hpBarContext.fillText(`HP: 0/${currentPokemon.hpStat}`, 600, 288)
+            if (cpu.currentPokemon.currentHP <= 0){
+                hpBarContext.fillText(`HP: 0/${cpu.currentPokemon.hpStat}`, 600, 288)
             } else {
-                hpBarContext.fillText(`HP: ${currentCPUPokemon.currentHP}/${currentCPUPokemon.hpStat}`, 280, 88)
+                hpBarContext.fillText(`HP: ${cpu.currentPokemon.currentHP}/${cpu.currentPokemon.hpStat}`, 280, 88)
             }
-        console.log(`${currentCPUPokemon.name} has ${currentCPUPokemon.currentHP} out of ${currentCPUPokemon.hpStat} HP remaining!`)
+        console.log(`${cpu.currentPokemon.name} has ${cpu.currentPokemon.currentHP} out of ${cpu.currentPokemon.hpStat} HP remaining!`)
         }
     }
     // animateText(displayDialog.toUpperCase())
