@@ -250,7 +250,6 @@ function createPokemonButtons() { //
 function renderGameWindow() {
     gameBackgroundCanvas.height = 512
     gameBackgroundCanvas.width = 888
-    // const screens = ["title", "creation", "login", "options", "overworld", "battle", "result"]
     gameBackgroundContext.fillStyle = "#285068"
     let gameBackground = new Image()
 
@@ -286,7 +285,7 @@ function renderGameWindow() {
         //     staticDisplay(gameBackground)
         //     console.log("rendering overworld")
         //     break
-        case "battle": // this is being run first
+        case "battle": 
             clearScreen()
             gameBackground.src = "./assets/battle-background-2.png"
             battleBackgroundDisplay(gameBackground)
@@ -466,9 +465,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
-    gameButtonCanvas.addEventListener('click', menuButtonListener, false)    // clickedButton()
-    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener, false)
-    teamHighlightCanvas.addEventListener('mousemove', animatePokemon, false)
+    gameButtonCanvas.addEventListener('click', menuButtonListener)
+    gameButtonCanvas.addEventListener('dblclick', switchButtonListener)    // clickedButton()
+    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener)
+    teamHighlightCanvas.addEventListener('mousemove', animatePokemon)
     teamDrawSelection(70, 50, 100, 100)
     teamDrawSelection(70, 200, 100, 100)
     teamDrawSelection(70, 350, 100, 100)

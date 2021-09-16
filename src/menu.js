@@ -62,46 +62,36 @@ function menuButtonListener(e){
                     changeStateToBattleOptions()
                     break     
             }
-        case "switch":
-            switch(true) {
-                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
-                    // debugger
-                    if (!player.currentPokemon){
-                        switchPokemonFromMenu(0)
-                    } else {
-                        alert("you cannnot switch with yourself!")
-                    }
-                    // alert("clicked moltres") //cant switch first with first
-                    break
-                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
-                    // alert("clicked weepinbell")
-                    switchPokemonFromMenu(1)
-                    break
-                case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
-                    // alert("clicked jynx")
-                    switchPokemonFromMenu(2)
-                    break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
-                    // alert("clicked snorlax")
-                    switchPokemonFromMenu(3)
-                    break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
-                    // alert("clicked rattata")
-                    switchPokemonFromMenu(4)
-                    break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
-                    // alert("clicked rhydon")
-                    //check if the pokemon exists!
-                    switchPokemonFromMenu(5)
-                    break
-                case (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && menuState === "switch"):
-                    // alert("clicked go back")
-                    changeStateToBattleOptions()
-                    break            
-            }
     }
 }
 
+function switchButtonListener(e){
+    let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
+    let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
+    if (menuState == "switch"){
+        if (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375){
+            if (!player.currentPokemon){
+                switchPokemonFromMenu(0)
+            } else {
+                alert("you cannnot switch with yourself!")
+            }
+        } else if (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435){
+            switchPokemonFromMenu(1)
+        } else if (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495){
+            switchPokemonFromMenu(2)
+        } else if (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375){
+            switchPokemonFromMenu(3)
+        } else if (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435){
+            switchPokemonFromMenu(4)
+        } else if (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495){
+            switchPokemonFromMenu(5)
+        } else if (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485){
+            changeStateToBattleOptions()
+        }
+    }
+}
+
+// }
 function highlightButtonListener(e) {
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
@@ -208,10 +198,11 @@ function replaceBattleOptionsWithMoves(){
 }
 
 function replaceBattleOptionsWithPokemon(){
+    // debugger
     clearBlueWindow()
+    // gameButtonCanvas.removeEventListener('click', menuButtonListener, false)
     Button.all = []
     createPokemonButtons()
-    menuState = "switch"
     // debugger
     textLeftSide("Please select a Pokemon")
     battleTextContext.fillText("to switch-in", 100, 400)
@@ -221,6 +212,8 @@ function replaceBattleOptionsWithPokemon(){
         }
     }
     renderStaticButton()
+    menuState = "switch"
+    // gameButtonCanvas.addEventListener('click', menuButtonListener, false) 
 }
 
 async function changeStateToSwitch(){
