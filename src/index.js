@@ -68,8 +68,12 @@ function getPlayer(){
             // debugger
             let poke = new Pokemon(pokemon)
             player.team.push(poke)
+            
         }
         player.currentPokemon = player.team[0]
+        for (const pokemon of player.team){
+            pokemon.position = player.team.indexOf(pokemon) + 1
+        }
     })
 }
 
@@ -154,16 +158,16 @@ function createMoveButtons() { //goes first
     }
     // debugger
     Object.assign(Button.find(player.currentPokemon.move1.name), {
-        xStart: 150,
+        xStart: 350,
         yStart: 325,
-        textX: 195,
+        textX: 395,
         textY: 385,
         percent: 1
     })
     Object.assign(Button.find(player.currentPokemon.move2.name), {
-        xStart: 150,
+        xStart: 350,
         yStart: 425,
-        textX: 195,
+        textX: 395,
         textY: 485,
         percent: 1
     })

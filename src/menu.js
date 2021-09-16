@@ -41,12 +41,12 @@ function menuButtonListener(e){
             }
         case "move":
             switch(true) {
-                case (mouseX >= 155 && mouseX <= 375 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
+                case (mouseX >= 355 && mouseX <= 575 && mouseY >= 345 && mouseY <= 410 && menuState === "move"):
                     battle = new Battle(player.currentPokemon.move1, player, cpu)
                     // debugger
                     battle.runBattle()
                     break
-                case (mouseX >= 155 && mouseX <= 375 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
+                case (mouseX >= 355 && mouseX <= 575 && mouseY >= 445 && mouseY <= 510 && menuState === "move"):
                     battle = new Battle(player.currentPokemon.move2, player, cpu)
                     battle.runBattle()
                     break
@@ -86,7 +86,7 @@ function switchButtonListener(e){
         } else if (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495){
             switchPokemonFromMenu(5)
         } else if (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485){
-            changeStateToBattleOptions()
+            changeStateToBattleOptions() // should get its own listener
         }
     }
 }
@@ -131,13 +131,13 @@ function highlightButtonListener(e) {
             } 
         case "move":
             switch(true){
-                case (mouseX >= 155 && mouseX <= 345 && mouseY >= 345 && mouseY <= 415 && menuState === "move"):
+                case (mouseX >= 355 && mouseX <= 545 && mouseY >= 345 && mouseY <= 415 && menuState === "move"):
                     highlightContext.clearRect(0, 0, 888, 512)
-                    drawSelection(155,345,190,60)
+                    drawSelection(355,345,190,60)
                     break
-                case (mouseX >= 155 && mouseX <= 345 && mouseY >= 445 && mouseY <= 515 && menuState === "move"):
+                case (mouseX >= 355 && mouseX <= 545 && mouseY >= 445 && mouseY <= 515 && menuState === "move"):
                     highlightContext.clearRect(0,0,888,512)
-                    drawSelection(155,445,190,60)
+                    drawSelection(355,445,190,60)
                     break
                 case (mouseX >= 555 && mouseX <= 745 && mouseY >= 345 && mouseY <=415 && menuState === "move"):
                     highlightContext.clearRect(0,0,888,512)
@@ -177,8 +177,10 @@ function highlightButtonListener(e) {
                     drawSelection(550,450,150,55)
                     break
                 case (mouseX >= 100 && mouseX <= 300 && mouseY >= 420 && mouseY <= 480 && menuState === "switch"):
+                    if (!player.team[5]){
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(100,415,200,70)
+                    }
                     break
                 case (menuState === "switch"):
                     highlightContext.clearRect(0,0,888,512)

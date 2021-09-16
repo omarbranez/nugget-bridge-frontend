@@ -256,40 +256,30 @@ class Battle { // attacker and defender // this will run twice
 }
 
 function resolveFaintedPokemon(){
-    // let trainers = [player, cpu]
     let mourner
     for (let pokemon of faintedPokemon){
         mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
         mourner.currentPokemon = ''
         mourner.team.shift()
-        // mourner.currentPokemon = mourner.team[0]
-        // debugger
+        setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),1000)
     }
-        if (mourner == player) {
-            animateText(`${mourner.name}'S ${faintedPokemon.name} HAS FAINTED!`)
-            battlePokemonContext.clearRect(150, 140, 200, 200)
-            battlePokemonContext.clearRect(500,230,200,25)
-            clearBlueWindow()
-            changeStateToSwitch()
-        } else {
-            setTimeout(()=>animateText(`${mourner.name}'S ${faintedPokemon.name} HAS FAINTED!`),1000)
-            cpu.currentPokemon = cpu.team[0]
-            // debugger
-            battlePokemonContext.clearRect(175,20,200,100)
-            battlePokemonContext.clearRect(550, 20, 200, 200)
-            // clearBlueWindow()
-            // setTimeout(()=> renderPokemon(cpu), 4000)
-            renderPokemon(cpu)
-            drawHpBar()
-            // debugger
-            setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
-            clearBlueWindow()
-            setTimeout(()=>changeStateToBattleOptions(),3000)
-            //render CPU Pokemon
-        }
-        faintedPokemon.shift()
+    if (mourner == player) {
+        battlePokemonContext.clearRect(150, 140, 200, 200)
+        setTimeout(() => clearBlueWindow(), 3000)
+        setTimeout(() => changeStateToSwitch(), 4000)
+    } else {
+        cpu.currentPokemon = cpu.team[0]
+        battlePokemonContext.clearRect(175,20,200,100)
+        battlePokemonContext.clearRect(550, 20, 200, 200)
+        renderPokemon(cpu)
+        drawHpBar()
+        setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
+        setTimeout(()=>clearBlueWindow(), 5000)
+        setTimeout(()=>changeStateToBattleOptions(),5500)
     }
-// }
+    faintedPokemon.shift()
+}
+
 
 // AFTER BATTLE //
 //
@@ -335,7 +325,7 @@ function switchPokemonFromMenu(position){
 
 function reinitializePokemon(){
     battlePokemonContext.clearRect(150, 140, 200, 200)
-    battlePokemonContext.clearRect(500,225,200,25)
+    battlePokemonContext.clearRect(500,215,200,40)
     clearBlueWindow()
     Button.all = []
     renderPokemon("player")
