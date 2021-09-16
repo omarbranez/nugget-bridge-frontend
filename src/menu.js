@@ -66,22 +66,27 @@ function menuButtonListener(e){
             switch(true) {
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
                     // debugger
-                    alert("clicked moltres") //cant switch first with first
+                    if (!player.currentPokemon){
+                        switchPokemonFromMenu(0)
+                    } else {
+                        alert("you cannnot switch with yourself!")
+                    }
+                    // alert("clicked moltres") //cant switch first with first
                     break
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
-                    alert("clicked weepinbell")
+                    // alert("clicked weepinbell")
                     switchPokemonFromMenu(1)
                     break
                 case (mouseX >= 355 && mouseX <= 500 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
-                    alert("clicked jynx")
+                    // alert("clicked jynx")
                     switchPokemonFromMenu(2)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 325 && mouseY <= 375 && menuState === "switch"):
-                    alert("clicked snorlax")
+                    // alert("clicked snorlax")
                     switchPokemonFromMenu(3)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 385 && mouseY <= 435 && menuState === "switch"):
-                    alert("clicked rattata")
+                    // alert("clicked rattata")
                     switchPokemonFromMenu(4)
                     break
                 case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495 && menuState === "switch"):
@@ -204,8 +209,10 @@ function replaceBattleOptionsWithMoves(){
 
 function replaceBattleOptionsWithPokemon(){
     clearBlueWindow()
+    Button.all = []
+    createPokemonButtons()
     menuState = "switch"
-    debugger
+    // debugger
     textLeftSide("Please select a Pokemon")
     battleTextContext.fillText("to switch-in", 100, 400)
     for (const button of Button.all){

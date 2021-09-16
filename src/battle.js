@@ -162,7 +162,7 @@ class Battle { // attacker and defender // this will run twice
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
-            resolveFaintedPokemon()
+            setTimeout(()=>resolveFaintedPokemon(),2000)
             this.attacker = ''
             this.defender = ''    
         } else {
@@ -212,15 +212,16 @@ class Battle { // attacker and defender // this will run twice
         if (!!this.defender && !!this.attacker){
             [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
             this.runBattle()
-        } else {
-            debugger
-            resolveFaintedPokemon()
+        // } else {
+        //     debugger
+        //     resolveFaintedPokemon()
         }
     }
 
   
 
     runBattle(){
+        menuState = "turn"
         this.hitCheck()
         this.statCheck()
         this.critCheck()
@@ -231,7 +232,7 @@ class Battle { // attacker and defender // this will run twice
         this.stabCheck()
         this.calculateDamage()
         // debugger
-        animateText(`${this.attacker.name.toUpperCase()} USED ${this.attacker.move.name.toUpperCase()}!`)
+        animateText(`${this.attacker.name} USED ${this.attacker.move.name}!`)
         // debugger
         this.resolveDamage()
         // console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
@@ -256,28 +257,39 @@ class Battle { // attacker and defender // this will run twice
 
 function resolveFaintedPokemon(){
     // let trainers = [player, cpu]
-    // let mourner
+    let mourner
     for (let pokemon of faintedPokemon){
-        let mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
-        animateText(`${mourner.name}'s ${pokemon.name} has fainted!`)
+        mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
         mourner.currentPokemon = ''
         mourner.team.shift()
-        debugger
+        // mourner.currentPokemon = mourner.team[0]
+        // debugger
+    }
         if (mourner == player) {
+            animateText(`${mourner.name}'S ${faintedPokemon.name} HAS FAINTED!`)
+            battlePokemonContext.clearRect(150, 140, 200, 200)
+            battlePokemonContext.clearRect(500,230,200,25)
+            clearBlueWindow()
             changeStateToSwitch()
         } else {
+            setTimeout(()=>animateText(`${mourner.name}'S ${faintedPokemon.name} HAS FAINTED!`),1000)
+            cpu.currentPokemon = cpu.team[0]
             // debugger
-            mourner.currentPokemon = mourner.team[0]
-            animateText(`Enemy ${mourner.name} has sent out ${mourner.currentPokemon}!`)
+            battlePokemonContext.clearRect(175,20,200,100)
+            battlePokemonContext.clearRect(550, 20, 200, 200)
+            // clearBlueWindow()
+            // setTimeout(()=> renderPokemon(cpu), 4000)
             renderPokemon(cpu)
             drawHpBar()
-            debugger
-            changeStateToBattleOptions()
+            // debugger
+            setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
+            clearBlueWindow()
+            setTimeout(()=>changeStateToBattleOptions(),3000)
             //render CPU Pokemon
         }
+        faintedPokemon.shift()
     }
-    faintedPokemon = []
-}
+// }
 
 // AFTER BATTLE //
 //
@@ -322,6 +334,10 @@ function switchPokemonFromMenu(position){
 }
 
 function reinitializePokemon(){
+    battlePokemonContext.clearRect(150, 140, 200, 200)
+    battlePokemonContext.clearRect(500,225,200,25)
+    clearBlueWindow()
+    Button.all = []
     renderPokemon("player")
     createMoveButtons()
     createPokemonButtons()

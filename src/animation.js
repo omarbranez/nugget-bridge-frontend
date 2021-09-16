@@ -1,5 +1,5 @@
 const wideChars = ["R", "w", "W", "E"]
-const narrowChars = ["", " ", "I", "!"]
+const narrowChars = ["", " ", "I", "!", "'"]
 
 function drawHpBar(){ 
     const hpBar = new Image() // for each player
@@ -78,6 +78,7 @@ function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
 }
 function animateText(text){
     clearBlueWindow()
+    text = text.toUpperCase()
     const textLength = text.length
     gameButtonContext.font = '2em sans-serif'; 
     gameButtonContext.fillStyle = "white";
