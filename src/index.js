@@ -146,8 +146,9 @@ function renderPlayerTeam(){ //async
     }
 }
 
-function createMoveButtons() { 
-    // debugger
+function createMoveButtons() { //goes first
+    // delete old ones when switched
+    Button.all = []
     for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
         new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
     }
@@ -184,55 +185,66 @@ function createMoveButtons() {
 }
 
 function createPokemonButtons() { // 
-    // remove all old mini pokemon
     // debugger
     for (const pokemon of Pokemon.all){
         if (pokemon.userID === playerID){
             new Button(pokemon.name, "./assets/button-blank.png", 200, 100, pokemon.name, "pokemon-select")
         }
+    }
+    if (!!player.team[0]){   
+        Object.assign(Button.find(player.team[0].name), { // position vs player team
+            xStart: 350,
+            yStart: 320,
+            textX: 385, // 6 letter Moltres // position 1 // we can probably assign the different textX with a loop
+            textY: 365,
+            percent: 0.75
+        })
     }   
-    Object.assign(Button.find(player.team[0].name), { // position vs player team
-        xStart: 350,
-        yStart: 320,
-        textX: 385, // 6 letter Moltres // position 1 // we can probably assign the different textX with a loop
-        textY: 365,
-        percent: 0.75
-    })
-    Object.assign(Button.find(player.team[1].name), { // position vs player team
-        xStart: 350,
-        yStart: 380,
-        textX: 365, // 10 letter Weepinbell // position 2
-        textY: 425,
-        percent: 0.75
-    })
-    Object.assign(Button.find(player.team[2].name), { // position vs player team
-        xStart: 350,
-        yStart: 440,
-        textX: 400, // 4 letter Jynx // position 3
-        textY: 485,
-        percent: 0.75
-    })
-    Object.assign(Button.find(player.team[3].name), { // position vs player team
-        xStart: 550,
-        yStart: 320,
-        textX: 585, // 6 letter Snorlax // position 4
-        textY: 365,
-        percent: 0.75
-    })
-    Object.assign(Button.find(player.team[4].name), { // position vs player team
-        xStart: 550,
-        yStart: 380,
-        textX: 585, // 7 letter Rattata // position 5
-        textY: 425,
-        percent: 0.75
-    })
-    Object.assign(Button.find(player.team[5].name), { // position vs player team
-        xStart: 550,
-        yStart: 440,
-        textX: 585, // 6 letter Rhydon // position 6
-        textY: 485,
-        percent: 0.75
-    })
+    if (!!player.team[1]){
+        Object.assign(Button.find(player.team[1].name), { // position vs player team
+            xStart: 350,
+            yStart: 380,
+            textX: 365, // 10 letter Weepinbell // position 2
+            textY: 425,
+            percent: 0.75
+        })
+    }
+    if (!!player.team[2]){
+        Object.assign(Button.find(player.team[2].name), { // position vs player team
+            xStart: 350,
+            yStart: 440,
+            textX: 400, // 4 letter Jynx // position 3
+            textY: 485,
+            percent: 0.75
+        })
+    }
+    if (!!player.team[3]){
+        Object.assign(Button.find(player.team[3].name), { // position vs player team
+            xStart: 550,
+            yStart: 320,
+            textX: 585, // 6 letter Snorlax // position 4
+            textY: 365,
+            percent: 0.75
+        })
+    }
+    if (!!player.team[4]){
+        Object.assign(Button.find(player.team[4].name), { // position vs player team
+            xStart: 550,
+            yStart: 380,
+            textX: 585, // 7 letter Rattata // position 5
+            textY: 425,
+            percent: 0.75
+        })
+    }
+    if (!!player.team[5]){
+        Object.assign(Button.find(player.team[5].name), { // position vs player team
+            xStart: 550,
+            yStart: 440,
+            textX: 585, // 6 letter Rhydon // position 6
+            textY: 485,
+            percent: 0.75
+        })
+    }
 }
 
 function renderGameWindow() {
@@ -255,25 +267,25 @@ function renderGameWindow() {
             renderInitialMenu()
             console.log("calling menu.js")
             break
-        case "creation":
-            clearScreen()
-            gameBackground.src = "./assets/menu-background.png"
-            staticDisplay(gameBackground)
-            renderNewUserModal()
-            break
-        case "options":
-            gameBackground.src = "./assets/nugget-bridge-options.png"
-            break
-        case "login":
-            gameBackground.src = "./assets/nugget-bridge-login.png"
-            renderContinueModal()
-            break
-        case "overworld":
-            clearScreen()
-            gameBackground.src = "./assets/route-24-full.png"
-            staticDisplay(gameBackground)
-            console.log("rendering overworld")
-            break
+        // case "creation":
+        //     clearScreen()
+        //     gameBackground.src = "./assets/menu-background.png"
+        //     staticDisplay(gameBackground)
+        //     renderNewUserModal()
+        //     break
+        // case "options":
+        //     gameBackground.src = "./assets/nugget-bridge-options.png"
+        //     break
+        // case "login":
+        //     gameBackground.src = "./assets/nugget-bridge-login.png"
+        //     renderContinueModal()
+        //     break
+        // case "overworld":
+        //     clearScreen()
+        //     gameBackground.src = "./assets/route-24-full.png"
+        //     staticDisplay(gameBackground)
+        //     console.log("rendering overworld")
+        //     break
         case "battle": // this is being run first
             clearScreen()
             gameBackground.src = "./assets/battle-background-2.png"

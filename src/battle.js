@@ -1,9 +1,9 @@
 class Battle { // attacker and defender // this will run twice
-    constructor(move) {
-        this.currentPokemon = currentPokemon
+    constructor(move, player, cpu) {
+        this.currentPokemon = player.currentPokemon
         this.currentPokemon.move = move
 
-        this.currentCPUPokemon = currentCPUPokemon
+        this.currentCPUPokemon = cpu.currentPokemon
         
         this.turn = 1
         this.attacker//determined by goesFirst/whosFaster, then switches unless someone fainted
@@ -38,19 +38,20 @@ class Battle { // attacker and defender // this will run twice
     // calcdamage has to be run separately
 
     selectCPUMove(){ // selected randomly
-        let moveArray = [currentCPUPokemon.move1, currentCPUPokemon.move2, currentCPUPokemon.move3, currentCPUPokemon.move4]
-        let randomMove =  moveArray[Math.floor(Math.random()*moveArray.length)]
+        let moveArray = [this.currentCPUPokemon.move1, this.currentCPUPokemon.move2, this.currentCPUPokemon.move3, this.currentCPUPokemon.move4]
+        let randomMove =  moveArray[Math.floor(Math.random()*4)]
         this.currentCPUPokemon.move = randomMove
     }
 
     speedCheck(){
+        // debugger
         if (this.turn == 1){ //remove in chain later
-            if (currentPokemon.speedStat === currentCPUPokemon.speedStat){ // if tied
-                this.attacker = [currentPokemon, currentCPUPokemon][Math.floor(Math.random()*2)]
+            if (this.currentPokemon.speedStat === this.currentCPUPokemon.speedStat){ // if tied
+                this.attacker = [this.currentPokemon, this.currentCPUPokemon][Math.floor(Math.random()*2)]
             } else {
-                this.attacker = [currentPokemon, currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
+                this.attacker = [this.currentPokemon, this.currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
             }
-            this.defender = [currentPokemon, currentCPUPokemon].filter(poke => poke !== this.attacker)[0]
+            this.defender = [this.currentPokemon, this.currentCPUPokemon].filter(poke => poke !== this.attacker)[0]
         }
     }
 
@@ -131,17 +132,17 @@ class Battle { // attacker and defender // this will run twice
     }}
 
     calculateDamage(){ // skip if self status move
-        displayDialog = `${this.attacker.name} used ${this.attacker.move}!`
+        console.log(`${this.attacker.name} used ${this.attacker.move.name}!`)
         if (this.accuracyCheck === true) {
             // debugger
             this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
         } else {
             this.attackDamage = 0
             if (!!(this.attacker.move.accuracy)){
-                displayDialog = `${this.attacker.name}'s attack missed!`
+                console.log(`${this.attacker.name}'s attack missed!`)
             } else {
                 // debugger
-                displayDialog = "Lol this move doesn't do anything yet"
+                console.log("Lol this move doesn't do anything yet")
                 // ()
             }
         }   
@@ -150,19 +151,22 @@ class Battle { // attacker and defender // this will run twice
     resolveEffects(){
         debugger
         if (this.attacker.move.name === "Magnet Rise" || this.attacker.move.name === "Double Team"){
-            displayDialog = "Lol this move doesn't do anything yet"
+            console.log("Lol this move doesn't do anything yet")
         }
     }
 
     resolveDamage(){
-        // await calculateDamage()
         this.defender.currentHP = this.defender.currentHP - this.attackDamage
-        redrawHP(currentPokemon, 565, 275, 600, 288)
-        redrawHP(currentCPUPokemon, 245, 75, 290, 88)
+        redrawHP(this.currentPokemon, 565, 275, 600, 288)
+        redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
-            this.attacker = ''        
+            resolveFaintedPokemon()
+            this.attacker = ''
+            this.defender = ''    
+        } else {
+            console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         }
     }
 
@@ -207,7 +211,9 @@ class Battle { // attacker and defender // this will run twice
     setSecondPhase(){
         if (!!this.defender && !!this.attacker){
             [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
+            this.runBattle()
         } else {
+            debugger
             resolveFaintedPokemon()
         }
     }
@@ -224,66 +230,54 @@ class Battle { // attacker and defender // this will run twice
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
-        animateText(`${this.attacker.name} USED ${this.attacker.move.name}!`)
+        // debugger
+        animateText(`${this.attacker.name.toUpperCase()} USED ${this.attacker.move.name.toUpperCase()}!`)
         // debugger
         this.resolveDamage()
-        console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
-        this.turn++
-        if (this.turn == 2) {
-            this.setSecondPhase()
-            if (!!this.attacker && !!this.defender){
-                this.runBattle()
-            }
+        // console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
+        if (!!this.attacker && !!this.defender){
+            this.turn++
         }
-        changeStateToBattleOptions()
+        if (this.turn == 2) {
+            setTimeout(() => this.setSecondPhase(), 2000)
+            // if (!!this.attacker && !!this.defender){
+            //     debugger
+            //     this.runBattle()
+            //     changeStateToBattleOptions()
+            // }
+        } else if (this.turn == 3 && !!this.attacker && !!this.defender) {
+            // debugger
+            setTimeout(()=> changeStateToBattleOptions(), 2000)
+            // changeStateToBattleOptions() 
+        }
     }
 
 }
 
 function resolveFaintedPokemon(){
+    // let trainers = [player, cpu]
+    // let mourner
     for (let pokemon of faintedPokemon){
-        debugger
-        let mourner = [currentPlayer, cpuPlayer].find( user => String(user.id) == pokemon.userID)
-        animateText(`${mourner.attributes.name}'s ${pokemon.name} has fainted!`)
+        let mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
+        animateText(`${mourner.name}'s ${pokemon.name} has fainted!`)
         mourner.currentPokemon = ''
         mourner.team.shift()
+        debugger
         if (mourner == player) {
             changeStateToSwitch()
         } else {
+            // debugger
             mourner.currentPokemon = mourner.team[0]
-            animateText(`Enemy ${mourner.attributes.name} has sent out ${mourner.currentPokemon}!`)
+            animateText(`Enemy ${mourner.name} has sent out ${mourner.currentPokemon}!`)
+            renderPokemon(cpu)
+            drawHpBar()
+            debugger
+            changeStateToBattleOptions()
             //render CPU Pokemon
         }
     }
-    // if (!currentPokemon){
-    //     // animateText(`${currentPlayer.attributes.name}'s ${currentPokemon.name} has fainted!`)
-    //     //clear screen for user // or animate it dropping
-    //     playerTeam.shift()
-    //     replaceBattleOptionsWithPokemon() // account for the missing pokemon // finish writing the switch method
-    //     //check on scope with the array switch
-    // }
-    // if (!currentCPUPokemon){
-    //     animateText(`Enemy ${cpuPlayer.attributes.name}'s ${currentCPUPokemon.name} has fainted!`)
-    //     //clear screen for cpu // or animate it dropping
-    //     cpuTeam.shift()
-    //     //send out pokemon in position 2, now 1
-    //     currentCPUPokemon = cpuTeam[0]
-    //     displayDialog = `Opposing trainer has sent out ${currentCPUPokemon}!`
-    //     renderCPUPokemon() // without the initial setup chain
-    // }
-    // // }
+    faintedPokemon = []
 }
-
-function writeBattleDialogue(){
-    displayDialog = `${attacker.name} used ${attackMove.name}!`
-}
-
-async function newTurn(){
-    await resolveFaintedPokemon()
-    menuState = main // so fight, switch, and quit reappear
-    new Turn() // something like that
-}
-
 
 // AFTER BATTLE //
 //
@@ -320,12 +314,20 @@ function regeneratePokemon(){ // probably not necessary
 
 function switchPokemonFromMenu(position){
     //switch case depending on which button was clicked
-    let temp = playerTeam[0]
-    playerTeam[0] = playerTeam[position]
-    playerTeam[position] = temp
-    currentPokemon = playerTeam[0] 
+    let temp = player.team[0]
+    player.team[0] = player.team[position]
+    player.team[position] = temp
+    player.currentPokemon = player.team[0]
+    reinitializePokemon()
 }
 
+function reinitializePokemon(){
+    renderPokemon("player")
+    createMoveButtons()
+    createPokemonButtons()
+    drawHpBar()
+    changeStateToBattleOptions()
+}
 function updatePokemonStates(pokemon){
     return fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
         method: "PATCH",

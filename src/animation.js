@@ -1,11 +1,7 @@
 const wideChars = ["R", "w", "W", "E"]
 const narrowChars = ["", " ", "I", "!"]
 
-function drawHpBar(){ //async
-    // await renderCPUPokemon() 
-    console.log("i go eigth! rendering the hp bars for both current pokemon!")
-    // debugger
-    // hpBarContext.fillStyle = "white"; // will need to wrap this inside a function
+function drawHpBar(){ 
     const hpBar = new Image() // for each player
     const cpuHPBar = new Image()
     hpBar.src = "./assets/progress-bar-blank-transparent.png"
@@ -35,7 +31,7 @@ function drawHpBar(){ //async
         hpBarContext.fillStyle = "green";
         if (cpu.currentPokemon.currentHP === cpu.currentPokemon.hpStat) {
             hpBarContext.fillRect(245, 75, 190, 14) // full hp
-        } else if (currentCPUPokemon.currentHP <= 0){
+        } else if (cpu.currentPokemon.currentHP <= 0){
             hpBarContext.fillRect(245, 75, 0, 14)            
         } else {
             hpBarContext.fillRect(245, 75, (cpu.currentPokemon.currentHP/cpu.currentPokemon.hpStat) * 190, 14)
@@ -70,6 +66,7 @@ function redrawHP(pokemon, xBarStart, yBarStart, textXStart, textYStart){
         }
     }
 }
+
 function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
     hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
     hpBarContext.fillStyle = "green";
@@ -105,7 +102,6 @@ function animateText(text){
             // console.log(`${letterX}, ${text[i]}`)
         }
     }, 30)
-    // clearBlueWindow()
 }
 
 function renderText(letter, newX) {
