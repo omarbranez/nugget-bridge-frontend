@@ -254,32 +254,61 @@ function resolveFaintedPokemon(){
         setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),1000)
     }
     if (mourner == player) {
-        battlePokemonContext.clearRect(150, 140, 200, 200)
-        setTimeout(() => clearBlueWindow(), 3000)
-        setTimeout(() => changeStateToSwitch(), 4000)
+        if (player.team.length == 0){
+            resolveBattleEnd("lose")
+        } else {
+            battlePokemonContext.clearRect(150, 140, 200, 200)
+            setTimeout(() => clearBlueWindow(), 3000)
+            setTimeout(() => changeStateToSwitch(), 4000)
+        }
     } else {
-        cpu.currentPokemon = cpu.team[0]
-        battlePokemonContext.clearRect(175,20,200,100)
-        battlePokemonContext.clearRect(550, 20, 200, 200)
-        renderPokemon(cpu)
-        drawHpBar()
-        setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
-        setTimeout(()=>clearBlueWindow(), 5000)
-        setTimeout(()=>changeStateToBattleOptions(),5500)
+        if (cpu.team.length == 0){
+            resolveBattleEnd("win")
+        } else {
+            cpu.currentPokemon = cpu.team[0]
+            battlePokemonContext.clearRect(175,20,200,100)
+            battlePokemonContext.clearRect(550, 20, 200, 200)
+            renderPokemon(cpu)
+            drawHpBar()
+            setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
+            setTimeout(()=>clearBlueWindow(), 5000)
+            setTimeout(()=>changeStateToBattleOptions(),5500)
+        }
     }
     faintedPokemon.shift()
 }
 
-function resolveEnd(){
-
+function resolveBattleEnd(result){
+    if (result == "win"){
+        animateText(`YOU HAVE DEFEATED ${cpu.name}!`)
+    } else {
+        animateText(`YOU HAVE BEEN DEFEATED BY ${cpu.name}!`)
+    }
+    let response = confirm("Would you like to battle again?")
+    if (response == true){
+        clearScreen
+        teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
+        teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
+        renderGameWindow()
+        renderTeamWindow()
+    } else {
+        restartGame()
+    }
 }
-// AFTER BATTLE //
-//
-//  let regenerateTeam
-//      generate newpokemon and add to team until there are 6
-// 
-// if ongoingBattle = false && playerTeam.length > 0
-// this will trigger an after_update callback
+
+function restartGame(){
+    menuState = "title"
+    currentScreen = "title"
+    clearScreen()
+    battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
+    clearBlueWindow()
+    teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
+    teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
+    renderGameWindow()
+    renderTeamWindow()
+    window.addEventListener('keyup', titleHandler)
+}
+
 function deleteFaintedPokemon(){
     if (faintedPokemon.length > 0){
         for (const pokemon of faintedPokemon){
