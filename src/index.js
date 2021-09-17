@@ -156,7 +156,6 @@ function renderPlayerTeam(){ //async
 function createMoveButtons() { //goes first
     // delete old ones when switched
     Button.all = []
-    debugger
     for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
         new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
     }
@@ -193,10 +192,8 @@ function createMoveButtons() { //goes first
 }
 
 function createPokemonButtons() { // 
-    debugger
     for (const pokemon of Pokemon.all){
-        if (pokemon.userID === playerID){
-            debugger
+        if (String(pokemon.userID) === playerID){
             new Button(pokemon.name, "./assets/button-blank.png", 200, 100, pokemon.name, "pokemon-select")
         }
     }

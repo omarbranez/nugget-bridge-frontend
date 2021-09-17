@@ -318,6 +318,9 @@ function switchPokemonFromMenu(position){
 function reinitializePokemon(){
     battlePokemonContext.clearRect(150, 140, 200, 200)
     battlePokemonContext.clearRect(500,215,200,50)
+    teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
+    teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
+    renderPlayerTeam()
     clearBlueWindow()
     Button.all = []
     renderPokemon("player")
