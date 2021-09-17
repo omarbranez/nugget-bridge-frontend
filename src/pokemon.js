@@ -22,10 +22,23 @@ class Pokemon {
         this.move4 = src.attributes.fourthMove.data.attributes
         this.constructor.all.push(this)
     }
-    
-    
 
-
-    
+    updatePokemon(){
+        // debugger
+        fetch(`${teamsURL}/${this.teamPokemonID}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                current_hp: this.currentHP,
+                current_status: this.status,
+                position: this.position
+            })
+        })
+        // .then(res => res.json())
+        // .then(messages => console.log(messages));
+    }
     
 }

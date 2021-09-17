@@ -91,7 +91,6 @@ function animateText(text){
             renderText(text[i], letterX)
             if (narrowChars.includes(text[i]) || narrowChars.includes(text[i+1])){
                 letterX = letterX + 15
-                // console.log(gameButtonContext.measureText(text[i]))
             } else {
                 if (wideChars.includes(text[i])){
                     letterX = letterX + 25
@@ -100,7 +99,6 @@ function animateText(text){
                 letterX = letterX + 20
             }}
             i++
-            // console.log(`${letterX}, ${text[i]}`)
         }
     }, 30)
 }
@@ -118,7 +116,7 @@ function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImag
     let frameWidth = sheetWidth / numColumns //2220
     let frameHeight = sheetHeight / numRows // 10250
     let currentFrame = 0;
-    setInterval( function() { // animate spritesheet
+    titleAnimator = setInterval( function() { // animate spritesheet
         currentFrame++ // pick new frame
         let maxFrame = numColumns * numRows - 1
         if (currentFrame > maxFrame){ // loop frames
@@ -128,4 +126,5 @@ function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImag
         let row = Math.floor(currentFrame / numColumns) // Clear and draw
         gameBackgroundContext.drawImage(bgImage, column * frameWidth, row * frameHeight, frameWidth, frameHeight, 0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
     }, 100)    //wait for next step in the loop
+
 }

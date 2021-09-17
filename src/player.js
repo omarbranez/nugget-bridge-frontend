@@ -4,8 +4,7 @@ class Player {
         this.playerID = src.id
         this.victories = src.attributes.victories
         this.team = []
-        this.currentPokemon = this.team[0] || ""
+        this.currentPokemon// = this.team[0] || ""
         // this.teamSize = src.teamSize
-        
     }
 }

@@ -47,9 +47,9 @@ hpBarContext.strokeStyle = "black";
 
 let player // player
 let cpu // cpu
-let currentScreen = "battle" 
+let currentScreen = "title" 
 let ongoingBattle = false   
-let menuState = "battle-options"
+let menuState = "title"
 let moveButton1 // will be button objects later
 let moveButton2 // destructure these, i guess
 let moveButton3
@@ -57,6 +57,7 @@ let moveButton4
 let playerID = 3 //= 3 //assuming login successful for userid 1
 let battle
 let faintedPokemon = []
+let titleAnimator
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")
@@ -464,11 +465,25 @@ function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
     }
 } // this can probably just be a draw all objects thing
 
+function titleHandler(e){
+    e.preventDefault()
+    // debugger
+    if (e.code == 'Enter' && currentScreen === "title"){
+        // alert('Enter is pressed')
+        currentScreen = "initial"
+        menuState = "initial"
+        removeEventListener('keyup', titleHandler)
+        clearInterval(titleAnimator)
+        setTimeout(()=>renderGameWindow(), 50)
+    }
+}
+
  
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
     renderGameWindow()
     renderTeamWindow()
+    window.addEventListener('keyup', titleHandler)
     gameButtonCanvas.addEventListener('click', menuButtonListener)
     gameButtonCanvas.addEventListener('dblclick', switchButtonListener)    // clickedButton()
     gameButtonCanvas.addEventListener('mousemove', highlightButtonListener)

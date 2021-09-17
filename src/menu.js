@@ -214,7 +214,7 @@ function replaceBattleOptionsWithPokemon(){
         }
     }
     renderStaticButton()
-    menuState = "switch"
+    // menuState = "switch"
     // gameButtonCanvas.addEventListener('click', menuButtonListener, false) 
 }
 

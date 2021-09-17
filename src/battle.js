@@ -159,6 +159,7 @@ class Battle { // attacker and defender // this will run twice
         this.defender.currentHP = this.defender.currentHP - this.attackDamage
         redrawHP(this.currentPokemon, 565, 275, 600, 288)
         redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
+        this.defender.updatePokemon()
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
@@ -226,30 +227,19 @@ class Battle { // attacker and defender // this will run twice
         this.statCheck()
         this.critCheck()
         this.randomCheck()
-        // debugger
         this.effectiveCheck()
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
-        // debugger
         animateText(`${this.attacker.name} USED ${this.attacker.move.name}!`)
-        // debugger
         this.resolveDamage()
-        // console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         if (!!this.attacker && !!this.defender){
             this.turn++
         }
         if (this.turn == 2) {
             setTimeout(() => this.setSecondPhase(), 2000)
-            // if (!!this.attacker && !!this.defender){
-            //     debugger
-            //     this.runBattle()
-            //     changeStateToBattleOptions()
-            // }
         } else if (this.turn == 3 && !!this.attacker && !!this.defender) {
-            // debugger
             setTimeout(()=> changeStateToBattleOptions(), 2000)
-            // changeStateToBattleOptions() 
         }
     }
 
@@ -280,7 +270,9 @@ function resolveFaintedPokemon(){
     faintedPokemon.shift()
 }
 
+function resolveEnd(){
 
+}
 // AFTER BATTLE //
 //
 //  let regenerateTeam
@@ -325,7 +317,7 @@ function switchPokemonFromMenu(position){
 
 function reinitializePokemon(){
     battlePokemonContext.clearRect(150, 140, 200, 200)
-    battlePokemonContext.clearRect(500,215,200,40)
+    battlePokemonContext.clearRect(500,215,200,50)
     clearBlueWindow()
     Button.all = []
     renderPokemon("player")
@@ -334,20 +326,7 @@ function reinitializePokemon(){
     drawHpBar()
     changeStateToBattleOptions()
 }
-function updatePokemonStates(pokemon){
-    return fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            current_hp: pokemon.currentHP,
-            current_status: pokemon.status,
-            position: pokemon.position
-        })
-    })
-}
+
 
 //  render results
 //      if pokemonTeam.length === 0
