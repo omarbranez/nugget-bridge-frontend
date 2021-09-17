@@ -80,18 +80,20 @@ function getPlayer(){
 
 function getCPU(){ //async
     console.log("i go second! fetching a cpu and their team from the backend!")
-    return fetch(`${usersURL}/${playerID + 1}`) // this will work for the first battle, i guess
+    return fetch(`${usersURL}/${String(parseInt(playerID)+1)}`) // this will work for the first battle, i guess
     .then(res => res.json())
     .then(json => {
         cpu = new Player(json.data)
         for (const pokemon of json.included){
-            new Pokemon(pokemon)
             let poke = new Pokemon(pokemon)
             cpu.team.push(poke)
+            // debugger
         }
         cpu.currentPokemon = cpu.team[0]
+        for (const pokemon of cpu.team){
+            pokemon.position = cpu.team.indexOf(pokemon) + 1
+        }
     })
-    // })
 }
 
 function renderPokemon(side){ //async
@@ -154,6 +156,7 @@ function renderPlayerTeam(){ //async
 function createMoveButtons() { //goes first
     // delete old ones when switched
     Button.all = []
+    debugger
     for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
         new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
     }
@@ -190,9 +193,10 @@ function createMoveButtons() { //goes first
 }
 
 function createPokemonButtons() { // 
-    // debugger
+    debugger
     for (const pokemon of Pokemon.all){
         if (pokemon.userID === playerID){
+            debugger
             new Button(pokemon.name, "./assets/button-blank.png", 200, 100, pokemon.name, "pokemon-select")
         }
     }
@@ -366,7 +370,7 @@ function renderNewUserModal(){
     <h3>Create a new profile</h3>
     <form>
     <label for="username">Username:</label><br>
-    <input type="text" name= "username"><br>
+    <input type="text" name= "name"><br>
     <input type="submit" value="Log in"><br>
     </form>
     `
@@ -381,15 +385,14 @@ function renderContinueModal(){
     <form>
     <label for="name">Name:</label><br>
     <input type="text" name="name"><br>
-    <input type="hidden" name="user_type" value="player">
     <input type="submit" value="Log in"><br>
     </form>
     `
-    modal.querySelector("form").addEventListener("submit", handleSubmit)
+    modal.querySelector("form").addEventListener("submit", handleContinue)
     // modal.open()
 }
 
-function handleSubmit(e) {
+function handleNewUser(e) {
     e.preventDefault()
     modal.style.display="none"
     fetch(`${usersURL}`, {
@@ -399,12 +402,42 @@ function handleSubmit(e) {
             "Accept": "application/json"
         },
         body: JSON.stringify({
-            name: e.target.username.value,
+            name: e.target.name.value,
             user_type: "player"
         })
     })
         .then(res => res.json())
-        .then(user => {playerID = user.data.id}) // this takes a while. maybe a progress bar?    
+        .then(user => {playerID = user.data.id})// this takes a while. maybe a progress bar?    
+        .then(()=>{
+            clearScreen()
+            currentScreen = "battle"
+            menuState = "battle-options"
+            setTimeout(()=>renderGameWindow(), 50)
+        })
+}
+
+function handleContinue(e){
+    e.preventDefault()
+    modal.style.display = "none"
+    fetch(`${baseURL}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            name: e.target.name.value,
+        })
+    })
+    .then(res => res.json())
+    .then(user => {
+        playerID = user.data.id
+        alert(`Welcome back, ${user.data.attributes.name}`)
+        clearScreen()
+        currentScreen = "battle"
+        menuState = "battle-options"
+        setTimeout(()=>renderGameWindow(), 50)
+    })
 }
 // function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
 //     let frameWidth = sheetWidth / numColumns
@@ -421,6 +454,7 @@ function battleBackgroundDisplay(bgImage) {
 
 function clearScreen() {
     gameBackgroundContext.clearRect(0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
+    gameButtonContext.clearRect(0,0,gameButtonCanvas.width,gameButtonCanvas.height)
     console.log("clearing the screen!")
 }
 
