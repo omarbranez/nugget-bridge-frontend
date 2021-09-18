@@ -62,13 +62,16 @@ class Battle { // attacker and defender // this will run twice
             let stageEvasion = 1 // not accounting for double team
             let stageAccuracy = 1 // not accounting for accuracy boosting moves
             let accuracyModified = this.attacker.move.accuracy * stageEvasion * stageAccuracy
-            let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100)) / 100
+            let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100))// / 100
             // debugger
             console.log(accuracyModified)
             console.log(randomFactor)
             if (randomFactor <= accuracyModified) {
                 this.accuracyCheck = true
-    }}}   
+            } else {
+                this.accuracyCheck = false
+            }
+        }}   
 
     statCheck(){ // if damageType is not status
         if (this.attacker.move.damageType === "Physical"){ //UNLESS THOSE STUPID MOVES LIKE PSYSTRIKE
@@ -99,7 +102,7 @@ class Battle { // attacker and defender // this will run twice
             this.effectiveModifier = 0
         } else if (halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
             this.effectiveModifier = 0.25
-        } else if (halfDamage.includes(this.defender.type2.name)) {//|| halfDamage.includes(this.defender.type2.name)) && !((halfDamage.includes(this.defender.type1.name)) && halfDamage.includes(this.defender.type2.name))){
+        } else if ((halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name)) && !(halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name))){
             this.effectiveModifier = 0.5
         } else if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name)) && !(doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name))) {
             this.effectiveModifier = 2
@@ -360,7 +363,7 @@ function switchPokemonFromMenu(position){
 function reinitializePokemon(){
     battlePokemonContext.clearRect(150, 140, 200, 200) // pokemon
     battlePokemonContext.clearRect(500,215,200,50) // name
-    //hp bar?
+    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)    
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     renderMiniPics()
