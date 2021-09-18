@@ -77,10 +77,9 @@ function getPlayer(){
             let poke = new Pokemon(pokemon)
             player.team.push(poke)
         }
+        player.team.sort(sortTeam)
         player.currentPokemon = player.team[0]
-        for (const pokemon of player.team){
-            pokemon.position = player.team.indexOf(pokemon) + 1
-        }
+
     })
 }
 
@@ -95,11 +94,8 @@ function getCPU(){ //async
             cpu.team.push(poke)
             // debugger
         }
+        player.team.sort(sortTeam)
         cpu.currentPokemon = cpu.team[0]
-        // debugger
-        for (const pokemon of cpu.team){
-            pokemon.position = cpu.team.indexOf(pokemon) + 1
-        }
     })
 }
 
@@ -420,7 +416,7 @@ function clearScreen() {
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
-    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)
+    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height) 
     console.log("clearing the screen!")
 }
 
@@ -497,3 +493,13 @@ document.addEventListener('DOMContentLoaded', () => {
     teamDrawSelection(520, 200, 100, 100)
     teamDrawSelection(520, 350, 100, 100)
 })
+
+function sortTeam(a, b){
+    if (a.position < b.position){
+        return -1
+    }
+    if (a.position > b.position){
+        return 1
+    }
+    return 0
+}

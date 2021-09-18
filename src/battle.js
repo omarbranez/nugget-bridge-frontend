@@ -165,6 +165,7 @@ class Battle { // attacker and defender // this will run twice
         redrawHP(this.currentPokemon, 565, 275, 600, 288)
         redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
         this.defender.updatePokemon()
+        console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
@@ -173,8 +174,6 @@ class Battle { // attacker and defender // this will run twice
 
             this.attacker = ''
             this.defender = ''    
-        } else {
-            console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         }
     }
 
@@ -226,8 +225,6 @@ class Battle { // attacker and defender // this will run twice
         }
     }
 
-    
-
     runBattle(){
         menuState = "turn"
         this.hitCheck()
@@ -252,45 +249,6 @@ class Battle { // attacker and defender // this will run twice
 
 }
 
-// function resolveFaintedPokemon(){
-//     // let mourner
-//     for (let pokemon of faintedPokemon){
-//         mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
-//         mourner.currentPokemon = ''
-//         mourner.team.shift()
-//         setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),500)
-//     }
-//     if (mourner == player) {
-//         if (player.team.length == 0){
-//             result = "lose"
-//             resolveGameEnd()
-//         } else {
-//             battlePokemonContext.clearRect(150, 140, 200, 200)
-//             setTimeout(() => clearBlueWindow(), 3000)
-//             setTimeout(() => changeStateToSwitch(), 4000)
-//         }
-//     } else {
-//         if (cpu.team.length == 0){
-//             result = "win"
-//             resolveGameEnd()
-//         } else {
-//             cpu.currentPokemon = cpu.team[0]
-//             battlePokemonContext.clearRect(175,20,200,100)
-//             battlePokemonContext.clearRect(550, 20, 200, 200)
-//             setTimeout(()=>renderPokemon(cpu),3000)
-//             setTimeout(()=>drawHpBar(),3000)
-//             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)
-//             setTimeout(()=>clearBlueWindow(), 6500)
-//             setTimeout(()=>changeStateToBattleOptions(),7000)
-//         }
-//     }
-//     faintedPokemon.shift()
-//     // if (result == "win"){
-//     //     setTimeout(()=>animateText(`YOU HAVE DEFEATED ${cpu.name}!`),3000)
-//     // } else if (result == "lose"){
-//     //     setTimeout(()=>animateText(`YOU HAVE BEEN DEFEATED BY ${cpu.name}!`),3000)
-//     // }
-// }
 
 function promptToContinue(){
     return response = confirm("Would you like to battle again?")//modal wont work for this
@@ -312,7 +270,9 @@ function restartBattle(){
     renderTeamWindow()
     changeStateToBattleOptions()
 }
+
 function restartGame(){
+    Player.clear
     menuState = "title"
     currentScreen = "title"
     result = ''
@@ -357,6 +317,7 @@ function switchPokemonFromMenu(position){
     player.team[0] = player.team[position]
     player.team[position] = temp
     player.currentPokemon = player.team[0]
+    player.updatePositions()
     reinitializePokemon()
 }
 
@@ -375,6 +336,7 @@ function reinitializePokemon(){
     drawHpBar()
     changeStateToBattleOptions()
 }
+
 function clearForeground(){
     battlePokemonContext.clearRect(150, 140, 200, 200) // pokemon
     battlePokemonContext.clearRect(500,215,200,50) // name
@@ -409,6 +371,7 @@ async function resolveMourner(){
             resolveGameEnd()
         } else {
             cpu.currentPokemon = cpu.team[0]
+            cpu.updatePositions()
             battlePokemonContext.clearRect(175,20,200,100)
             battlePokemonContext.clearRect(550, 20, 200, 200)
             setTimeout(()=>renderPokemon(cpu),3000)
