@@ -64,6 +64,7 @@ let faintedPokemon = []
 let titleAnimator
 let response
 let result
+let mourner
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")
@@ -418,6 +419,8 @@ function clearScreen() {
     gameButtonContext.clearRect(0,0,gameButtonCanvas.width,gameButtonCanvas.height)
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
+    battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
+    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)
     console.log("clearing the screen!")
 }
 
