@@ -85,7 +85,7 @@ function switchButtonListener(e){
             switchPokemonFromMenu(4)
         } else if (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 495){
             switchPokemonFromMenu(5)
-        } else if (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485){
+        } else if (mouseX >= 103 && mouseX <= 303 && mouseY >= 420 && mouseY <= 485 && !!player.currentPokemon){
             changeStateToBattleOptions() // should get its own listener
         }
     }
@@ -152,35 +152,35 @@ function highlightButtonListener(e) {
             }
         case "switch":
             switch(true){
-                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 335 && mouseY <= 385 && menuState === "switch"):
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 335 && mouseY <= 385 && menuState === "switch" && !!player.team[0]):
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(350,330,150,55)
                     break
-                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 395 && mouseY <= 445 && menuState === "switch"):
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 395 && mouseY <= 445 && menuState === "switch") && !!player.team[1]:
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(350,390,150,55)
                     break
-                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 445 && mouseY <= 505 && menuState === "switch"):
+                case (mouseX >= 350 && mouseX <= 500 && mouseY >= 445 && mouseY <= 505 && menuState === "switch") && !!player.team[2]:
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(350,450,150,55)
                     break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 335 && mouseY <= 385 && menuState === "switch"):
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 335 && mouseY <= 385 && menuState === "switch" && !!player.team[3]):
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(550,330,150,55)
                     break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 395 && mouseY <= 445 && menuState === "switch"):
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 395 && mouseY <= 445 && menuState === "switch" && !!player.team[4]):
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(550,390,150,55)
                     break
-                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 505 && menuState === "switch"):
+                case (mouseX >= 555 && mouseX <= 700 && mouseY >= 445 && mouseY <= 505 && menuState === "switch" && !!player.team[5]):
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(550,450,150,55)
                     break
-                case (mouseX >= 100 && mouseX <= 300 && mouseY >= 420 && mouseY <= 480 && menuState === "switch"):
-                    if (!player.team[5]){
+                case (mouseX >= 100 && mouseX <= 300 && mouseY >= 420 && mouseY <= 480 && menuState === "switch" && !!player.currentPokemon):
+                    // if (!player.team[5]){
                     highlightContext.clearRect(0,0,888,512)
                     drawSelection(100,415,200,70)
-                    }
+                    // }
                     break
                 case (menuState === "switch"):
                     highlightContext.clearRect(0,0,888,512)

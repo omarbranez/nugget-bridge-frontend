@@ -268,7 +268,7 @@ function resolveFaintedPokemon(){
             cpu.currentPokemon = cpu.team[0]
             battlePokemonContext.clearRect(175,20,200,100)
             battlePokemonContext.clearRect(550, 20, 200, 200)
-            renderPokemon(cpu)
+            setTimeout(()=>renderPokemon(cpu),2000)
             drawHpBar()
             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
             setTimeout(()=>clearBlueWindow(), 5000)
@@ -286,11 +286,12 @@ function resolveBattleEnd(result){
     }
     let response = confirm("Would you like to battle again?")
     if (response == true){
-        clearScreen
+        clearScreen()
+        clearBlueWindow()
         teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
         teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
-        renderGameWindow()
-        renderTeamWindow()
+        setTimeout(()=>renderGameWindow(),500)
+        setTImeout(()=>renderTeamWindow(),500)
     } else {
         restartGame()
     }

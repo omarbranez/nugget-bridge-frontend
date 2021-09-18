@@ -93,6 +93,7 @@ function getCPU(){ //async
             // debugger
         }
         cpu.currentPokemon = cpu.team[0]
+        // debugger
         for (const pokemon of cpu.team){
             pokemon.position = cpu.team.indexOf(pokemon) + 1
         }
@@ -115,8 +116,7 @@ function renderPokemon(side){ //async
 
 }
 
-function createMoveButtons() { //goes first
-    // delete old ones when switched
+function createMoveButtons() { 
     Button.all = []
     for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
         new Button(move.name, "./assets/button-blank.png", 200, 100, move.name, "move-select")
