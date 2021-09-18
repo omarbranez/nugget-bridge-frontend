@@ -1,9 +1,9 @@
 class Pokemon {
-    static all = []
+    static all = [] // for testing
     constructor(src) {
         this.teamPokemonID = src.id
         this.userID = src.attributes.userId
-        // this.pokemonID = src.attributes.id
+        this.pokemonID = src.attributes.pokemonId
         this.position = src.attributes.position //default is array index
         this.name = src.attributes.name
         this.currentHP = src.attributes.currentHp
@@ -40,5 +40,33 @@ class Pokemon {
         // .then(res => res.json())
         // .then(messages => console.log(messages));
     }
-    
+
+    async setPosition(){
+        this.position = player.team.indexOf(this) + 1
+    }
+
+    async assignTeamWindowCoordinates(){ //get set position to work!
+        await this.setPosition()
+        this.picSrc = `./assets/pokemon/mini/${this.pokemonID}.png`
+        if (this.position == 1 || this.position == 2 || this.position == 3){
+            this.xMiniPic = 20
+            this.xMiniText = 200
+        }
+        if (this.position == 4 || this.position == 5 || this.position == 6){
+            this.xMiniPic = 470
+            this.xMiniText = 650
+        }
+        if (this.position == 1 || this.position == 4){
+            this.yMiniPic = 5
+            this.yMiniText = 75
+        }
+        if (this.position == 2 || this.position == 5){
+            this.yMiniPic = 155
+            this.yMiniText = 225
+        }
+        if (this.position == 3 || this.position == 6){
+            this.yMiniPic = 305
+            this.yMiniText = 375
+        }
+    }
 }

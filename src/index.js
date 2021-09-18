@@ -45,16 +45,20 @@ hpBarContext.strokeStyle = "black";
 // hpBarContext.fillStyle = "green";
 
 
-let player // player
-let cpu // cpu
+let player 
+let playerID
+let cpu 
+
 let currentScreen = "title" 
-let ongoingBattle = false   
 let menuState = "title"
+let spriteVersion = "diamond-pearl"
+
+let ongoingBattle = false   
 let moveButton1 // will be button objects later
 let moveButton2 // destructure these, i guess
 let moveButton3
 let moveButton4
-let playerID = 3 //= 3 //assuming login successful for userid 1
+
 let battle
 let faintedPokemon = []
 let titleAnimator
@@ -69,7 +73,6 @@ function getPlayer(){
             // debugger
             let poke = new Pokemon(pokemon)
             player.team.push(poke)
-            
         }
         player.currentPokemon = player.team[0]
         for (const pokemon of player.team){
@@ -100,57 +103,16 @@ function renderPokemon(side){ //async
     // debugger
     const pokemonBattleImage = new Image()
     if (side == "player"){
-        pokemonBattleImage.src = `./assets/pokemon-battle/${player.currentPokemon.name.toLowerCase()}-rear.png`
+        pokemonBattleImage.src = `./assets/pokemon/${spriteVersion}/back/${player.currentPokemon.pokemonID}.png`
         drawBattlePokemon(pokemonBattleImage, 150, 140, 200, 200)
         battlePokemonContext.fillText(player.currentPokemon.name, 500, 250)
     } else {
-        pokemonBattleImage.src = `./assets/pokemon-battle/${cpu.currentPokemon.name.toLowerCase()}-front.png`
+        pokemonBattleImage.src = `./assets/pokemon/${spriteVersion}/front/${cpu.currentPokemon.pokemonID}.png`
         drawBattlePokemon(pokemonBattleImage, 550, 20, 200, 200)
         battlePokemonContext.fillText(cpu.currentPokemon.name, 175, 50)
     }
     console.log("i go third! rendering the views of both the player's and cpu's current pokemon")
 
-}
-
-function renderPlayerTeam(){ //async
-    console.log("i go fourth! rendering the mini pokemon in the team window below!")
-    teamPokemonPicturesContext.clearRect(0, 0, 888, 512)
-    // for (const pokemon of player.team) { set their locations depending on position
-    // }
-    let pokemonOnePic = new Image() //refactor this
-    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].name.toLowerCase()}-mini.png`
-    renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
-    teamPokemonTextContext.fillText(`${player.team[0].name}`, 200, 75)
-    if (player.team[1]) {
-        let pokemonTwoPic = new Image()
-        pokemonTwoPic.src = `./assets/pokemon-battle/${player.team[1].name.toLowerCase()}-mini.png`
-        renderFirstTeam(pokemonTwoPic, 50, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${player.team[1].name}`, 200, 225)
-    }
-    if (player.team[2]) {
-        let pokemonThreePic = new Image()
-        pokemonThreePic.src = `./assets/pokemon-battle/${player.team[2].name.toLowerCase()}-mini.png`
-        renderFirstTeam(pokemonThreePic, 50, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${player.team[2].name}`, 200, 375)
-    }
-    if (player.team[3]) {
-        let pokemonFourPic = new Image()
-        pokemonFourPic.src = `./assets/pokemon-battle/${player.team[3].name.toLowerCase()}-mini.png`
-        renderFirstTeam(pokemonFourPic, 500, 50, 133, 100)
-        teamPokemonTextContext.fillText(`${player.team[3].name}`, 650, 75)
-    }
-    if (player.team[4]) {
-        let pokemonFivePic = new Image()
-        pokemonFivePic.src = `./assets/pokemon-battle/${player.team[4].name.toLowerCase()}-mini.png`
-        renderFirstTeam(pokemonFivePic, 500, 200, 133, 100)
-        teamPokemonTextContext.fillText(`${player.team[4].name}`, 650, 225)
-    }
-    if (player.team[5]) {
-        let pokemonSixPic = new Image()
-        pokemonSixPic.src = `./assets/pokemon-battle/${player.team[5].name.toLowerCase()}-mini.png`
-        renderFirstTeam(pokemonSixPic, 500, 350, 133, 100)
-        teamPokemonTextContext.fillText(`${player.team[5].name}`, 650, 375)
-    }
 }
 
 function createMoveButtons() { //goes first
@@ -302,7 +264,7 @@ function renderGameWindow() {
             .then(getCPU)
             .then(renderPokemon.bind(null, "player"))
             .then(renderPokemon.bind(null, "cpu"))
-            .then(renderPlayerTeam)
+            .then(renderMiniPics)
             .then(drawHpBar)
             .then(createMoveButtons)
             .then(createPokemonButtons)
@@ -371,7 +333,7 @@ function renderNewUserModal(){
     <input type="submit" value="Log in"><br>
     </form>
     `
-    modal.querySelector("form").addEventListener("submit", handleSubmit)
+    modal.querySelector("form").addEventListener("submit", handleNewUser)
     // modal.open()
 }
 function renderContinueModal(){
@@ -512,6 +474,8 @@ function titleHandler(e){
  
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded")
+    currentScreen = "title"
+    menuState = "title"
     renderGameWindow()
     renderTeamWindow()
     window.addEventListener('keyup', titleHandler)
