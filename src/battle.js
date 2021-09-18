@@ -52,8 +52,7 @@ class Battle { // attacker and defender // this will run twice
                 this.attacker = [this.currentPokemon, this.currentCPUPokemon].reduce((myPoke, cpuPoke) => myPoke.speedStat > cpuPoke.speedStat ? myPoke : cpuPoke)
             }
             this.defender = [this.currentPokemon, this.currentCPUPokemon].filter(poke => poke !== this.attacker)[0]
-        }
-    }
+    }}
 
     hitCheck(){
         if (this.attacker.move.name === "Swift" || this.attacker.move.name === "Feint Attack" || this.attacker.move.name === "Aerial Ace" || this.attacker.move.name === "Aura Sphere"){
@@ -70,8 +69,8 @@ class Battle { // attacker and defender // this will run twice
                 this.accuracyCheck = true
             } else {
                 this.accuracyCheck = false
-            }
-        }}   
+                missed.text = `${this.attacker.name}'s attack missed!`
+    }}}   
 
     statCheck(){ // if damageType is not status
         if (this.attacker.move.damageType === "Physical"){ //UNLESS THOSE STUPID MOVES LIKE PSYSTRIKE
@@ -81,13 +80,15 @@ class Battle { // attacker and defender // this will run twice
             if (this.attacker.move.damageType === "Special"){
                 this.attackStatUsed = this.attacker.specialAttackStat
                 this.defenseStatUsed = this.defender.specialDefenseStat
-            }
-        }
-    }
+    }}}
 
     critCheck(){
-        this.critModifier = Math.floor(Math.random() * 17) === 16 ? 1.5 : 1
-    }
+        if (Math.floor(Math.random() * 17) == 16){
+            this.critModifier = 1.5
+            critical.text = "It's a critical hit!"
+        } else {
+            this.critModifier = 1
+    }}
 
     randomCheck(){
         this.randomModifier = Math.floor(Math.random() * (Math.ceil(85) - Math.floor(100)) + Math.floor(100)) / 100
@@ -100,19 +101,23 @@ class Battle { // attacker and defender // this will run twice
         // debugger
         if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name)){ // maybe a switch, if it doesnt break anything again!
             this.effectiveModifier = 0
+            effective.text = `${this.defender.name} was unaffected!`
         } else if (halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
             this.effectiveModifier = 0.25
-        } else if ((halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name)) && !(halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name))){
+            effective.text = "It's not very effective..."
+        } else if ((halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name)) && !(doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name))){
             this.effectiveModifier = 0.5
-        } else if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name)) && !(doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name))) {
-            this.effectiveModifier = 2
-        } else if (doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name)) {
+            effective.text = "It's not very effective..."
+        } else if (doubleDamage.includes(this.defender.type1.name) && doubleDamage.includes(this.defender.type2.name)) { // && evaluates first
             this.effectiveModifier = 4
+            effective.text = "It's super effective!"
+        } else if ((doubleDamage.includes(this.defender.type1.name) || doubleDamage.includes(this.defender.type2.name)) && !(halfDamage.includes(this.defender.type1.name) || halfDamage.includes(this.defender.type2.name))) {
+            this.effectiveModifier = 2
+            effective.text = "It's super effective!"
         } else {
             // debugger
             this.effectiveModifier = 1
-        }
-    }   
+    // }debugger}   
 
     burnCheck(){
         // debugger
@@ -120,20 +125,13 @@ class Battle { // attacker and defender // this will run twice
             this.burnModifier = 0.5
         } else {
             this.burnModifier = 1
-        }
-    }
+    }}
 
     stabCheck(){
-        // debugger
-        // if (!!(this.attacker.type2)) {
-            if (this.attacker.type1.name === this.attacker.move.type.name || this.attacker.type2.name === this.attacker.move.type.name){
-                this.stabModifier = 1.5
-            }
-            // else {
-            //     if (this.attacker.type1.name === this.attacker.move.type.name) {
-            //         this.stabModifier = 1.5
-                 else {
-                    this.stabModifier = 1
+        if (this.attacker.type1.name === this.attacker.move.type.name || this.attacker.type2.name === this.attacker.move.type.name){
+            this.stabModifier = 1.5
+        } else {
+            this.stabModifier = 1
     }}
 
     calculateDamage(){ // skip if self status move
@@ -145,13 +143,12 @@ class Battle { // attacker and defender // this will run twice
             this.attackDamage = 0
             if (!!this.attacker.move.accuracy && !!this.attacker.move.power){
                 console.log(`${this.attacker.name}'s attack missed!`)
+                animateText(missed.text)
             } else {
                 // debugger
                 console.log("Lol this move doesn't do anything yet")
                 // ()
-            }
-        }   
-    }
+    }}}
 
     resolveEffects(){
         debugger
@@ -164,6 +161,10 @@ class Battle { // attacker and defender // this will run twice
         this.defender.currentHP = this.defender.currentHP - this.attackDamage
         redrawHP(this.currentPokemon, 565, 275, 600, 288)
         redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
+        if (this.effectiveModifier != 1){
+            animateText(effective.text)
+            console.log(effective.text)
+        }
         this.defender.updatePokemon()
         console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         if (this.defender.currentHP <= 0) {
@@ -227,6 +228,7 @@ class Battle { // attacker and defender // this will run twice
 
     runBattle(){
         menuState = "turn"
+        attack.text = `${this.attacker.name} USED ${this.attacker.move.name}!`
         this.hitCheck()
         this.statCheck()
         this.critCheck()
@@ -235,8 +237,9 @@ class Battle { // attacker and defender // this will run twice
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
-        animateText(`${this.attacker.name} USED ${this.attacker.move.name}!`)
+        animateText(attack.text)
         this.resolveDamage()
+        Message.clear
         if (!!this.attacker && !!this.defender){
             this.turn++
         }
@@ -250,7 +253,8 @@ class Battle { // attacker and defender // this will run twice
 }
 
 
-function promptToContinue(){
+async function promptToContinue(){
+    await determineMourner()
     return response = confirm("Would you like to battle again?")//modal wont work for this
 }
 
@@ -349,7 +353,8 @@ function determineMourner(){
         mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
         mourner.currentPokemon = ''
         mourner.team.shift()
-        setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),500)
+        faint.text = `${mourner.name}'S ${pokemon.name} HAS FAINTED!`
+        setTimeout(()=>animateText(faint.text),500)
         faintedPokemon.shift()
     }
 }

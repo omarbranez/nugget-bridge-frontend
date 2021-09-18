@@ -45,8 +45,8 @@ hpBarContext.strokeStyle = "black";
 // hpBarContext.fillStyle = "green";
 
 
-let player 
 let playerID
+let player 
 let cpu 
 
 let currentScreen = "title" 
@@ -54,17 +54,20 @@ let menuState = "title"
 let spriteVersion = "diamond-pearl"
 
 let ongoingBattle = false   
-let moveButton1 // will be button objects later
-let moveButton2 // destructure these, i guess
-let moveButton3
-let moveButton4
 
-let battle
+let battle // the battle object
+
 let faintedPokemon = []
 let titleAnimator
 let response
 let result
 let mourner
+
+let effective = new Message()
+let missed = new Message()
+let critical = new Message()
+let attack = new Message()
+let faint = new Message()
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")

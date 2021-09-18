@@ -1,14 +1,15 @@
 class Message {
     static all = []
-    
+
     constructor(text, purpose){
-        this.text = text
-        this.purpose = purpose
-        this.constructor.all.push(this) 
+        this.text = text || ""
+        this.constructor.all.push(this)
     }
     
     static clear(){
-        this.all = []
+        for (const message of this.all){
+            message.text = ""
+        }
     }
 
 }
