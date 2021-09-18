@@ -62,6 +62,8 @@ let moveButton4
 let battle
 let faintedPokemon = []
 let titleAnimator
+let response
+let result
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")
@@ -414,6 +416,8 @@ function battleBackgroundDisplay(bgImage) {
 function clearScreen() {
     gameBackgroundContext.clearRect(0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
     gameButtonContext.clearRect(0,0,gameButtonCanvas.width,gameButtonCanvas.height)
+    teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
+    teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     console.log("clearing the screen!")
 }
 
@@ -481,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('keyup', titleHandler)
     gameButtonCanvas.addEventListener('click', menuButtonListener)
     gameButtonCanvas.addEventListener('dblclick', switchButtonListener)    // clickedButton()
-    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener)
+    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener) // can i combine all these?
     teamHighlightCanvas.addEventListener('mousemove', animatePokemon)
     teamDrawSelection(70, 50, 100, 100)
     teamDrawSelection(70, 200, 100, 100)

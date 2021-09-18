@@ -133,12 +133,12 @@ class Battle { // attacker and defender // this will run twice
 
     calculateDamage(){ // skip if self status move
         console.log(`${this.attacker.name} used ${this.attacker.move.name}!`)
-        if (this.accuracyCheck === true) {
+        if (this.accuracyCheck == true && !!this.attacker.move.power) {
             // debugger
             this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
         } else {
             this.attackDamage = 0
-            if (!!(this.attacker.move.accuracy)){
+            if (!!this.attacker.move.accuracy && !!this.attacker.move.power){
                 console.log(`${this.attacker.name}'s attack missed!`)
             } else {
                 // debugger
@@ -219,7 +219,7 @@ class Battle { // attacker and defender // this will run twice
         }
     }
 
-  
+    
 
     runBattle(){
         menuState = "turn"
@@ -251,11 +251,12 @@ function resolveFaintedPokemon(){
         mourner = [player, cpu].find( user => user.playerID == String(pokemon.userID))
         mourner.currentPokemon = ''
         mourner.team.shift()
-        setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),1000)
+        setTimeout(()=>animateText(`${mourner.name}'S ${pokemon.name} HAS FAINTED!`),500)
     }
     if (mourner == player) {
         if (player.team.length == 0){
-            resolveBattleEnd("lose")
+            result = "lose"
+            resolveGameEnd()
         } else {
             battlePokemonContext.clearRect(150, 140, 200, 200)
             setTimeout(() => clearBlueWindow(), 3000)
@@ -263,48 +264,54 @@ function resolveFaintedPokemon(){
         }
     } else {
         if (cpu.team.length == 0){
-            resolveBattleEnd("win")
+            result = "win"
+            resolveGameEnd()
         } else {
             cpu.currentPokemon = cpu.team[0]
             battlePokemonContext.clearRect(175,20,200,100)
             battlePokemonContext.clearRect(550, 20, 200, 200)
-            setTimeout(()=>renderPokemon(cpu),2000)
-            drawHpBar()
-            setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 3000)
-            setTimeout(()=>clearBlueWindow(), 5000)
-            setTimeout(()=>changeStateToBattleOptions(),5500)
+            setTimeout(()=>renderPokemon(cpu),3000)
+            setTimeout(()=>drawHpBar(),3000)
+            setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)
+            setTimeout(()=>clearBlueWindow(), 6500)
+            setTimeout(()=>changeStateToBattleOptions(),7000)
         }
     }
     faintedPokemon.shift()
+    // if (result == "win"){
+    //     setTimeout(()=>animateText(`YOU HAVE DEFEATED ${cpu.name}!`),3000)
+    // } else if (result == "lose"){
+    //     setTimeout(()=>animateText(`YOU HAVE BEEN DEFEATED BY ${cpu.name}!`),3000)
+    // }
 }
 
-function resolveBattleEnd(result){
-    if (result == "win"){
-        animateText(`YOU HAVE DEFEATED ${cpu.name}!`)
-    } else {
-        animateText(`YOU HAVE BEEN DEFEATED BY ${cpu.name}!`)
-    }
-    let response = confirm("Would you like to battle again?")
+function promptToContinue(){
+    response = confirm("Would you like to battle again?")//modal wont work for this
+}
+
+async function resolveGameEnd(){
+    await promptToContinue()
     if (response == true){
+        debugger
         clearScreen()
-        clearBlueWindow()
-        teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
-        teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
-        setTimeout(()=>renderGameWindow(),500)
-        setTImeout(()=>renderTeamWindow(),500)
+        .then(clearBlueWindow())
+        .then(renderGameWindow())
+        .then(renderTeamWindow())
+        .then(changeStateToBattleOptions())
     } else {
         restartGame()
     }
+    response = ''
 }
 
 function restartGame(){
     menuState = "title"
     currentScreen = "title"
+    result = ''
     clearScreen()
     battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
+    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)
     clearBlueWindow()
-    teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
-    teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     renderGameWindow()
     renderTeamWindow()
     window.addEventListener('keyup', titleHandler)
@@ -346,8 +353,9 @@ function switchPokemonFromMenu(position){
 }
 
 function reinitializePokemon(){
-    battlePokemonContext.clearRect(150, 140, 200, 200)
-    battlePokemonContext.clearRect(500,215,200,50)
+    battlePokemonContext.clearRect(150, 140, 200, 200) // pokemon
+    battlePokemonContext.clearRect(500,215,200,50) // name
+    //hp bar?
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     renderMiniPics()
