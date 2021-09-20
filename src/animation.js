@@ -1,6 +1,3 @@
-const wideChars = ["R", "w", "W", "E"]
-const narrowChars = ["", " ", "I", "!", "'"]
-
 function drawHpBar(){ 
     const hpBar = new Image() // for each player
     const cpuHPBar = new Image()
@@ -72,12 +69,13 @@ function redrawHP(pokemon, xBarStart, yBarStart, textXStart, textYStart){
 }
 
 function animateText(text){
-    // debugger
     clearBlueWindow()
     text = text.toUpperCase()
     const textLength = text.length
+    gameButtonCanvas.style.letterSpacing = '1px'
     gameButtonContext.font = '2em sans-serif'; 
     gameButtonContext.fillStyle = "white";
+    gameButtonContext.textAlign = "center"
     let i = 0
     let letterX = 100
     const writer = setInterval( function() {
@@ -85,23 +83,14 @@ function animateText(text){
             clearInterval(writer)
         } else {
             renderText(text[i], letterX)
-            if (narrowChars.includes(text[i]) || narrowChars.includes(text[i+1])){
-                letterX = letterX + 15
-            } else {
-                if (wideChars.includes(text[i])){
-                    letterX = letterX + 25
-                }
-            else {
-                letterX = letterX + 20
-            }}
+            letterX = letterX + 20
+            }
             i++
         }
-    }, 30)
+    , 30)
    
     
 }
-
-
 
 function renderText(letter, newX) {
     gameButtonContext.textAlign = "center"
