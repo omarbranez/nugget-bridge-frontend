@@ -46,37 +46,33 @@ function drawHpBar(){
         console.log(`${cpu.currentPokemon.name} has ${cpu.currentPokemon.currentHP} out of ${cpu.currentPokemon.hpStat} HP remaining!`)
         }
     }
-    // animateText(displayDialog.toUpperCase())
 }
 
 function redrawHP(pokemon, xBarStart, yBarStart, textXStart, textYStart){
-    hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
-    hpBarContext.fillStyle = "green";
-    if (!!(pokemon)) {
-        if (pokemon.currentHP <= 0){
-            hpBarContext.fillRect(xBarStart, yBarStart, 0, 14)
-        } else {
-            hpBarContext.fillRect(xBarStart, yBarStart, (pokemon.currentHP/pokemon.hpStat) * 190, 14)
-        }
+    let counter = 0
+    const drawBar = setInterval(function() {
+    if ((counter <= battle.attackDamage) && (((pokemon.currentHP + battle.attackDamage) - counter)/pokemon.hpStat >= 0)){
+        hpBarContext.fillStyle = "green";
+        hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
+        hpBarContext.fillRect(xBarStart, yBarStart, (((pokemon.currentHP+battle.attackDamage)-counter)/pokemon.hpStat) * 190, 14)
         hpBarContext.fillStyle = "black"
-        if (pokemon.currentHP <= 0) {
+        if ((pokemon.currentHP+battle.attackDamage-counter/pokemon.hpStat < 0)){
+            clearInterval(drawBar)
+        }
+        if (pokemon.currentHP+battle.attackDamage-counter <= 0) {
             hpBarContext.fillText(`HP: 0/${pokemon.hpStat}`, textXStart, textYStart)
         } else {
-            hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
+            hpBarContext.fillText(`HP: ${pokemon.currentHP+battle.attackDamage-counter}/${pokemon.hpStat}`, textXStart, textYStart)
         }
+    } else {
+        clearInterval(drawBar)
     }
+    ++counter
+    }, 30)
 }
 
-function animateHPBar(pokemon, xBarStart, yBarStart, textXStart, textYStart){
-    hpBarContext.clearRect(xBarStart, yBarStart, 190, 14)
-    hpBarContext.fillStyle = "green";
-    if (!!(pokemon)) {
-        hpBarContext.fillRect(xBarStart, yBarStart, (pokemon.currentHP/pokemon.hpStat) * 190, 14)
-        hpBarContext.fillStyle = "black"
-        hpBarContext.fillText(`HP: ${pokemon.currentHP}/${pokemon.hpStat}`, textXStart, textYStart)
-    }
-}
 function animateText(text){
+    // debugger
     clearBlueWindow()
     text = text.toUpperCase()
     const textLength = text.length
@@ -101,7 +97,11 @@ function animateText(text){
             i++
         }
     }, 30)
+   
+    
 }
+
+
 
 function renderText(letter, newX) {
     gameButtonContext.textAlign = "center"

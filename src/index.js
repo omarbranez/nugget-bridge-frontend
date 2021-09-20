@@ -68,6 +68,9 @@ let missed = new Message()
 let critical = new Message()
 let attack = new Message()
 let faint = new Message()
+// let counter = 0
+// let anim
+// let counter
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")

@@ -6,8 +6,8 @@ class Battle { // attacker and defender // this will run twice
         this.currentCPUPokemon = cpu.currentPokemon
         
         this.turn = 1
-        this.attacker//determined by goesFirst/whosFaster, then switches unless someone fainted
-        this.defender //determined by goesFirst, then switches unless someone fainted
+        this.attacker
+        this.defender
         this.attackStatUsed
         this.defenseStatUsed
         
@@ -22,7 +22,6 @@ class Battle { // attacker and defender // this will run twice
 
         this.attackDamage
 
-        // this.faintedPokemon = [] // boolean
         this.speedCheck()
         this.selectCPUMove()
         // run battle after creation
@@ -30,7 +29,7 @@ class Battle { // attacker and defender // this will run twice
 
     // RUNS IN THIS ORDER
     // SPEED CHECK
-    // HIT CHECK => IF MISS, SWAP ATTACKER DEFENDER 
+    // HIT CHECK => IF MISS, SWAP ATTACKER DEFENDER // what about jump kick/high jump kick
     // PROC CHECK
     // MODIFIER CHECKS
     // they can run concurrently, they arent dependable on each other
@@ -101,7 +100,7 @@ class Battle { // attacker and defender // this will run twice
         // debugger
         if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name)){ // maybe a switch, if it doesnt break anything again!
             this.effectiveModifier = 0
-            effective.text = `${this.defender.name} was unaffected!`
+            effective.text = `It doesn't affect ${this.defender.name}...`
         } else if (halfDamage.includes(this.defender.type1.name) && halfDamage.includes(this.defender.type2.name)) {
             this.effectiveModifier = 0.25
             effective.text = "It's not very effective..."
@@ -117,6 +116,7 @@ class Battle { // attacker and defender // this will run twice
         } else {
             // debugger
             this.effectiveModifier = 1
+        }}
     // }debugger}   
 
     burnCheck(){
@@ -137,7 +137,6 @@ class Battle { // attacker and defender // this will run twice
     calculateDamage(){ // skip if self status move
         console.log(`${this.attacker.name} used ${this.attacker.move.name}!`)
         if (this.accuracyCheck == true && !!this.attacker.move.power) {
-            // debugger
             this.attackDamage = Math.floor(((((42 * this.attacker.move.power * (this.attackStatUsed / this.defenseStatUsed)) / 50)) + 2) * this.critModifier * this.randomModifier * this.effectiveModifier * this.stabModifier * this.burnModifier)
         } else {
             this.attackDamage = 0
@@ -145,9 +144,7 @@ class Battle { // attacker and defender // this will run twice
                 console.log(`${this.attacker.name}'s attack missed!`)
                 animateText(missed.text)
             } else {
-                // debugger
                 console.log("Lol this move doesn't do anything yet")
-                // ()
     }}}
 
     resolveEffects(){
@@ -158,13 +155,15 @@ class Battle { // attacker and defender // this will run twice
     }
 
     resolveDamage(){
-        this.defender.currentHP = this.defender.currentHP - this.attackDamage
-        redrawHP(this.currentPokemon, 565, 275, 600, 288)
-        redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
-        if (this.effectiveModifier != 1){
-            animateText(effective.text)
-            console.log(effective.text)
+        animateText(attack.text)
+        animateText(effective.text)
+        if (this.defender == this.currentCPUPokemon){
+            redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
+        } else if(this.defender == this.currentPokemon){
+            redrawHP(this.currentPokemon, 565, 275, 600, 288)
         }
+        this.defender.currentHP = this.defender.currentHP - this.attackDamage
+        console.log(effective.text)
         this.defender.updatePokemon()
         console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         if (this.defender.currentHP <= 0) {
@@ -178,43 +177,43 @@ class Battle { // attacker and defender // this will run twice
         }
     }
 
-    static async resolveEffectDamageForAttacker(){
-        if (this.defender){
-            await resolveDamage() //if status is NOT None
-            if (this.attacker.currentStatus === "Burn" || this.attacker.currentStatus === "Poison"){
-                this.attacker.currentHP = this.attacker.currentHP - Math.floor(this.attacker.hpStat / 16)
-            }
-            if (this.attacker.currentStatus === "Leech Seed"){
-                let hpLeeched = Math.floor(this.attacker.hpStat / 8)
-                this.attacker.currentHP = this.attacker.currentHP - hpLeeched
-                this.defender.currentHP = this.defender.currentHP + hpLeeched
-            }
-            if (this.attacker.currentHP <= 0){
-                this.attacker.currentStatus = "Faint"
-                faintedPokemon.push(this.attacker)
-                this.attacker = ''
-            }// redraw hp again
-        } 
-    }
+    // static async resolveEffectDamageForAttacker(){
+    //     if (this.defender){
+    //         await resolveDamage() //if status is NOT None
+    //         if (this.attacker.currentStatus === "Burn" || this.attacker.currentStatus === "Poison"){
+    //             this.attacker.currentHP = this.attacker.currentHP - Math.floor(this.attacker.hpStat / 16)
+    //         }
+    //         if (this.attacker.currentStatus === "Leech Seed"){
+    //             let hpLeeched = Math.floor(this.attacker.hpStat / 8)
+    //             this.attacker.currentHP = this.attacker.currentHP - hpLeeched
+    //             this.defender.currentHP = this.defender.currentHP + hpLeeched
+    //         }
+    //         if (this.attacker.currentHP <= 0){
+    //             this.attacker.currentStatus = "Faint"
+    //             faintedPokemon.push(this.attacker)
+    //             this.attacker = ''
+    //         }// redraw hp again
+    //     } 
+    // }
 
-    static async resolveEffectDamageForDefender(){ //refactor
-        if (this.defender){
-            await resolveEffectDamageForAttacker()
-            if (this.defender.currentStatus === "Burn" || this.defender.currentStatus === "Poison"){
-                this.defender.currentHP = this.defender.currentHP - Math.floor(this.defender.hpStat / 16)
-            }
-            if (this.defender.currentStatus === "Leech Seed"){
-                let hpLeeched = Math.floor(defender.hpStat / 8)
-                this.defender.currentHP = this.defender.currentHP - hpLeeched
-                this.attacker.currentHP = this.attacker.currentHP + hpLeeched
-            }
-            if (this.defender.currentHP <= 0){
-                this.defender.currentStatus = "Faint"
-                faintedPokemon.push(this.defender)
-                this.defender = ''   
-            }
-        }
-    }
+    // static async resolveEffectDamageForDefender(){ //refactor
+    //     if (this.defender){
+    //         await resolveEffectDamageForAttacker()
+    //         if (this.defender.currentStatus === "Burn" || this.defender.currentStatus === "Poison"){
+    //             this.defender.currentHP = this.defender.currentHP - Math.floor(this.defender.hpStat / 16)
+    //         }
+    //         if (this.defender.currentStatus === "Leech Seed"){
+    //             let hpLeeched = Math.floor(defender.hpStat / 8)
+    //             this.defender.currentHP = this.defender.currentHP - hpLeeched
+    //             this.attacker.currentHP = this.attacker.currentHP + hpLeeched
+    //         }
+    //         if (this.defender.currentHP <= 0){
+    //             this.defender.currentStatus = "Faint"
+    //             faintedPokemon.push(this.defender)
+    //             this.defender = ''   
+    //         }
+    //     }
+    // }
 
     setSecondPhase(){
         if (!!this.defender && !!this.attacker){
@@ -237,9 +236,14 @@ class Battle { // attacker and defender // this will run twice
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
-        animateText(attack.text)
+        // animateText(attack.text)
         this.resolveDamage()
-        Message.clear
+        this.endTurn()
+    }
+    
+    endTurn(){
+        Message.clear()
+        // counter = 0
         if (!!this.attacker && !!this.defender){
             this.turn++
         }
@@ -354,7 +358,7 @@ function determineMourner(){
         mourner.currentPokemon = ''
         mourner.team.shift()
         faint.text = `${mourner.name}'S ${pokemon.name} HAS FAINTED!`
-        setTimeout(()=>animateText(faint.text),500)
+        animateText(faint.text)
         faintedPokemon.shift()
     }
 }

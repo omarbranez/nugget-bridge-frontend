@@ -8,6 +8,7 @@ class Message {
     
     static clear(){
         for (const message of this.all){
+            // debugger
             message.text = ""
         }
     }
