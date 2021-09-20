@@ -73,7 +73,7 @@ function animateText(text){
     text = text.toUpperCase()
     const textLength = text.length
     gameButtonCanvas.style.letterSpacing = '1px'
-    gameButtonContext.font = '2em sans-serif'; 
+    gameButtonContext.font = '3em monospace'; 
     gameButtonContext.fillStyle = "white";
     gameButtonContext.textAlign = "center"
     let i = 0
@@ -84,9 +84,10 @@ function animateText(text){
         } else {
             renderText(text[i], letterX)
             letterX = letterX + 20
-            }
             i++
         }
+    }
+        
     , 30)
    
     
