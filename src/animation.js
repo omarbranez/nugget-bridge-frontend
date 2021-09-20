@@ -87,10 +87,7 @@ function animateText(text){
             i++
         }
     }
-        
     , 30)
-   
-    
 }
 
 function renderText(letter, newX) {
@@ -100,6 +97,10 @@ function renderText(letter, newX) {
     } else {
         gameButtonContext.fillText(letter, newX - 688, 410)
     }
+}
+
+function animateWithDelay(text, duration){
+    setTimeout( ()=> animateText(text), duration)
 }
 
 function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {

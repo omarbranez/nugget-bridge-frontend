@@ -155,8 +155,19 @@ class Battle { // attacker and defender // this will run twice
     }
 
     resolveDamage(){
-        animateText(attack.text)
-        animateText(effective.text)
+        const hpCounter = this.defender.currentHP
+        if (!!missed.text) {
+            animateText(attack.text)
+            setTimeout(()=>animateText(missed.text), 3000)
+        } else if (!!effective.text && !missed.text){
+            debugger
+            animateText(attack.text)
+            setTimeout(()=>animateText(effective.text), 3000)
+        } else {
+            animateText(attack.text)
+        }
+        // animateText(attack.text)
+        // animateWithDelay(effective.text)
         if (this.defender == this.currentCPUPokemon){
             redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
         } else if(this.defender == this.currentPokemon){
@@ -169,9 +180,9 @@ class Battle { // attacker and defender // this will run twice
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
-            // setTimeout(()=>resolveFaintedPokemon(),2000)
-            setTimeout(()=>resolveMourner(),2000)
-
+            debugger
+            setTimeout(()=>resolveMourner(),(hpCounter / 33)*1000)
+            
             this.attacker = ''
             this.defender = ''    
         }
@@ -238,7 +249,11 @@ class Battle { // attacker and defender // this will run twice
         this.calculateDamage()
         // animateText(attack.text)
         this.resolveDamage()
-        this.endTurn()
+        if (this.attackDamage > 0) {
+            setTimeout(()=>this.endTurn(), (this.attackDamage / 20)*1000)
+        } else {
+            setTimeout(()=>this.endTurn(), 6000)
+        }
     }
     
     endTurn(){
@@ -368,7 +383,7 @@ async function resolveMourner(){
     if (mourner == player) {
         if (player.team.length == 0){
             result = "lose"
-            resolveGameEnd()
+            setTimeout(()=>resolveGameEnd(),4000)
         } else {
             battlePokemonContext.clearRect(150, 140, 200, 200)
             setTimeout(() => clearBlueWindow(), 3000)
@@ -377,7 +392,7 @@ async function resolveMourner(){
     } else {
         if (cpu.team.length == 0){
             result = "win"
-            resolveGameEnd()
+            setTimeout(()=>resolveGameEnd(),4000)
         } else {
             cpu.currentPokemon = cpu.team[0]
             cpu.updatePositions()
