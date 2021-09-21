@@ -6,7 +6,7 @@ Many of you who grew up playing the Generation I Pokemon games will remember thi
 ---
 ![nugget bridge overview](https://cdn.wikimg.net/en/strategywiki/images/f/f0/Pokemon_RBY_Route24.png)
 
-**A never-ending gauntlet of annoying trainers whose hordes of wimpy, unevolved Pokemon**
+**A never-ending gauntlet of annoying trainers whose hordes of wimpy, unevolved Pokemon serve nothing but to test your patience and sanity**
 
 Nugget Bridge attempts to recreate those fond, and totally not suppressed, traumas in the form of an unending series of consecutive battles. 
 
