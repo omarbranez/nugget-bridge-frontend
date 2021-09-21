@@ -4,7 +4,7 @@ Nugget Bridge is a Pokemon battle simulator written in object-oriented JavaScrip
 ---
 Many of you who grew up playing the Generation I Pokemon games will remember this
 ---
-![nugget bridge overview](https://strategywiki.org/wiki/File:Pokemon_RBY_Route24.png)
+![nugget bridge overview](https://cdn.wikimg.net/en/strategywiki/images/f/f0/Pokemon_RBY_Route24.png)
 
 **A never-ending gauntlet of annoying trainers whose hordes of wimpy, unevolved Pokemon**
 
