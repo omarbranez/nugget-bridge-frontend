@@ -17,11 +17,9 @@ function menuButtonListener(e){
         case "initial":
             switch(true) {
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 180 && mouseY <= 220 && menuState === "initial"):
-                    // alert("clicked continueButton")
                     renderContinueModal()
                     break
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 80 && mouseY <= 120 && menuState === "initial"):
-                    // alert("clicked newGameButton")
                     renderNewUserModal()
                     break
             }
@@ -34,7 +32,6 @@ function menuButtonListener(e){
                     changeStateToSwitch()
                     break
                 case (mouseX > 371 && mouseX < 501 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options"):
-                    // alert("clicked quitButton")
                     let response = confirm("Would you really like to quit? Your status will be saved")
                     if (response == true){
                         restartGame()
@@ -45,7 +42,6 @@ function menuButtonListener(e){
             switch(true) {
                 case (mouseX >= 237 && mouseX <= 383 && mouseY >= 153 && mouseY <= 273 && menuState === "move"):
                     battle = new Battle(player.currentPokemon.move1, player, cpu)
-                    // debugger
                     battle.runBattle()
                     break
                 case (mouseX >= 237 && mouseX <= 383 && mouseY >= 297 && mouseY <= 340 && menuState === "move"):
@@ -71,21 +67,21 @@ function switchButtonListener(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
     if (menuState == "switch"){
-        if (mouseX >= 235 && mouseX <= 333 && mouseY >= 223 && mouseY <= 250){
+        if (mouseX >= 235 && mouseX <= 333 && mouseY >= 223 && mouseY <= 256){
             if (!player.currentPokemon){
                 switchPokemonFromMenu(0)
             } else {
                 alert("you cannnot switch with yourself!")
             }
-        } else if (mouseX >= 235 && mouseX <= 333 && mouseY >= 257 && mouseY <= 435){
+        } else if (mouseX >= 235 && mouseX <= 333 && mouseY >= 257 && mouseY <= 290){
             switchPokemonFromMenu(1)
-        } else if (mouseX >= 235 && mouseX <= 333 && mouseY >= 297 && mouseY <= 495){
+        } else if (mouseX >= 235 && mouseX <= 333 && mouseY >= 297 && mouseY <= 330){
             switchPokemonFromMenu(2)
         } else if (mouseX >= 369 && mouseX <= 465 && mouseY >= 223 && mouseY <= 256){
             switchPokemonFromMenu(3)
-        } else if (mouseX >= 369 && mouseX <= 465 && mouseY >= 257 && mouseY <= 435){
+        } else if (mouseX >= 369 && mouseX <= 465 && mouseY >= 257 && mouseY <= 290){
             switchPokemonFromMenu(4)
-        } else if (mouseX >= 369 && mouseX <= 465 && mouseY >= 297 && mouseY <= 495){
+        } else if (mouseX >= 369 && mouseX <= 465 && mouseY >= 297 && mouseY <= 330){
             switchPokemonFromMenu(5)
         } else if (mouseX >= 69 && mouseX <= 198 && mouseY >= 280 && mouseY <= 323 && !!player.currentPokemon){
             changeStateToBattleOptions() 
@@ -93,7 +89,6 @@ function switchButtonListener(e){
     }
 }
 
-// }
 function highlightButtonListener(e) {
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
@@ -117,16 +112,13 @@ function highlightButtonListener(e) {
                     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(103, 297, 127, 40)
                     break
-                // alert("highlighting fight button!")
                 case (mouseX > 237 && mouseX < 367 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options" ):
                     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(237, 297, 127, 40)
-                    // alert("highlighting switch button")
                     break
                 case (mouseX > 373 && mouseX < 503 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options" ):
                     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(372, 297, 127, 40)
-                    // alert("highlighting quit button")
                     break
                 case (menuState === "battle-options"):
                     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
@@ -184,10 +176,8 @@ function highlightButtonListener(e) {
                     drawSelection(367,300,100,37)
                     break
                 case ((mouseX >= 70 && mouseX <= 197 && mouseY >= 284 && mouseY <= 324 && menuState === "switch" && !!player.currentPokemon)):
-                    // if (!player.team[5]){
                     highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
                     drawSelection(69,280,127,40)
-                    // }
                     break
                 case (menuState === "switch"):
                     highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
@@ -200,7 +190,6 @@ function replaceBattleOptionsWithMoves(){
     textLeftSide("Please select an attack")
     for (const button of Button.all) {
         if (button.purpose === "move-select"){
-            debugger
             Button.renderButton(button)
         }
     }
@@ -208,12 +197,9 @@ function replaceBattleOptionsWithMoves(){
 }
 
 function replaceBattleOptionsWithPokemon(){
-    // debugger
     clearBlueWindow()
-    // gameButtonCanvas.removeEventListener('click', menuButtonListener, false)
     // Button.all = []
     createPokemonButtons()
-    // debugger
     textLeftSide("Please select a Pokemon")
     battleTextContext.fillText("to switch-in", 67, 267)
     for (const button of Button.all){
@@ -224,8 +210,6 @@ function replaceBattleOptionsWithPokemon(){
     if (!!player.currentPokemon){
     renderStaticButton()
     }
-    // menuState = "switch"
-    // gameButtonCanvas.addEventListener('click', menuButtonListener, false) 
 }
 
 async function changeStateToSwitch(){
@@ -280,7 +264,7 @@ function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
     const quitButton = new Image()
     quitButton.src = "./assets/battle-save-quit-button.png"
     renderButton(quitButton, 368, 283, 133, 67)
+    textLeftSide("Please select a option")
     // drawSelection()
     console.log("displaying battle buttons")
 }
-    // Button.renderButton(Button.find(playerTeam[0].name))

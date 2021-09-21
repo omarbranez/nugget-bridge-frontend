@@ -84,7 +84,7 @@ function animateText(text){
             clearInterval(writer)
         } else {
             renderText(text[i], letterX)
-            letterX = letterX + 13
+            letterX = letterX + 9
             i++
         }
     }

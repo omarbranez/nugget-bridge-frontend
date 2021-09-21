@@ -110,11 +110,11 @@ function renderPokemon(side){ //async
     const pokemonBattleImage = new Image()
     if (side == "player"){
         pokemonBattleImage.src = `./assets/pokemon/${spriteVersion}/back/${player.currentPokemon.pokemonID}.png`
-        drawBattlePokemon(pokemonBattleImage, 100, 93, 150, 150)
+        drawBattlePokemon(pokemonBattleImage, 100, 103, 133, 133)
         battlePokemonContext.fillText(player.currentPokemon.name, 333, 167)
     } else {
         pokemonBattleImage.src = `./assets/pokemon/${spriteVersion}/front/${cpu.currentPokemon.pokemonID}.png`
-        drawBattlePokemon(pokemonBattleImage, 367, 13, 150, 150)
+        drawBattlePokemon(pokemonBattleImage, 367, 13, 133, 133)
         battlePokemonContext.fillText(cpu.currentPokemon.name, 117, 33)
     }
     console.log("i go third! rendering the views of both the player's and cpu's current pokemon")

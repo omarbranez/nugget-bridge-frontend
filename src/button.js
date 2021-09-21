@@ -20,7 +20,6 @@ class Button {
     }
 
     static async drawButtonText(button){
-        // debugger
         await Button.drawButton(button)
         battleTextContext.fillStyle = "white"
         if (button.percent === 0.75){
@@ -30,12 +29,10 @@ class Button {
     }    
 
     static find(button){
-        // debugger
         return Button.all.find( b => b.name === button)
     }
 
     static async renderButton(button){
-        // debugger
         await Button.drawButtonText(button)
     }
 

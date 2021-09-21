@@ -388,7 +388,7 @@ async function resolveMourner(){
             result = "lose"
             setTimeout(()=>resolveGameEnd(),4000)
         } else {
-            battlePokemonContext.clearRect(100, 93, 133, 133)
+            battlePokemonContext.clearRect(100, 93, 145, 133)
             setTimeout(() => clearBlueWindow(), 3000)
             setTimeout(() => changeStateToSwitch(), 4000)
         }
@@ -404,7 +404,7 @@ async function resolveMourner(){
             setTimeout(()=>renderPokemon(cpu),3000)
             setTimeout(()=>drawHpBar(),3000)
             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)
-            setTimeout(()=>clearBlueWindow(), 6500)
+            // setTimeout(()=>clearBlueWindow(), 6500)
             setTimeout(()=>changeStateToBattleOptions(),7000)
         }
     }
