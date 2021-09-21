@@ -47,7 +47,7 @@ async function renderMiniPics(){
         let pokePic = new Image()
         pokePic.src = pokemon.picSrc
         pokePic.onload = function() {
-            teamPokemonPicturesContext.drawImage(pokePic, pokemon.xMiniPic, pokemon.yMiniPic, 200, 150)
+            teamPokemonPicturesContext.drawImage(pokePic, pokemon.xMiniPic, pokemon.yMiniPic, 133, 100)
         }
         teamPokemonTextContext.fillText(pokemon.name, pokemon.xMiniText, pokemon.yMiniText)
     }

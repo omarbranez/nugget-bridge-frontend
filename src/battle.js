@@ -43,7 +43,7 @@ class Battle { // attacker and defender // this will run twice
     }
 
     speedCheck(){
-        // debugger
+        // 
         if (this.turn == 1){ //remove in chain later
             if (this.currentPokemon.speedStat === this.currentCPUPokemon.speedStat){ // if tied
                 this.attacker = [this.currentPokemon, this.currentCPUPokemon][Math.floor(Math.random()*2)]
@@ -61,7 +61,7 @@ class Battle { // attacker and defender // this will run twice
             let stageAccuracy = 1 // not accounting for accuracy boosting moves
             let accuracyModified = this.attacker.move.accuracy * stageEvasion * stageAccuracy
             let randomFactor = Math.floor(Math.random() * (Math.ceil(1) - Math.floor(100)) + Math.floor(100))// / 100
-            // debugger
+            // 
             console.log(accuracyModified)
             console.log(randomFactor)
             if (randomFactor <= accuracyModified) {
@@ -97,7 +97,7 @@ class Battle { // attacker and defender // this will run twice
         const noDamage = this.attacker.move.type.no_damage_to.split(", ")
         const halfDamage = this.attacker.move.type.half_damage_to.split(", ")
         const doubleDamage = this.attacker.move.type.double_damage_to.split(", ")
-        // debugger
+        // 
         if (noDamage.includes(this.defender.type1.name) || noDamage.includes(this.defender.type2.name)){ // maybe a switch, if it doesnt break anything again!
             this.effectiveModifier = 0
             effective.text = `It doesn't affect ${this.defender.name}...`
@@ -114,13 +114,13 @@ class Battle { // attacker and defender // this will run twice
             this.effectiveModifier = 2
             effective.text = "It's super effective!"
         } else {
-            // debugger
+            // 
             this.effectiveModifier = 1
         }}
-    // }debugger}   
+    // }}   
 
     burnCheck(){
-        // debugger
+        // 
         if (this.attacker.status === "Burn" && this.attacker.move.damageType === "Physical"){
             this.burnModifier = 0.5
         } else {
@@ -142,14 +142,17 @@ class Battle { // attacker and defender // this will run twice
             this.attackDamage = 0
             if (!!this.attacker.move.accuracy && !!this.attacker.move.power){
                 console.log(`${this.attacker.name}'s attack missed!`)
-                animateText(missed.text)
+                // animateText(missed.text)
             } else {
+                missed.text = "But it failed!"
+                // animateText(missed.text)
                 console.log("Lol this move doesn't do anything yet")
     }}}
 
     resolveEffects(){
-        debugger
+        // 
         if (this.attacker.move.name === "Magnet Rise" || this.attacker.move.name === "Double Team"){
+            missed.text = "But it failed!"
             console.log("Lol this move doesn't do anything yet")
         }
     }
@@ -160,18 +163,16 @@ class Battle { // attacker and defender // this will run twice
             animateText(attack.text)
             setTimeout(()=>animateText(missed.text), 3000)
         } else if (!!effective.text && !missed.text){
-            debugger
+            
             animateText(attack.text)
             setTimeout(()=>animateText(effective.text), 3000)
         } else {
             animateText(attack.text)
         }
-        // animateText(attack.text)
-        // animateWithDelay(effective.text)
         if (this.defender == this.currentCPUPokemon){
-            redrawHP(this.currentCPUPokemon, 245, 75, 290, 88)
+            redrawHP(this.currentCPUPokemon, 163, 50, 187, 59)
         } else if(this.defender == this.currentPokemon){
-            redrawHP(this.currentPokemon, 565, 275, 600, 288)
+            redrawHP(this.currentPokemon, 377, 183, 400, 191)
         }
         this.defender.currentHP = this.defender.currentHP - this.attackDamage
         console.log(effective.text)
@@ -180,14 +181,14 @@ class Battle { // attacker and defender // this will run twice
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
-            debugger
+            
             setTimeout(()=>resolveMourner(),(hpCounter / 33)*1000)
             
             this.attacker = ''
             this.defender = ''    
         }
     }
-
+    // text length
     // static async resolveEffectDamageForAttacker(){
     //     if (this.defender){
     //         await resolveDamage() //if status is NOT None
@@ -231,7 +232,7 @@ class Battle { // attacker and defender // this will run twice
             [this.attacker, this.defender] = [this.defender, this.attacker] //destructuring assignment array matching to swap the variables
             this.runBattle()
         // } else {
-        //     debugger
+        //     
         //     resolveFaintedPokemon()
         }
     }
@@ -252,7 +253,8 @@ class Battle { // attacker and defender // this will run twice
         if (this.attackDamage > 0) {
             setTimeout(()=>this.endTurn(), (this.attackDamage / 20)*1000)
         } else {
-            setTimeout(()=>this.endTurn(), 6000)
+            
+            setTimeout(()=>this.endTurn(), 3000)
         }
     }
     
@@ -295,6 +297,7 @@ function restartBattle(){
 }
 
 function restartGame(){
+    playerID = ''
     Player.clear
     menuState = "title"
     currentScreen = "title"
@@ -345,8 +348,8 @@ function switchPokemonFromMenu(position){
 }
 
 function reinitializePokemon(){
-    battlePokemonContext.clearRect(150, 140, 200, 200) // pokemon
-    battlePokemonContext.clearRect(500,215,200,50) // name
+    battlePokemonContext.clearRect(100, 93, 150, 133) // pokemon
+    battlePokemonContext.clearRect(333,143,133,33) // name
     hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)    
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
@@ -361,8 +364,8 @@ function reinitializePokemon(){
 }
 
 function clearForeground(){
-    battlePokemonContext.clearRect(150, 140, 200, 200) // pokemon
-    battlePokemonContext.clearRect(500,215,200,50) // name
+    battlePokemonContext.clearRect(100, 93, 160, 150) // pokemon
+    battlePokemonContext.clearRect(333,143,133,33) // name
     //hp bar?
     teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
@@ -385,7 +388,7 @@ async function resolveMourner(){
             result = "lose"
             setTimeout(()=>resolveGameEnd(),4000)
         } else {
-            battlePokemonContext.clearRect(150, 140, 200, 200)
+            battlePokemonContext.clearRect(100, 93, 133, 133)
             setTimeout(() => clearBlueWindow(), 3000)
             setTimeout(() => changeStateToSwitch(), 4000)
         }
@@ -396,8 +399,8 @@ async function resolveMourner(){
         } else {
             cpu.currentPokemon = cpu.team[0]
             cpu.updatePositions()
-            battlePokemonContext.clearRect(175,20,200,100)
-            battlePokemonContext.clearRect(550, 20, 200, 200)
+            battlePokemonContext.clearRect(117,13,150,67)
+            battlePokemonContext.clearRect(367, 13, 160, 133)
             setTimeout(()=>renderPokemon(cpu),3000)
             setTimeout(()=>drawHpBar(),3000)
             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)

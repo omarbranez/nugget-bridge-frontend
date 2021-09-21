@@ -24,7 +24,7 @@ class Button {
         await Button.drawButton(button)
         battleTextContext.fillStyle = "white"
         if (button.percent === 0.75){
-            battleTextContext.font = "1.5em sans-serif"
+            battleTextContext.font = "1em sans-serif"
         }
         battleTextContext.fillText(button.text, button.textX, button.textY)
     }    

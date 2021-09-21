@@ -13,6 +13,10 @@ html, body {
 
 }
 
+img {
+    max-width: 100%;
+}
+
 body {
     /* height: 100% */
     align-content: space-around;
@@ -23,17 +27,17 @@ body {
 }
 
 #top-window  {
-    width: 888px;
-    height: 512px;
+    min-width: 586px;
+    height: 338px;
     position: relative;
-    border: 2px solid black;
+    /* border: 1px solid black; */
 }
 
 #bottom-window {
-    width: 888px;
-    height: 512px;
+    min-width: 58px;
+    height: 338px;
     position: relative;
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 
 canvas { 
@@ -97,3 +101,5 @@ canvas {
     text-decoration: none;
     cursor: pointer;
   }
+
+  /* 66 % */

@@ -49,24 +49,24 @@ class Pokemon {
         await this.setPosition()
         this.picSrc = `./assets/pokemon/mini/${this.pokemonID}.png`
         if (this.position == 1 || this.position == 2 || this.position == 3){
-            this.xMiniPic = 20
-            this.xMiniText = 200
+            this.xMiniPic = 13
+            this.xMiniText = 133
         }
         if (this.position == 4 || this.position == 5 || this.position == 6){
-            this.xMiniPic = 470
-            this.xMiniText = 650
+            this.xMiniPic = 313
+            this.xMiniText = 433
         }
         if (this.position == 1 || this.position == 4){
-            this.yMiniPic = 5
-            this.yMiniText = 75
+            this.yMiniPic = 3
+            this.yMiniText = 50
         }
         if (this.position == 2 || this.position == 5){
-            this.yMiniPic = 155
-            this.yMiniText = 225
+            this.yMiniPic = 103
+            this.yMiniText = 150
         }
         if (this.position == 3 || this.position == 6){
-            this.yMiniPic = 305
-            this.yMiniText = 375
+            this.yMiniPic = 203
+            this.yMiniText = 250
         }
     }
 }
