@@ -1,8 +1,6 @@
 const baseURL = 'http://localhost:3000'
 const teamsURL = `${baseURL}/team_pokemons`
-const pokemonsURL = `${baseURL}/pokemons`
 const usersURL = `${baseURL}/users`
-const movesURL = `${baseURL}/moves`
 
 const gameBackgroundCanvas = document.getElementById("game-background")
 const gameBackgroundContext = gameBackgroundCanvas.getContext("2d")
@@ -39,14 +37,13 @@ const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 hpBarContext.font = '.66em sans-serif'; 
 hpBarContext.strokeStyle = "black";
-// hpBarContext.fillStyle = "green";
 
 let playerID
 let player 
 let cpu 
 
-let currentScreen = "title" 
-let menuState = "title"
+let currentScreen
+let menuState
 let spriteVersion = "diamond-pearl"
 
 let ongoingBattle = false   
@@ -59,11 +56,6 @@ let response
 let result
 let mourner
 
-let attack = new Message()
-let missed = new Message()
-let effective = new Message()
-let critical = new Message()
-let faint = new Message()
 
 function renderPokemon(side){ 
     const pokemonBattleImage = new Image()
@@ -78,102 +70,18 @@ function renderPokemon(side){
     }
 }
 
-function createMoveButtons() { 
-    Button.all = []
-    for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
-        new Button(move.name, "./assets/button-blank.png", 133, 66, move.name, "move-select")
+async function renderMiniPics(){
+    for (const pokemon of player.team){
+        await pokemon.assignTeamWindowCoordinates()
+        let pokePic = new Image()
+        pokePic.src = pokemon.picSrc
+        pokePic.onload = function() {
+            teamPokemonPicturesContext.drawImage(pokePic, pokemon.xMiniPic, pokemon.yMiniPic, 133, 100)
+        }
+        teamPokemonTextContext.fillText(pokemon.name, pokemon.xMiniText, pokemon.yMiniText)
     }
-    Object.assign(Button.find(player.currentPokemon.move1.name), {
-        xStart: 233,
-        yStart: 217,
-        textX: 263,
-        textY: 257,
-        percent: 1
-    })
-    Object.assign(Button.find(player.currentPokemon.move2.name), {
-        xStart: 233,
-        yStart: 283,
-        textX: 263,
-        textY: 323,
-        percent: 1
-    })
-    Object.assign(Button.find(player.currentPokemon.move3.name), {
-        xStart: 367,
-        yStart: 217,
-        textX: 397,
-        textY: 257,
-        percent: 1
-    })
-    Object.assign(Button.find(player.currentPokemon.move4.name), {
-        xStart: 367,
-        yStart: 283,
-        textX: 397,
-        textY: 323,
-        percent: 1
-    })
 }
 
-function createPokemonButtons() { // 
-    for (const pokemon of Pokemon.all){
-        if (String(pokemon.userID) === playerID){
-            new Button(pokemon.name, "./assets/button-blank.png", 133, 66, pokemon.name, "pokemon-select")
-        }
-    }
-    if (!!player.team[0]){   
-        Object.assign(Button.find(player.team[0].name), { // position vs player team
-            xStart: 233,
-            yStart: 213,
-            textX: 257, // 6 letter Moltres // position 1 // we can probably assign the different textX with a loop
-            textY: 243,
-            percent: 0.75
-        })
-    }   
-    if (!!player.team[1]){
-        Object.assign(Button.find(player.team[1].name), { // position vs player team
-            xStart: 233,
-            yStart: 253,
-            textX: 243, // 10 letter Weepinbell // position 2
-            textY: 283,
-            percent: 0.75
-        })
-    }
-    if (!!player.team[2]){
-        Object.assign(Button.find(player.team[2].name), { // position vs player team
-            xStart: 233,
-            yStart: 293,
-            textX: 267, // 4 letter Jynx // position 3
-            textY: 323,
-            percent: 0.75
-        })
-    }
-    if (!!player.team[3]){
-        Object.assign(Button.find(player.team[3].name), { // position vs player team
-            xStart: 367,
-            yStart: 213,
-            textX: 391, // 6 letter Snorlax // position 4
-            textY: 243,
-            percent: 0.75
-        })
-    }
-    if (!!player.team[4]){
-        Object.assign(Button.find(player.team[4].name), { // position vs player team
-            xStart: 367,
-            yStart: 253,
-            textX: 391, // 7 letter Rattata // position 5
-            textY: 283,
-            percent: 0.75
-        })
-    }
-    if (!!player.team[5]){
-        Object.assign(Button.find(player.team[5].name), { // position vs player team
-            xStart: 367,
-            yStart: 293,
-            textX: 391, // 6 letter Rhydon // position 6
-            textY: 323,
-            percent: 0.75
-        })
-    }
-}
 
 function renderGameWindow() {
     gameBackgroundCanvas.height = 338
@@ -218,7 +126,7 @@ function renderGameWindow() {
             gameBackground.src = "./assets/battle-background-2.png"
             battleBackgroundDisplay(gameBackground)
             ongoingBattle = true
-            renderBattleButtons()
+            Button.renderOptionButtons()
             gameBackgroundContext.fillRect(0, 213, 586, 126)
             ApiService.getPlayer()
             .then(ApiService.getCPU)
@@ -226,8 +134,8 @@ function renderGameWindow() {
             .then(renderPokemon.bind(null, "cpu"))
             .then(renderMiniPics)
             .then(drawHpBar)
-            .then(createMoveButtons)
-            .then(createPokemonButtons)
+            .then(Button.createMoveButtons)
+            .then(Button.createPokemonButtons)
             teamHighlightCanvas.addEventListener('mousemove', hopHandler)
             break
         case "result":
@@ -320,14 +228,6 @@ function drawSelection(x, y, dx, dy) {
     highlightContext.stroke()
 }
 
-function teamDrawSelection(x, y, dx, dy) {
-    teamHighlightContext.beginPath()
-    teamHighlightContext.lineWidth = "5"
-    teamHighlightContext.strokeStyle = "red"
-    teamHighlightContext.rect(x, y, dx, dy)
-    teamHighlightContext.stroke()
-}
-
 function animatePokemon(e) { // interval will go into render team
     let mouseX = e.clientX// - teamHighlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.clientY// - teamHighlightCanvas.offsetParent.offsetTop
@@ -342,7 +242,6 @@ function animatePokemon(e) { // interval will go into render team
         clearInterval(hopper)
     }},96)
 }
-
 
 function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
     pokemon.onload = function() {
@@ -362,16 +261,6 @@ function titleHandler(e){
 }
 
  
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM loaded")
-    currentScreen = "title"
-    menuState = "title"
-    renderGameWindow()
-    window.addEventListener('keyup', titleHandler)
-    gameButtonCanvas.addEventListener('click', menuButtonHandler)
-    gameButtonCanvas.addEventListener('dblclick', switchButtonHandler)
-    gameButtonCanvas.addEventListener('mousemove', highlightButtonHandler)
-})
 
 function sortTeam(a, b){
     if (a.position < b.position){
@@ -382,3 +271,14 @@ function sortTeam(a, b){
     }
     return 0
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM loaded")
+    currentScreen = "title"
+    menuState = "title"
+    renderGameWindow()
+    window.addEventListener('keyup', titleHandler)
+    gameButtonCanvas.addEventListener('click', menuButtonHandler)
+    gameButtonCanvas.addEventListener('dblclick', switchButtonHandler)
+    gameButtonCanvas.addEventListener('mousemove', highlightButtonHandler)
+})

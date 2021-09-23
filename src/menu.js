@@ -3,8 +3,8 @@ function renderInitialMenu(){
     newGameButton.src = "./assets/menu-button-new-game.png"
     const continueButton = new Image()
     continueButton.src = "./assets/menu-button-continue.png"
-    renderButton(newGameButton, 226, 67, 133, 66) // fixed aspect ratio
-    renderButton(continueButton, 226, 167, 133, 66)
+    Button.renderGameButton(newGameButton, 226, 67, 133, 66) // fixed aspect ratio
+    Button.renderGameButton(continueButton, 226, 167, 133, 66)
     drawSelection()
 }
 
@@ -34,6 +34,7 @@ function menuButtonHandler(e){
                     let response = confirm("Would you really like to quit? Your status will be saved")
                     if (response == true){
                         restartGame()
+                        response = ''
                     }
                     break
             }
@@ -183,45 +184,18 @@ function highlightButtonHandler(e) {
     }
 }
 
-function replaceBattleOptionsWithMoves(){
-    clearBlueWindow()
-    textLeftSide("Please select an attack")
-    for (const button of Button.all) {
-        if (button.purpose === "move-select"){
-            Button.renderButton(button)
-        }
-    }
-    renderStaticButton()
-}
-
-function replaceBattleOptionsWithPokemon(){
-    clearBlueWindow()
-    // Button.all = []
-    createPokemonButtons()
-    textLeftSide("Please select a Pokemon")
-    battleTextContext.fillText("to switch-in", 67, 267)
-    for (const button of Button.all){
-        if (button.purpose === "pokemon-select"){
-            Button.renderButton(button)
-        }
-    }
-    if (!!player.currentPokemon){
-    renderStaticButton()
-    }
-}
-
 async function changeStateToSwitch(){
-    await replaceBattleOptionsWithPokemon()
+    await Button.renderPokemonButtons()
     menuState = "switch"
 }
 
 async function changeStateToMove(){
-    await replaceBattleOptionsWithMoves()
+    await Button.renderMoveButtons()
     menuState = "move"
 }
 
 async function changeStateToBattleOptions(){
-    await renderBattleButtons()
+    await Button.renderOptionButtons()
     menuState = "battle-options"
 }
 
@@ -230,35 +204,9 @@ function textLeftSide(text){
     battleTextContext.fillText(text, 67, 250)
 }
 
-function renderButton(gameButton, xLocation, yLocation, width, height){
-    gameButton.onload = function() {
-        gameButtonContext.drawImage(gameButton, xLocation, yLocation, width, height)
-    }
-}
-
 function clearBlueWindow(){
     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
     battleButtonContext.clearRect(0,217,battleButtonCanvas.width, battleButtonCanvas.height)
     battleTextContext.clearRect(0,217,battleTextCanvas.width, battleTextCanvas.height)
     gameButtonContext.clearRect(0,217,gameButtonCanvas.width,gameButtonCanvas.height)
-}
-
-function renderStaticButton(){ // arguments for the others
-    const goBack = new Image()
-    goBack.src = "./assets/button-go-back.png"
-    renderButton(goBack, 67, 267, 133, 67)
-}
-
-function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
-    clearBlueWindow()
-    const fightButton = new Image()
-    fightButton.src = "./assets/battle-fight-button.png"
-    renderButton(fightButton, 100, 283, 133, 67)
-    const switchButton = new Image()
-    switchButton.src = "./assets/battle-switch-button.png"
-    renderButton(switchButton, 234, 283, 133, 67)
-    const quitButton = new Image()
-    quitButton.src = "./assets/battle-save-quit-button.png"
-    renderButton(quitButton, 368, 283, 133, 67)
-    textLeftSide("Please select a option")
 }

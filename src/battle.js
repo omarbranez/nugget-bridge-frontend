@@ -1,3 +1,9 @@
+let attack = new Message()
+let missed = new Message()
+let effective = new Message()
+let critical = new Message()
+let faint = new Message()
+
 class Battle { // attacker and defender // this will run twice
     constructor(move, player, cpu) {
         this.currentPokemon = player.currentPokemon
@@ -323,8 +329,8 @@ function reinitializePokemon(){
     clearBlueWindow()
     Button.all = []
     renderPokemon("player")
-    createMoveButtons()
-    createPokemonButtons()
+    Button.createMoveButtons()
+    Button.createPokemonButtons()
     drawHpBar()
     changeStateToBattleOptions()
 }
