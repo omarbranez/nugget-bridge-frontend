@@ -163,7 +163,6 @@ class Battle { // attacker and defender // this will run twice
             animateText(attack.text)
             setTimeout(()=>animateText(missed.text), 3000)
         } else if (!!effective.text && !missed.text){
-            
             animateText(attack.text)
             setTimeout(()=>animateText(effective.text), 3000)
         } else {
@@ -176,14 +175,12 @@ class Battle { // attacker and defender // this will run twice
         }
         this.defender.currentHP = this.defender.currentHP - this.attackDamage
         console.log(effective.text)
-        this.defender.updatePokemon()
+        ApiService.updatePokemon(this.defender)
         console.log(`${this.attacker.name} did ${this.attackDamage} damage to ${this.defender.name}!`)
         if (this.defender.currentHP <= 0) {
             this.defender.currentStatus = "Faint"
             faintedPokemon.push(this.defender)
-            
             setTimeout(()=>resolveMourner(),(hpCounter / 33)*1000)
-            
             this.attacker = ''
             this.defender = ''    
         }
@@ -248,12 +245,10 @@ class Battle { // attacker and defender // this will run twice
         this.burnCheck()
         this.stabCheck()
         this.calculateDamage()
-        // animateText(attack.text)
         this.resolveDamage()
         if (this.attackDamage > 0) {
-            setTimeout(()=>this.endTurn(), (this.attackDamage / 20)*1000)
+            setTimeout(()=>this.endTurn(), (this.attackDamage / 33)*1000)
         } else {
-            
             setTimeout(()=>this.endTurn(), 3000)
         }
     }
@@ -273,7 +268,6 @@ class Battle { // attacker and defender // this will run twice
 
 }
 
-
 async function promptToContinue(){
     await determineMourner()
     return response = confirm("Would you like to battle again?")//modal wont work for this
@@ -292,7 +286,6 @@ function restartBattle(){
     clearForeground()
     clearBlueWindow()
     renderGameWindow()
-    renderTeamWindow()
     changeStateToBattleOptions()
 }
 
@@ -307,43 +300,16 @@ function restartGame(){
     hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)
     clearBlueWindow()
     renderGameWindow()
-    renderTeamWindow()
     window.addEventListener('keyup', titleHandler)
-}
-
-function deleteFaintedPokemon(){
-    if (faintedPokemon.length > 0){
-        for (const pokemon of faintedPokemon){
-            return fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
-                method: 'DELETE',
-            })
-            // .then((resp) => resp.json())
-        }
-        faintedPokemon = []
-    }
-}
-
-function regeneratePokemon(){ // probably not necessary
-    // await // end of battle
-    if (player.team.length < 6){ // or if BEFORE i call it
-        return fetch(`${usersURL}/${player.id}`)
-        .then(res = res.json())
-        .then(json => {
-            // while (player.team.length < 6){ // they've already been created, just merge them!
-            if (!Pokemon.all.includes(json.included)){
-                new Pokemon(json.included)
-            }
-        })
-    } // do i need an else to just move forward? to call new pokemon?
+    window.removeEventListener('mousemove', hopHandler)
 }
 
 function switchPokemonFromMenu(position){
-    //switch case depending on which button was clicked
     let temp = player.team[0]
     player.team[0] = player.team[position]
     player.team[position] = temp
     player.currentPokemon = player.team[0]
-    player.updatePositions()
+    ApiService.updatePositions(player)
     reinitializePokemon()
 }
 
@@ -398,14 +364,13 @@ async function resolveMourner(){
             setTimeout(()=>resolveGameEnd(),4000)
         } else {
             cpu.currentPokemon = cpu.team[0]
-            cpu.updatePositions()
+            ApiService.updatePositions(cpu)
             battlePokemonContext.clearRect(117,13,150,67)
             battlePokemonContext.clearRect(367, 13, 160, 133)
             setTimeout(()=>renderPokemon(cpu),3000)
             setTimeout(()=>drawHpBar(),3000)
             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)
-            // setTimeout(()=>clearBlueWindow(), 6500)
-            setTimeout(()=>changeStateToBattleOptions(),7000)
+            setTimeout(()=>changeStateToBattleOptions(),6500)
         }
     }
 }

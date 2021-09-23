@@ -23,29 +23,26 @@ class Pokemon {
         this.constructor.all.push(this)
     }
 
-    updatePokemon(){
-        // debugger
-        fetch(`${teamsURL}/${this.teamPokemonID}`, {
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                current_hp: this.currentHP,
-                current_status: this.status,
-                position: this.position
-            })
-        })
-        // .then(res => res.json())
-        // .then(messages => console.log(messages));
-    }
+    // updatePokemon(){
+    //     fetch(`${teamsURL}/${this.teamPokemonID}`, {
+    //         method: "PATCH",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             current_hp: this.currentHP,
+    //             current_status: this.status,
+    //             position: this.position
+    //         })
+    //     })
+    // }
 
     async setPosition(){
         this.position = player.team.indexOf(this) + 1
     }
 
-    async assignTeamWindowCoordinates(){ //get set position to work!
+    async assignTeamWindowCoordinates(){
         await this.setPosition()
         this.picSrc = `./assets/pokemon/mini/${this.pokemonID}.png`
         if (this.position == 1 || this.position == 2 || this.position == 3){

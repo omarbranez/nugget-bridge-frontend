@@ -25,9 +25,6 @@ battleTextContext.font = "1.33em sans-serif"
 const highlightCanvas = document.getElementById("highlight-button-top")
 const highlightContext = highlightCanvas.getContext("2d")
 
-const teamBackgroundCanvas = document.getElementById("team-background")
-const teamBackgroundContext = teamBackgroundCanvas.getContext("2d")
-
 const teamPokemonPicturesCanvas = document.getElementById("team-pokemon-pictures")
 const teamPokemonPicturesContext = teamPokemonPicturesCanvas.getContext("2d")
 
@@ -44,7 +41,6 @@ hpBarContext.font = '.66em sans-serif';
 hpBarContext.strokeStyle = "black";
 // hpBarContext.fillStyle = "green";
 
-
 let playerID
 let player 
 let cpu 
@@ -55,7 +51,7 @@ let spriteVersion = "diamond-pearl"
 
 let ongoingBattle = false   
 
-let battle // the battle object
+let battle
 
 let faintedPokemon = []
 let titleAnimator
@@ -68,37 +64,6 @@ let missed = new Message()
 let effective = new Message()
 let critical = new Message()
 let faint = new Message()
-
-
-function getPlayer(){
-    console.log("i go first! fetching a user and their team from the backend!")
-    return fetch(`${usersURL}/${playerID}`)
-    .then(res => res.json())
-    .then(json => {
-        player = new Player(json.data)
-        for (const pokemon of json.included){
-            let poke = new Pokemon(pokemon)
-            player.team.push(poke)
-        }
-        player.team.sort(sortTeam)
-        player.currentPokemon = player.team[0]
-    })
-}
-
-function getCPU(){ 
-    console.log("i go second! fetching a cpu and their team from the backend!")
-    return fetch(`${usersURL}/${String(parseInt(playerID)+1)}`) 
-    .then(res => res.json())
-    .then(json => {
-        cpu = new Player(json.data)
-        for (const pokemon of json.included){
-            let poke = new Pokemon(pokemon)
-            cpu.team.push(poke)
-        }
-        player.team.sort(sortTeam)
-        cpu.currentPokemon = cpu.team[0]
-    })
-}
 
 function renderPokemon(side){ 
     const pokemonBattleImage = new Image()
@@ -255,14 +220,15 @@ function renderGameWindow() {
             ongoingBattle = true
             renderBattleButtons()
             gameBackgroundContext.fillRect(0, 213, 586, 126)
-            getPlayer()
-            .then(getCPU)
+            ApiService.getPlayer()
+            .then(ApiService.getCPU)
             .then(renderPokemon.bind(null, "player"))
             .then(renderPokemon.bind(null, "cpu"))
             .then(renderMiniPics)
             .then(drawHpBar)
             .then(createMoveButtons)
             .then(createPokemonButtons)
+            teamHighlightCanvas.addEventListener('mousemove', hopHandler)
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
@@ -271,17 +237,6 @@ function renderGameWindow() {
             gameBackground.src = "./assets/title-screen-logo.gif"
             console.log("top window loaded")
     }
-}
-
-function renderTeamWindow() {
-    teamBackgroundCanvas.height = 338
-    teamBackgroundCanvas.width = 586
-    const bottomBackground = new Image()
-    bottomBackground.src = "./assets/team-canvas-background.png"
-    bottomBackground.onload = function() { 
-        teamBackgroundContext.drawImage(bottomBackground, 0, 0, teamBackgroundCanvas.width, teamBackgroundCanvas.height)
-    }
-    console.log("started from the bottom")
 }
 
 function staticDisplay(bgImage) {
@@ -319,43 +274,18 @@ function renderContinueModal(){
 }
 
 function handleNewUser(e) {
-    e.preventDefault()
-    modal.style.display="none"
-    fetch(`${usersURL}`, {
-        method: 'POST', 
-        headers: {
-            'Content-Type': "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            name: e.target.name.value,
-            user_type: "player"
-        })
+    ApiService.createUser(e)
+    .then(user => {playerID = user.data.id})
+    .then(()=>{
+        clearScreen()
+        currentScreen = "battle"
+        menuState = "battle-options"
+        setTimeout(()=>renderGameWindow(), 50)
     })
-        .then(res => res.json())
-        .then(user => {playerID = user.data.id})
-        .then(()=>{
-            clearScreen()
-            currentScreen = "battle"
-            menuState = "battle-options"
-            setTimeout(()=>renderGameWindow(), 50)
-        })
 }
 
 function handleContinue(e){
-    e.preventDefault()
-    modal.style.display = "none"
-    fetch(`${baseURL}/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            name: e.target.name.value,
-        })
-    })
-    .then(res => res.json())
+    ApiService.loadUser(e)
     .then(user => {
         playerID = user.data.id
         alert(`Welcome back, ${user.data.attributes.name}`)
@@ -368,7 +298,7 @@ function handleContinue(e){
 
 function battleBackgroundDisplay(bgImage) {
     bgImage.onload = function() {
-        gameBackgroundContext.drawImage(bgImage, 0, 0, teamBackgroundCanvas.width, 213)
+        gameBackgroundContext.drawImage(bgImage, 0, 0, gameBackgroundCanvas.width, 213)
     }
 }
 
@@ -437,19 +367,10 @@ document.addEventListener('DOMContentLoaded', () => {
     currentScreen = "title"
     menuState = "title"
     renderGameWindow()
-    // renderTeamWindow()
     window.addEventListener('keyup', titleHandler)
     gameButtonCanvas.addEventListener('click', menuButtonHandler)
     gameButtonCanvas.addEventListener('dblclick', switchButtonHandler)
     gameButtonCanvas.addEventListener('mousemove', highlightButtonHandler)
-    teamHighlightCanvas.addEventListener('mousemove', hopHandler)
-    // teamHighlightCanvas.addEventListener('mouseout', hopHandler)
-    teamDrawSelection(47, 33, 66, 66)
-    teamDrawSelection(47, 133, 66, 66)
-    teamDrawSelection(47, 233, 66, 66)
-    teamDrawSelection(347, 33, 66, 66)
-    teamDrawSelection(347, 133, 66, 66)
-    teamDrawSelection(347, 233, 66, 66)
 })
 
 function sortTeam(a, b){

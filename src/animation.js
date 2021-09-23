@@ -1,3 +1,46 @@
+let funcArray = [ drawHigher, drawNormal ]
+let funcIndex = 0
+let hopper
+
+function hopHandler(e){
+    let mouseX = e.clientX - teamHighlightCanvas.offsetParent.offsetLeft
+    let mouseY = e.clientY - teamHighlightCanvas.offsetParent.offsetTop
+    if (mouseX > 45 && mouseX < 115 && mouseY > 30 && mouseY < 100){
+        hopper = player.team[0]
+    } else if (mouseX > 45 && mouseX < 115 && mouseY > 130 && mouseY < 200 && !!player.team[1]){
+        hopper = player.team[1]
+    } else if (mouseX > 45 && mouseX < 115 && mouseY > 230 && mouseY < 330 && !!player.team[2]){
+        hopper = player.team[2]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 30 && mouseY < 100 && !!player.team[3]){
+        hopper = player.team[3]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 130 && mouseY < 200 && !!player.team[4]){
+        hopper = player.team[4]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 230 && mouseY < 300 && !!player.team[5]){
+        hopper = player.team[5]
+    } else {
+        hopper = '' 
+    }
+}
+
+window.setInterval(function(){
+    if (hopper) {
+        funcArray[funcIndex++ % funcArray.length]()
+    }}, 96)
+
+function drawNormal(){
+    teamPokemonPicturesContext.clearRect(hopper.xMiniPic, hopper.yMiniPic, 133, 140)
+    let pokemonPic = new Image()
+    pokemonPic.src = `./assets/pokemon/mini/${hopper.pokemonID}.png`
+    teamPokemonPicturesContext.drawImage(pokemonPic, hopper.xMiniPic, hopper.yMiniPic, 133, 100)
+}
+
+function drawHigher(){
+    teamPokemonPicturesContext.clearRect(hopper.xMiniPic, hopper.yMiniPic, 133, 140)
+    let pokemonPic = new Image()
+    pokemonPic.src = `./assets/pokemon/mini/${hopper.pokemonID}.png`
+    teamPokemonPicturesContext.drawImage(pokemonPic, hopper.xMiniPic, hopper.yMiniPic + 5, 133, 100)
+}
+
 function drawHpBar(){ 
     const hpBar = new Image() // for each player
     const cpuHPBar = new Image()
@@ -72,7 +115,6 @@ function animateText(text){
     clearBlueWindow()
     text = text.toUpperCase()
     const textLength = text.length
-    // debugger
     gameButtonCanvas.style.letterSpacing = '.3px'
     gameButtonContext.font = '1.33em monospace'; 
     gameButtonContext.fillStyle = "white";
@@ -100,9 +142,7 @@ function renderText(letter, newX) {
     }
 }
 
-function animateWithDelay(text, duration){
-    setTimeout( ()=> animateText(text), duration)
-}
+
 
 function spritesheetAnimate(numColumns, numRows, sheetWidth, sheetHeight, bgImage) {
     let frameWidth = sheetWidth / numColumns //2220

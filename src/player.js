@@ -10,21 +10,6 @@ class Player {
         this.constructor.all.push(this)
     }
 
-    updatePositions(){
-        for (const pokemon of this.team){
-            fetch(`${teamsURL}/${pokemon.teamPokemonID}`, {
-                method: "PATCH",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    position: this.team.indexOf(pokemon) + 1
-                })
-            })
-        }   
-    }
-
     static clear(){
         Player.all = []
     }
