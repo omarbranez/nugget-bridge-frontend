@@ -302,8 +302,6 @@ function restartGame(){
     currentScreen = "title"
     result = ''
     clearScreen()
-    battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
-    hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)
     clearBlueWindow()
     renderGameWindow()
     window.addEventListener('keyup', titleHandler)
@@ -320,11 +318,8 @@ function switchPokemonFromMenu(position){
 }
 
 function reinitializePokemon(){
-    battlePokemonContext.clearRect(100, 93, 150, 133) // pokemon
-    battlePokemonContext.clearRect(333,143,133,33) // name
+    clearForeground()
     hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height)    
-    teamPokemonPicturesContext.clearRect(0,0,teamPokemonPicturesCanvas.width, teamPokemonPicturesCanvas.height)
-    teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     renderMiniPics()
     clearBlueWindow()
     Button.all = []
@@ -360,7 +355,7 @@ async function resolveMourner(){
             result = "lose"
             setTimeout(()=>resolveGameEnd(),4000)
         } else {
-            battlePokemonContext.clearRect(100, 93, 145, 133)
+            battlePokemonContext.clearRect(100,93,145,133)
             setTimeout(() => clearBlueWindow(), 3000)
             setTimeout(() => changeStateToSwitch(), 4000)
         }
@@ -372,7 +367,7 @@ async function resolveMourner(){
             cpu.currentPokemon = cpu.team[0]
             ApiService.updatePositions(cpu)
             battlePokemonContext.clearRect(117,13,150,67)
-            battlePokemonContext.clearRect(367, 13, 160, 133)
+            battlePokemonContext.clearRect(367,13,160,133)
             setTimeout(()=>renderPokemon(cpu),3000)
             setTimeout(()=>drawHpBar(),3000)
             setTimeout(()=>animateText(`ENEMY ${cpu.name} HAS SENT OUT ${cpu.currentPokemon.name}!`), 4000)

@@ -30,9 +30,6 @@ const teamPokemonTextCanvas = document.getElementById("team-pokemon-text")
 const teamPokemonTextContext = teamPokemonTextCanvas.getContext("2d")
 teamPokemonTextContext.font = "0.8em sans-serif";
 
-const teamHighlightCanvas = document.getElementById("team-highlight")
-const teamHighlightContext = teamHighlightCanvas.getContext("2d")
-
 const hpBarCanvas = document.getElementById("hp-bar")
 const hpBarContext = hpBarCanvas.getContext("2d")
 hpBarContext.font = '.66em sans-serif'; 
@@ -82,7 +79,6 @@ async function renderMiniPics(){
     }
 }
 
-
 function renderGameWindow() {
     gameBackgroundCanvas.height = 338
     gameBackgroundCanvas.width = 586
@@ -100,7 +96,6 @@ function renderGameWindow() {
             gameBackground.src = "./assets/menu-background.png"
             staticDisplay(gameBackground)
             renderInitialMenu()
-            console.log("calling menu.js")
             break
         // case "creation":
         //     clearScreen()
@@ -136,21 +131,19 @@ function renderGameWindow() {
             .then(drawHpBar)
             .then(Button.createMoveButtons)
             .then(Button.createPokemonButtons)
-            teamHighlightCanvas.addEventListener('mousemove', hopHandler)
+            teamPokemonTextCanvas.addEventListener('mousemove', hopHandler)
             break
         case "result":
             gameBackground.src = "./assets/nugget-bridge-result.png"
             break
         default:
             gameBackground.src = "./assets/title-screen-logo.gif"
-            console.log("top window loaded")
     }
 }
 
 function staticDisplay(bgImage) {
     bgImage.onload = function() {
         gameBackgroundContext.drawImage(bgImage, 0, 0, gameBackgroundCanvas.width, gameBackgroundCanvas.height)
-        console.log("i'm displaying the static background!")
     }
 }
 
@@ -167,6 +160,7 @@ function renderNewUserModal(){
     `
     modal.querySelector("form").addEventListener("submit", handleNewUser)
 }
+
 function renderContinueModal(){
     const modal = document.getElementById("modal")
     modal.style.display="block"
@@ -217,7 +211,6 @@ function clearScreen() {
     teamPokemonTextContext.clearRect(0,0,teamPokemonTextCanvas.width,teamPokemonTextCanvas.height)
     battlePokemonContext.clearRect(0,0,battlePokemonCanvas.width,battlePokemonCanvas.height)
     hpBarContext.clearRect(0,0,hpBarCanvas.width,hpBarCanvas.height) 
-    console.log("clearing the screen!")
 }
 
 function drawSelection(x, y, dx, dy) {
@@ -226,21 +219,6 @@ function drawSelection(x, y, dx, dy) {
     highlightContext.strokeStyle = "red"
     highlightContext.rect(x, y, dx, dy)
     highlightContext.stroke()
-}
-
-function animatePokemon(e) { // interval will go into render team
-    let mouseX = e.clientX// - teamHighlightCanvas.offsetParent.offsetLeft // minus the bounding areas
-    let mouseY = e.clientY// - teamHighlightCanvas.offsetParent.offsetTop
-    console.log(mouseX, mouseY)
-    const hopper = setInterval( function() {
-    
-    if (mouseX > 250 && mouseX < 320 && mouseY > 430 && mouseY < 490) {
-        console.log("JUMPING")
-        drawNormal()
-        drawHigher()
-    } else {
-        clearInterval(hopper)
-    }},96)
 }
 
 function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
@@ -259,8 +237,6 @@ function titleHandler(e){
         setTimeout(()=>renderGameWindow(), 50)
     }
 }
-
- 
 
 function sortTeam(a, b){
     if (a.position < b.position){

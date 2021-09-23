@@ -3,8 +3,8 @@ let funcIndex = 0
 let hopper
 
 function hopHandler(e){
-    let mouseX = e.clientX - teamHighlightCanvas.offsetParent.offsetLeft
-    let mouseY = e.clientY - teamHighlightCanvas.offsetParent.offsetTop
+    let mouseX = e.clientX - teamPokemonTextCanvas.offsetParent.offsetLeft
+    let mouseY = e.clientY - teamPokemonTextCanvas.offsetParent.offsetTop
     if (mouseX > 45 && mouseX < 115 && mouseY > 30 && mouseY < 100){
         hopper = player.team[0]
     } else if (mouseX > 45 && mouseX < 115 && mouseY > 130 && mouseY < 200 && !!player.team[1]){

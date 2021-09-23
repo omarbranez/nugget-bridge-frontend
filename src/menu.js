@@ -96,11 +96,11 @@ function highlightButtonHandler(e) {
         case "initial":
             switch(true){
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 180 && mouseY <= 220 && menuState === "initial"):
-                    highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
+                    // highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
                     drawSelection(228,180,128,40)
                     break
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 80 && mouseY <= 120 && menuState === "initial"):
-                    highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
+                    // highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
                     drawSelection(228,80,128,40)
                     break
                 case (menuState === "initial"):
@@ -109,15 +109,15 @@ function highlightButtonHandler(e) {
         case "battle-options": 
             switch(true){
                 case (mouseX > 103 && mouseX < 233 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options"):
-                    highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
+                    // highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(103, 297, 127, 40)
                     break
                 case (mouseX > 237 && mouseX < 367 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options" ):
-                    highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
+                    // highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(237, 297, 127, 40)
                     break
                 case (mouseX > 373 && mouseX < 503 && mouseY >= 297 && mouseY <= 337 && menuState === "battle-options" ):
-                    highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
+                    // highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
                     drawSelection(372, 297, 127, 40)
                     break
                 case (menuState === "battle-options"):
