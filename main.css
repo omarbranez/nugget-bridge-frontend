@@ -40,6 +40,10 @@ body {
     /* border: 2px solid black; */
 }
 
+.img {
+    position:absolute;
+}
+
 canvas { 
     position: absolute; 
 }

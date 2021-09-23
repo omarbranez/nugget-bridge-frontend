@@ -6,10 +6,9 @@ function renderInitialMenu(){
     renderButton(newGameButton, 226, 67, 133, 66) // fixed aspect ratio
     renderButton(continueButton, 226, 167, 133, 66)
     drawSelection()
-    console.log("new game menu rendering")
 }
 
-function menuButtonListener(e){
+function menuButtonHandler(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
     console.log(mouseX, mouseY)
@@ -63,7 +62,7 @@ function menuButtonListener(e){
     }
 }
 
-function switchButtonListener(e){
+function switchButtonHandler(e){
     let mouseX = e.x - gameButtonCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - gameButtonCanvas.offsetParent.offsetTop
     if (menuState == "switch"){
@@ -89,7 +88,7 @@ function switchButtonListener(e){
     }
 }
 
-function highlightButtonListener(e) {
+function highlightButtonHandler(e) {
     let mouseX = e.x - highlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.y - highlightCanvas.offsetParent.offsetTop
     switch(menuState) {
@@ -144,7 +143,6 @@ function highlightButtonListener(e) {
                 case (mouseX >= 70 && mouseX <= 197 && mouseY >= 284 && mouseY <= 324 && menuState === "move"):
                     highlightContext.clearRect(0,0,highlightCanvas.width,highlightCanvas.height)
                     drawSelection(69,280,127,40)
-                        // }
                     break
                 case (menuState === "move"):
                     highlightContext.clearRect(0, 0, highlightCanvas.width,highlightCanvas.height)
@@ -255,16 +253,12 @@ function renderBattleButtons(){ // MOVE THESE TO THE RIGHT
     clearBlueWindow()
     const fightButton = new Image()
     fightButton.src = "./assets/battle-fight-button.png"
-    // renderButton(fightButton, 100, 300, 133, 67) // moving this down to fit dialog box
     renderButton(fightButton, 100, 283, 133, 67)
     const switchButton = new Image()
     switchButton.src = "./assets/battle-switch-button.png"
-    // renderButton(switchButton, 100, 267, 133, 67)
     renderButton(switchButton, 234, 283, 133, 67)
     const quitButton = new Image()
     quitButton.src = "./assets/battle-save-quit-button.png"
     renderButton(quitButton, 368, 283, 133, 67)
     textLeftSide("Please select a option")
-    // drawSelection()
-    console.log("displaying battle buttons")
 }

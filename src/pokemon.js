@@ -69,4 +69,5 @@ class Pokemon {
             this.yMiniText = 250
         }
     }
+
 }

@@ -68,9 +68,7 @@ let missed = new Message()
 let effective = new Message()
 let critical = new Message()
 let faint = new Message()
-// let counter = 0
-// let anim
-// let counter
+
 
 function getPlayer(){
     console.log("i go first! fetching a user and their team from the backend!")
@@ -79,34 +77,30 @@ function getPlayer(){
     .then(json => {
         player = new Player(json.data)
         for (const pokemon of json.included){
-            // debugger
             let poke = new Pokemon(pokemon)
             player.team.push(poke)
         }
         player.team.sort(sortTeam)
         player.currentPokemon = player.team[0]
-
     })
 }
 
-function getCPU(){ //async
+function getCPU(){ 
     console.log("i go second! fetching a cpu and their team from the backend!")
-    return fetch(`${usersURL}/${String(parseInt(playerID)+1)}`) // this will work for the first battle, i guess
+    return fetch(`${usersURL}/${String(parseInt(playerID)+1)}`) 
     .then(res => res.json())
     .then(json => {
         cpu = new Player(json.data)
         for (const pokemon of json.included){
             let poke = new Pokemon(pokemon)
             cpu.team.push(poke)
-            // debugger
         }
         player.team.sort(sortTeam)
         cpu.currentPokemon = cpu.team[0]
     })
 }
 
-function renderPokemon(side){ //async
-    // debugger
+function renderPokemon(side){ 
     const pokemonBattleImage = new Image()
     if (side == "player"){
         pokemonBattleImage.src = `./assets/pokemon/${spriteVersion}/back/${player.currentPokemon.pokemonID}.png`
@@ -117,8 +111,6 @@ function renderPokemon(side){ //async
         drawBattlePokemon(pokemonBattleImage, 367, 13, 133, 133)
         battlePokemonContext.fillText(cpu.currentPokemon.name, 117, 33)
     }
-    console.log("i go third! rendering the views of both the player's and cpu's current pokemon")
-
 }
 
 function createMoveButtons() { 
@@ -126,7 +118,6 @@ function createMoveButtons() {
     for (const move of [player.currentPokemon.move1, player.currentPokemon.move2, player.currentPokemon.move3, player.currentPokemon.move4]){
         new Button(move.name, "./assets/button-blank.png", 133, 66, move.name, "move-select")
     }
-    // debugger
     Object.assign(Button.find(player.currentPokemon.move1.name), {
         xStart: 233,
         yStart: 217,
@@ -155,7 +146,6 @@ function createMoveButtons() {
         textY: 323,
         percent: 1
     })
-    
 }
 
 function createPokemonButtons() { // 
@@ -283,8 +273,6 @@ function renderGameWindow() {
     }
 }
 
-
-
 function renderTeamWindow() {
     teamBackgroundCanvas.height = 338
     teamBackgroundCanvas.width = 586
@@ -303,43 +291,18 @@ function staticDisplay(bgImage) {
     }
 }
 
-// function save(){
-//     let save = {
-//         userID: player.userID,
-//         player.team: player.team,
-//         cpuTeam: cpuTeam, // specifically, the ID
-//         victories: victories,
-//     }
-//     return fetch(`${usersURL}/${userID}`, {
-//         method: 'PUT', 
-//         headers: {
-//           'Content-Type': "application/json",
-//           "Accept": "application/json"
-//         },
-//           body: JSON.stringify(save)
-//         })
-//     .then(response => response.json())  
-// }
-    // send update fetch request
-
-function load(){
-    // get fetch request for user data
-    // add attribute for team player is currently battling
-}
-
 function renderNewUserModal(){
     const modal = document.getElementById("modal")
     modal.style.display="block"
     modal.innerHTML = `
     <h3>Create a new profile</h3>
     <form>
-    <label for="username">Username:</label><br>
+    <label for="name">Name:</label><br>
     <input type="text" name= "name"><br>
-    <input type="submit" value="Log in"><br>
+    <input type="submit" value="Create User"><br>
     </form>
     `
     modal.querySelector("form").addEventListener("submit", handleNewUser)
-    // modal.open()
 }
 function renderContinueModal(){
     const modal = document.getElementById("modal")
@@ -353,7 +316,6 @@ function renderContinueModal(){
     </form>
     `
     modal.querySelector("form").addEventListener("submit", handleContinue)
-    // modal.open()
 }
 
 function handleNewUser(e) {
@@ -371,7 +333,7 @@ function handleNewUser(e) {
         })
     })
         .then(res => res.json())
-        .then(user => {playerID = user.data.id})// this takes a while. maybe a progress bar?    
+        .then(user => {playerID = user.data.id})
         .then(()=>{
             clearScreen()
             currentScreen = "battle"
@@ -403,16 +365,10 @@ function handleContinue(e){
         setTimeout(()=>renderGameWindow(), 50)
     })
 }
-// function spritesheetStatic(numColumns, numRows, sheetWidth, sheetHeight, bgImage){
-//     let frameWidth = sheetWidth / numColumns
-//     let frameHeight = sheetHeight / numRows
-//     let 
-// }
 
 function battleBackgroundDisplay(bgImage) {
     bgImage.onload = function() {
         gameBackgroundContext.drawImage(bgImage, 0, 0, teamBackgroundCanvas.width, 213)
-        console.log("i'm displaying the battle background!")
     }
 }
 
@@ -426,13 +382,12 @@ function clearScreen() {
     console.log("clearing the screen!")
 }
 
-function drawSelection(x, y, dx, dy) { //draws rectangle if chosen
+function drawSelection(x, y, dx, dy) {
     highlightContext.beginPath()
     highlightContext.lineWidth = "5"
     highlightContext.strokeStyle = "red"
     highlightContext.rect(x, y, dx, dy)
     highlightContext.stroke()
-    // console.log("drew red rectangle over selection")
 }
 
 function teamDrawSelection(x, y, dx, dy) {
@@ -443,21 +398,19 @@ function teamDrawSelection(x, y, dx, dy) {
     teamHighlightContext.stroke()
 }
 
-// function clearSelection(x, y, dx, dy){
-//     highlightContext.clearRect(x, y, dx, dy)
-// }
-
-
 function animatePokemon(e) { // interval will go into render team
     let mouseX = e.clientX// - teamHighlightCanvas.offsetParent.offsetLeft // minus the bounding areas
     let mouseY = e.clientY// - teamHighlightCanvas.offsetParent.offsetTop
-    if (mouseX > 160 && mouseX < 260 && mouseY > 586 && mouseY < 700) {
+    console.log(mouseX, mouseY)
+    const hopper = setInterval( function() {
+    
+    if (mouseX > 250 && mouseX < 320 && mouseY > 430 && mouseY < 490) {
         console.log("JUMPING")
-        hopOn = true
-        // requestAnimationFrame(hopper)
+        drawNormal()
+        drawHigher()
     } else {
-        hopOn = false
-    }
+        clearInterval(hopper)
+    }},96)
 }
 
 
@@ -465,13 +418,11 @@ function drawBattlePokemon(pokemon, xLocation, yLocation, width, height){
     pokemon.onload = function() {
         battlePokemonContext.drawImage(pokemon, xLocation, yLocation, width, height)
     }
-} // this can probably just be a draw all objects thing
+}
 
 function titleHandler(e){
     e.preventDefault()
-    // debugger
     if (e.code == 'Enter' && currentScreen === "title"){
-        // alert('Enter is pressed')
         currentScreen = "initial"
         menuState = "initial"
         removeEventListener('keyup', titleHandler)
@@ -486,18 +437,19 @@ document.addEventListener('DOMContentLoaded', () => {
     currentScreen = "title"
     menuState = "title"
     renderGameWindow()
-    renderTeamWindow()
+    // renderTeamWindow()
     window.addEventListener('keyup', titleHandler)
-    gameButtonCanvas.addEventListener('click', menuButtonListener)
-    gameButtonCanvas.addEventListener('dblclick', switchButtonListener)    // clickedButton()
-    gameButtonCanvas.addEventListener('mousemove', highlightButtonListener) // can i combine all these?
-    teamHighlightCanvas.addEventListener('mousemove', animatePokemon)
-    teamDrawSelection(47, 33, 66, 66) //70, 50, 100, 100
-    teamDrawSelection(47, 133, 66, 66) // 70, 200, 50, 50
-    teamDrawSelection(47, 233, 66, 66) // 70, 350, 50, 50
-    teamDrawSelection(347, 33, 66, 66) //520, 50, 50, 50
-    teamDrawSelection(347, 133, 66, 66)//520, 200, 50, 50
-    teamDrawSelection(347, 233, 66, 66)//520, 350, 50, 50
+    gameButtonCanvas.addEventListener('click', menuButtonHandler)
+    gameButtonCanvas.addEventListener('dblclick', switchButtonHandler)
+    gameButtonCanvas.addEventListener('mousemove', highlightButtonHandler)
+    teamHighlightCanvas.addEventListener('mousemove', hopHandler)
+    // teamHighlightCanvas.addEventListener('mouseout', hopHandler)
+    teamDrawSelection(47, 33, 66, 66)
+    teamDrawSelection(47, 133, 66, 66)
+    teamDrawSelection(47, 233, 66, 66)
+    teamDrawSelection(347, 33, 66, 66)
+    teamDrawSelection(347, 133, 66, 66)
+    teamDrawSelection(347, 233, 66, 66)
 })
 
 function sortTeam(a, b){

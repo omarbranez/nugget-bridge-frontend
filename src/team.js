@@ -1,43 +1,52 @@
 console.log(`i'm in the team window`)
-// teamPokemonTextContext.font = "1.2em sans-serif";
 
-// let playerTeam = ["Charizard", "Venusaur"] //already declared in environment for now
 let teamWindowSlots = []
 let x = 0
-// let playerTeam = ["Blastoise", "Dragonite", "Mewtwo", "Zapdos"]
-// let playerTeam = []
 
 let funcArray = [ drawNormal, drawHigher ]
 let funcIndex = 0
 
-let hopOn = false
-
-
+let hopper
+function hopHandler(e){
+    let mouseX = e.clientX - teamHighlightCanvas.offsetParent.offsetLeft
+    let mouseY = e.clientY - teamHighlightCanvas.offsetParent.offsetTop
+    // console.log(mouseX, mouseY)
+    if (mouseX > 45 && mouseX < 115 && mouseY > 30 && mouseY < 100){
+        // debugger
+        hopper = player.team[0]
+    } else if (mouseX > 45 && mouseX < 115 && mouseY > 130 && mouseY < 200 && !!player.team[1]){
+        hopper = player.team[1]
+    } else if (mouseX > 45 && mouseX < 115 && mouseY > 230 && mouseY < 330 && !!player.team[2]){
+        hopper = player.team[2]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 30 && mouseY < 100 && !!player.team[3]){
+        hopper = player.team[3]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 130 && mouseY < 200 && !!player.team[4]){
+        hopper = player.team[4]
+    } else if (mouseX > 345 && mouseX < 415 && mouseY > 230 && mouseY < 300 && !!player.team[5]){
+        hopper = player.team[5]
+    } else {
+        hopper = '' 
+    }
+}
 window.setInterval(function(){
-    if (hopOn) {
+    if (hopper) {
         funcArray[funcIndex++ % funcArray.length]()
         // console.log("hello")
     }}, 96)
 
-// function hopper() {
-//     funcArray[funcIndex++ % funcArray.length]()
-//     if (hopOn) {
-//         requestAnimationFrame(hopper)
-//     }
-// }
-// requestAnimationFrame(hopper)
 function drawNormal(){
-    teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
-    let pokemonOnePic = new Image()
-    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].toLowerCase()}-mini.png`
-    renderFirstTeam(pokemonOnePic, 50, 50, 133, 100)
+    // debugger
+    teamPokemonPicturesContext.clearRect(hopper.xMiniPic, hopper.yMiniPic, 133, 140)
+    let pokemonPic = new Image()
+    pokemonPic.src = `./assets/pokemon/mini/${hopper.pokemonID}.png`
+    teamPokemonPicturesContext.drawImage(pokemonPic, hopper.xMiniPic, hopper.yMiniPic, 133, 100)
     console.log("Jumping Up!")
 }
 function drawHigher(){
-    teamPokemonPicturesContext.clearRect(50, 10, 133, 140)
-    let pokemonOnePic = new Image()
-    pokemonOnePic.src = `./assets/pokemon-battle/${player.team[0].toLowerCase()}-mini.png`
-    renderFirstTeam(pokemonOnePic, 50, 45, 133, 100)
+    teamPokemonPicturesContext.clearRect(hopper.xMiniPic, hopper.yMiniPic, 133, 140)
+    let pokemonPic = new Image()
+    pokemonPic.src = `./assets/pokemon/mini/${hopper.pokemonID}.png`
+    teamPokemonPicturesContext.drawImage(pokemonPic, hopper.xMiniPic, hopper.yMiniPic + 5, 133, 100)
     console.log("Jumping Down!")
 }
     
