@@ -147,33 +147,45 @@ function staticDisplay(bgImage) {
     }
 }
 
-function renderNewUserModal(){
+function renderModal(purpose){
     const modal = document.getElementById("modal")
     modal.style.display="block"
-    modal.innerHTML = `
-    <h3>Create a new profile</h3>
-    <form>
-    <label for="name">Name:</label><br>
-    <input type="text" name= "name"><br>
-    <input type="submit" value="Create User"><br>
-    </form>
-    `
-    modal.querySelector("form").addEventListener("submit", handleNewUser)
+    let modalContent = document.querySelector(".modal-content")
+    let span = document.getElementsByClassName("close")[0]
+    span.onclick = function() {
+        modal.style.display = "none"
+        for (const el of [h3, form, button]){
+        el.remove()
+    }}
+    let h3 = document.createElement("h3")
+    let label = document.createElement("label")
+    let form = document.createElement("form")
+    let input = document.createElement("input")
+    let button = document.createElement("input")
+    label.htmlFor = "name"
+    input.setAttribute("name", "name")
+    input.setAttribute("type", "text")
+    button.setAttribute("type", "submit")
+    modalContent.appendChild(h3)
+    modalContent.appendChild(form)
+    form.appendChild(label)
+    form.appendChild(input)
+    form.appendChild(button)
+    if (purpose == "new"){
+        h3.innerText = "Create Your Profile. Press Enter/Return to Continue!"
+        button.innerHTML = "Create a Team!"
+        document.querySelector("form").addEventListener("submit", handleNewUser)
+    } else {
+        if (purpose == "continue") {
+            h3.innerText = "Log In To Your Profile. Press Enter/Return to Continue!"
+            button.innerHTML = "Load My Team!"
+            document.querySelector("form").addEventListener("submit", handleContinue)
+        }
+    }
 }
+    
+    
 
-function renderContinueModal(){
-    const modal = document.getElementById("modal")
-    modal.style.display="block"
-    modal.innerHTML = `
-    <h3>Log in to your profile</h3>
-    <form>
-    <label for="name">Name:</label><br>
-    <input type="text" name="name"><br>
-    <input type="submit" value="Log in"><br>
-    </form>
-    `
-    modal.querySelector("form").addEventListener("submit", handleContinue)
-}
 
 function handleNewUser(e) {
     ApiService.createUser(e)

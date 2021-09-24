@@ -16,10 +16,10 @@ function menuButtonHandler(e){
         case "initial":
             switch(true) {
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 180 && mouseY <= 220 && menuState === "initial"):
-                    renderContinueModal()
+                    renderModal("continue")
                     break
                 case (mouseX >= 226 && mouseX <= 380 && mouseY >= 80 && mouseY <= 120 && menuState === "initial"):
-                    renderNewUserModal()
+                    renderModal("new")
                     break
             }
         case "battle-options":
